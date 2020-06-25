@@ -10,6 +10,8 @@ library(dplyr)
 library(deSolve)
 library(readxl)
 library(stringr)
+library(reshape2)
+library(ggplot2)
 
 #Define input directory
 indir<-("~/GitHub/epi_model_HIV_TB/param_files")
@@ -180,6 +182,8 @@ lapply(TB_SET, function(t){
                  HIV_compartment == h,
                  G_compartment == g)
         
+        #N_t_r_h_g_init <<- c(N_t_r_h_g_init, 1000)
+        
         N_t_r_h_g_init <<- c(N_t_r_h_g_init, temp$Reference_expected_value)
       })
     })
@@ -343,8 +347,8 @@ pi_i_t <- array(data = 0, dim = c(length(TB_SET),
 lapply(1:nrow(pi_params), function(x){
   i <- as.integer(pi_params$TB_compartment[x]/10)
   t <- pi_params$TB_compartment[x]%%10
-  #pi_i_t[i,t] <<- pi_params$Reference_expected_value[x]
-  pi_i_t[i,t] <<- .05
+  pi_i_t[i,t] <<- pi_params$Reference_expected_value[x]
+  #pi_i_t[i,t] <<- .05
 })
 
 rm(pi_params)
@@ -405,7 +409,7 @@ lapply(c(TB_SUBSET_UNINFECTED_NOIPT, TB_SUBSET_LTBI), function(t){
                HIV_compartment == h,
                G_compartment == g)
       #rho_t_h_g[t,h,g] <<-temp$Reference_expected_value
-      rho_t_h_g[t,h,g] <<- .05
+      rho_t_h_g[t,h,g] <<- .1
     })
   })
 })
@@ -479,27 +483,31 @@ FOI_MDR <- function(lambda_1_g){
 
 ######TB/SEIR model equations#####
 
-#set current policy getting tested 
-#we will eventually just run over all policies so we can evaluate against eachother
-#but for now we will do one at a time
-policy_id <- 1 
-
-tau_itr <- 0 #iterator for recording current time
+#Create iterators that will be updated as they go through the different for loops
+policy_id <- 1 #iterator for recording current policy evaluated 
+tau_itr <- 1 #iterator for recording current time
 
 seir <- function(time, compartment_pop, parameters) {
   with(as.list(c(compartment_pop, parameters)), {
     
-    # force of infection 
-    active_pop <- compartment_pop[(5*2*4*2+1):((5*2*4*2)+(4*2))] # total active TB compartment populations
+    # force of infection
+    active_pop <- compartment_pop[c(N_t_r_h_g_ref[6, DR_SET, HIV_SET, G_SET])] # total active TB compartment populations
     total_pop <- sum(compartment_pop) #sum total population
     
     lambda_1_g <- FOI_DS(active_pop, total_pop)
     lambda_2_g <- FOI_MDR(lambda_1_g)
     
     #record FOI for evaluation
-    tau_itr <- tau_itr + 1 #id loc in TT set getting evaluated for proper recording
-    lambda_r_g_tau_p[DR_SUBSET_DS, G_SET, tau_itr, policy_id] <<- lambda_1_g
-    lambda_r_g_tau_p[DR_SUBSET_MDR, G_SET, tau_itr, policy_id] <<- lambda_2_g
+    if ((time >= TT_SET[tau_itr]) & (tau_itr <= 60)){
+      
+      lambda_r_g_tau_p[DR_SUBSET_DS, G_SET, tau_itr, policy_id] <<- lambda_1_g
+      lambda_r_g_tau_p[DR_SUBSET_MDR, G_SET, tau_itr, policy_id] <<- lambda_2_g
+      
+      #print(tau_itr)
+      #print(time)
+      
+      tau_itr <<- tau_itr + 1 #id loc in TT set getting evaluated for proper recording
+    }
     
     lambda_r <-c(sum(lambda_1_g), sum(lambda_2_g))
     lambda <- sum(lambda_r)
@@ -789,10 +797,49 @@ seir <- function(time, compartment_pop, parameters) {
   })
 }
 
-out <- ode(y = compartments_init, 
+out_all_df <- data.frame(matrix(ncol = n_compartments+2, nrow = 0))
+colnames(out_all_df) <- c('time', comparment_id, 'policy_id')
+
+lapply(P_SET, function(p){
+  
+  #set policy id
+  policy_id <<- p
+  
+  #reset tau itr
+  tau_itr <<- 1
+  
+  out <- ode(y = compartments_init, 
            times = TT_SET, 
            func = seir, 
            parms = c())
+  
+  out <- as.data.frame(out)
+  
+  out$policy_id <- rep(policy_id, length(TT_SET))
+  
+  out_all_df <<- rbind(out_all_df, out)
+  
+})
 
-out <- as.data.frame(out)
+######Graphs#######
+
+#all active
+active_pops_df <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, HIV_SET, G_SET])+1), 130)]
+active_pops_df <- melt(active_pops_df, id.vars = c('time', 'policy_id'))
+
+active_pops_df_group_by_compartments <- active_pops_df%>%
+  group_by(time, policy_id)%>%
+  summarise(total_pop = sum(value))
+
+#FOI over time
+FOI_overtime_graph_df<-melt(lambda_r_g_tau_p)
+colnames(FOI_overtime_graph_df)<-c('DRUG_RESISTANCE', 'GENDER', 'TIME', 'POLICY', 'FOI')
+FOI_overtime_graph_df_gender_grouped <- FOI_overtime_graph_df%>%
+  group_by(DRUG_RESISTANCE, TIME, POLICY)%>%
+  summarise(FOI_by_DR = sum(FOI))
+
+
+FOI_overtime_graph_df_gender_grouped %>%filter(DRUG_RESISTANCE == 2) %>%
+ggplot(.,aes(x=TIME,y = FOI_by_DR, group = as.factor(POLICY), color = as.factor(POLICY))) +geom_line() + theme_bw() + labs (x = "Time", y = "Rate", title = "Plot")
+
 
