@@ -23,8 +23,8 @@ set.seed(1)
 
 #read parameter file
 setwd(indir)
-param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
-pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
+param_df <- read_excel("Epi_parameters_June_24_2020+fakedata.xlsx", sheet = 'Model_Matched_Parameters')
+pop_init_df <- read_excel("Epi_parameters_June_24_2020+fakedata.xlsx", sheet = 'Pop_Init')
 
 
 ####clean df for input####
