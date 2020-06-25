@@ -1,5 +1,5 @@
-##Ref HIV_TB_Model_Appendix_Jun3.pdf##
-#Last Modified: Jun 17
+##Ref HIV_TB_Model_Appendix_Jun24.pdf##
+#Last Modified: Jun 25
 
 #clean workspace
 rm(list = ls())
@@ -12,26 +12,35 @@ library(readxl)
 library(stringr)
 
 #Define input directory
-indir<-("~/Google Drive/HIV:TB/param_file")
+indir<-("~/GitHub/epi_model_HIV_TB/param_files")
 
 #Define output directory - Set to JR files
-outdir<-("~/Google Drive/HIV:TB/test_outputs/Jun17")
+outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25")
 
 set.seed(1)
 
 #read parameter file
 setwd(indir)
-param_df <- read_excel("Epi parameters_June_2020+fakedata.xlsx")
+param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
+pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
 
+
+####clean df for input####
 #remove all spaces from column names
 names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
+names(pop_init_df)<-str_replace_all(names(pop_init_df), c(" " = "_" , "-" = "_" ))
 
-#####make sure all compartments are integer type for proper indexing#####
+#make sure all compartments are integer type for proper indexing#
 param_df$TB_compartment<-as.integer(param_df$TB_compartment)
 param_df$DR_compartment<-as.integer(param_df$DR_compartment)
 param_df$HIV_compartment<-as.integer(param_df$HIV_compartment)
 param_df$G_compartment<-as.integer(param_df$G_compartment)
 param_df$P_compartment<-as.integer(param_df$P_compartment)
+
+pop_init_df$TB_compartment<-as.integer(pop_init_df$TB_compartment)
+pop_init_df$DR_compartment<-as.integer(pop_init_df$DR_compartment)
+pop_init_df$HIV_compartment<-as.integer(pop_init_df$HIV_compartment)
+pop_init_df$G_compartment<-as.integer(pop_init_df$G_compartment)
 
 #Set of Scenarios (S)
 #S_SET<-1:10
@@ -131,12 +140,26 @@ lapply(TB_SET, function(t){
   })
 })
 
-N_t_r_h_g_ref <- seq(1: n_compartments)
-N_t_r_h_g_ref <-array(data=N_t_r_h_g_ref, dim = c(length(TB_SET),
-                                                  length(DR_SET),
-                                                  length(HIV_SET),
-                                                  length(G_SET)
-))
+
+N_t_r_h_g_ref <-array(data = 0, dim = c(length(TB_SET),
+                                          length(DR_SET),
+                                          length(HIV_SET),
+                                          length(G_SET)))
+
+n = 0
+
+lapply(TB_SET, function(t){
+  lapply(DR_SET, function(r){
+    lapply(HIV_SET, function(h){
+      lapply(G_SET, function(g){
+        
+        n <<- n + 1
+        
+        N_t_r_h_g_ref[t,r,h,g] <<- n
+      })
+    })
+  })
+})
 
 #create delta compartment ids
 d_comparment_id<-paste0('d', comparment_id)
@@ -144,13 +167,24 @@ d_comparment_id<-paste0('d', comparment_id)
 ##########POPULATION##########
 
 #set initial populations
-N_t_r_h_g_init <-array(data = 0, dim = c(length(TB_SET),
-                                          length(DR_SET),
-                                          length(HIV_SET),
-                                          length(G_SET)))
+N_t_r_h_g_init <-c()
 
-#set init populations here at TT = 1
-N_t_r_h_g_init[TB_SET, DR_SET, HIV_SET, G_SET] = 10000 # will change to pop init when determined
+lapply(TB_SET, function(t){
+  lapply(DR_SET, function(r){
+    lapply(HIV_SET, function(h){
+      lapply(G_SET, function(g){
+        
+        temp <- pop_init_df%>%
+          filter(TB_compartment == t,
+                 DR_compartment == r,
+                 HIV_compartment == h,
+                 G_compartment == g)
+        
+        N_t_r_h_g_init <<- c(N_t_r_h_g_init, temp$Reference_expected_value)
+      })
+    })
+  })
+})
 
 #make into 1D array for ODE
 compartments_init <- c(N_t_r_h_g_init) #under all policies the initial pop is the same so can just set init population using any aribritrary policy
@@ -396,7 +430,8 @@ lapply(TB_SET, function(t){
                HIV_compartment == h,
                G_compartment == g)
       
-      mu_t_h_g[t,h,g] <<-temp$Reference_expected_value
+      #mu_t_h_g[t,h,g] <<-temp$Reference_expected_value (not filled in the sheet yet)
+      mu_t_h_g[t,h,g] <<-.05
     })
   })
 })
@@ -760,3 +795,4 @@ out <- ode(y = compartments_init,
            parms = c())
 
 out <- as.data.frame(out)
+
