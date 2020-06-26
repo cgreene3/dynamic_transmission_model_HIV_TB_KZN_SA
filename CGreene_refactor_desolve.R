@@ -1,30 +1,25 @@
 ##Ref HIV_TB_Model_Appendix_Jun24.pdf##
-#Last Modified: Jun 25
+#Last Modified: Jun 26
 
 #clean workspace
 rm(list = ls())
 gc()
 
-#Import Libraries#
-library(dplyr)
-library(deSolve)
-library(readxl)
-library(stringr)
-library(reshape2)
-library(ggplot2)
+#load packages
+sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2'), require, character.only=T)
 
 #Define input directory
 indir<-("~/GitHub/epi_model_HIV_TB/param_files")
 
-#Define output directory - Set to JR files
-outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25")
+#Define output directory - Set to outdir loc
+#outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25")
 
 set.seed(1)
 
 #read parameter file
 setwd(indir)
-param_df <- read_excel("Epi_parameters_June_24_2020+fakedata.xlsx", sheet = 'Model_Matched_Parameters')
-pop_init_df <- read_excel("Epi_parameters_June_24_2020+fakedata.xlsx", sheet = 'Pop_Init')
+param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
+pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
 
 
 ####clean df for input####
@@ -129,6 +124,8 @@ TT_SET <- c(1:(12*TT))*time_interval
 ######create compartment ids and reference matrix to go between multidementional arrays and 1D array####
 n_compartments <- length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET)
 comparment_id<-rep(NA, n_compartments)
+
+#iterator for loop
 n = 0
 
 lapply(TB_SET, function(t){
@@ -148,6 +145,7 @@ N_t_r_h_g_ref <-array(data = 0, dim = c(length(TB_SET),
                                           length(HIV_SET),
                                           length(G_SET)))
 
+#iterator for loop
 n = 0
 
 lapply(TB_SET, function(t){
@@ -182,9 +180,8 @@ lapply(TB_SET, function(t){
                  HIV_compartment == h,
                  G_compartment == g)
         
-        #N_t_r_h_g_init <<- c(N_t_r_h_g_init, 1000)
-        
         N_t_r_h_g_init <<- c(N_t_r_h_g_init, temp$Reference_expected_value)
+        
       })
     })
   })
@@ -377,15 +374,17 @@ gamma_r <- c(0,1)
 eta_params <- param_df%>%
   filter(notation == 'eta')
 
-eta_i_h <-array(data = 0, dim = c(length(HIV_SET),
-                                  length(HIV_SET)))
+eta_i_h_p <-array(data = 0, dim = c(length(HIV_SET),
+                                  length(HIV_SET),
+                                  length(P_SET)))
 
 lapply(1:nrow(eta_params), function(x){
   i <- as.integer(eta_params$HIV_compartment[x]/10)
   h <- eta_params$HIV_compartment[x]%%10
+  p <- eta_params$P_compartment[x]
   
-  eta_i_h[i,h] <<- eta_params$Reference_expected_value[x]
-  #eta_i_h[i,h] <<- .05
+  eta_i_h_p [i,h, p] <<- eta_params$Reference_expected_value[x]
+  #eta_i_h_p[i,h,p] <<- .05
 })
 
 rm(eta_params)
@@ -408,8 +407,9 @@ lapply(c(TB_SUBSET_UNINFECTED_NOIPT, TB_SUBSET_LTBI), function(t){
         filter(TB_compartment == t,
                HIV_compartment == h,
                G_compartment == g)
+      
       #rho_t_h_g[t,h,g] <<-temp$Reference_expected_value
-      rho_t_h_g[t,h,g] <<- .1
+      rho_t_h_g[t,h,g] <<- .05
     })
   })
 })
@@ -434,8 +434,8 @@ lapply(TB_SET, function(t){
                HIV_compartment == h,
                G_compartment == g)
       
-      #mu_t_h_g[t,h,g] <<-temp$Reference_expected_value (not filled in the sheet yet)
-      mu_t_h_g[t,h,g] <<-.05
+      mu_t_h_g[t,h,g] <<-temp$Reference_expected_value
+      #mu_t_h_g[t,h,g] <<-.05
     })
   })
 })
@@ -445,29 +445,34 @@ rm(mu_params)
 #Rate of exit from the population due to aging
 alpha <- 1/(65-15)
 
-
 ########Force of Infection (FOI) CALCULATIONS#####
 FOI_DS <- function(active_pop, total_pop){
-  n = 0
-  lambda_1_1_numerator<-0
-  lambda_1_2_numerator<-0
   
-  lapply(HIV_SET, function(h){
-    lapply(G_SET, function(g){
-      n = n+1
-      if (g == 1){
-        lambda_1_1_numerator <<- phi_h[h]*active_pop[n] + lambda_1_1_numerator
+  n = 1
+  
+  numerator_MALE <- rep(0, times = length(HIV_SET))
+  numerator_FEMALE <- rep(0, times = length(HIV_SET))
+  
+  
+  lapply(G_SET, function(g){
+    lapply(HIV_SET, function(h){
+      
+      if (g == G_SUBSET_M){
+        numerator_MALE[h] <<- phi_h[h] * active_pop[n]
+        
+      } else {
+        numerator_FEMALE[h] <<- phi_h[h]*active_pop[n]
       }
-      else{
-        lambda_1_2_numerator <<- phi_h[h]*active_pop[n] + lambda_1_2_numerator
-      }
+      
+      n <<- n + 1
+      
     })
   })
   
-  lambda_1_1 <- beta_g[1]*(lambda_1_1_numerator/total_pop)
-  lambda_1_2 <- beta_g[2]*(lambda_1_2_numerator/total_pop)
+  lambda_1_1 <- beta_g[1]*(sum(numerator_MALE)/total_pop)
+  lambda_1_2 <- beta_g[2]*(sum(numerator_FEMALE)/total_pop)
   
-  return(c(unname(lambda_1_1), unname(lambda_1_2)))
+  return(c(lambda_1_1, lambda_1_2)) 
 }
   
 FOI_MDR <- function(lambda_1_g){
@@ -486,25 +491,25 @@ FOI_MDR <- function(lambda_1_g){
 #Create iterators that will be updated as they go through the different for loops
 policy_id <- 1 #iterator for recording current policy evaluated 
 tau_itr <- 1 #iterator for recording current time
+active_DS_pop_subset <- c(N_t_r_h_g_ref[TB_SUBSET_ACTIVE, DR_SUBSET_MDR, HIV_SET, G_SUBSET_M], 
+                       N_t_r_h_g_ref[TB_SUBSET_ACTIVE, DR_SUBSET_MDR, HIV_SET, G_SUBSET_F]) #ensures correct order males--> females
+
 
 seir <- function(time, compartment_pop, parameters) {
   with(as.list(c(compartment_pop, parameters)), {
     
     # force of infection
-    active_pop <- compartment_pop[c(N_t_r_h_g_ref[6, DR_SET, HIV_SET, G_SET])] # total active TB compartment populations
+    active_pop <- compartment_pop[active_DS_pop_subset] # total active TB compartment populations
     total_pop <- sum(compartment_pop) #sum total population
     
     lambda_1_g <- FOI_DS(active_pop, total_pop)
     lambda_2_g <- FOI_MDR(lambda_1_g)
     
     #record FOI for evaluation
-    if ((time >= TT_SET[tau_itr]) & (tau_itr <= 60)){
+    if ((time >= TT_SET[tau_itr]) & (tau_itr <= length(TT_SET))){
       
       lambda_r_g_tau_p[DR_SUBSET_DS, G_SET, tau_itr, policy_id] <<- lambda_1_g
       lambda_r_g_tau_p[DR_SUBSET_MDR, G_SET, tau_itr, policy_id] <<- lambda_2_g
-      
-      #print(tau_itr)
-      #print(time)
       
       tau_itr <<- tau_itr + 1 #id loc in TT set getting evaluated for proper recording
     }
@@ -516,37 +521,39 @@ seir <- function(time, compartment_pop, parameters) {
     names(delta_pop)<-d_comparment_id
     
     
-    ### TB compartment 1##
+    ### TB compartment 1 (Uninfected no IPT) ##
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_UNINFECTED_NOIPT
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[1, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #since DS is not applicable for unifected compartments assign all DR == 1
           if (r == 1){
             
             #look up relative compartment pop locations in 1D array
             other_hiv_ids <- HIV_SET[-h]
-            other_hiv_loc1 <- 
-            other_hiv_loc2 <- N_t_r_h_g_ref[1, r, other_hiv_ids[2], g]
-            other_hiv_loc3 <- N_t_r_h_g_ref[1, r, other_hiv_ids[3], g]
+            other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+            other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+            other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
             
-            tb_compartment_2_loc <- N_t_r_h_g_ref[2, r, h, g]
+            tb_compartment_2_loc <- N_t_r_h_g_ref[t, r, h, g]
             
             #calculate net gains/losses in compartment
-            delta_pop[current_compartment_loc] <<- rho_t_h_g[1,h,g]*total_pop + 
-              eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-              eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-              eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
-              omega_t_p[1,policy_id]*compartment_pop[tb_compartment_2_loc] -
+            delta_pop[current_compartment_loc] <<- rho_t_h_g[t,h,g]*total_pop + 
+              eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+              eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+              eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
+              omega_t_p[t,policy_id]*compartment_pop[tb_compartment_2_loc] -
               #losses
               ((alpha + 
-                 mu_t_h_g[1,h,g] + 
+                 mu_t_h_g[t,h,g] + 
                  lambda + 
-                 kappa_t_h_g_p[1,h,g,policy_id] + 
-                 sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                 kappa_t_h_g_p[t,h,g,policy_id] + 
+                 sum(eta_i_h_p[h, other_hiv_ids, policy_id]))*compartment_pop[current_compartment_loc])
               
           }
           
@@ -555,37 +562,39 @@ seir <- function(time, compartment_pop, parameters) {
       })
     })
         
-    ### TB compartment 2##
+    ### TB compartment 2 (uninfected no IPT_##
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_UNINFECTED_NOIPT
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[2, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #since DS is not applicable for unifected compartments
           if (r == 1){
             
             #look up relative compartment pop locations in 1D array 
             other_hiv_ids <- HIV_SET[-h]
-            other_hiv_loc1 <- N_t_r_h_g_ref[2, r, other_hiv_ids[1], g]
-            other_hiv_loc2 <- N_t_r_h_g_ref[2, r, other_hiv_ids[2], g]
-            other_hiv_loc3 <- N_t_r_h_g_ref[2, r, other_hiv_ids[3], g]
+            other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+            other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+            other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
             
             tb_compartment_1_loc <- N_t_r_h_g_ref[1, r, h, g]
             
             #calculate net gains/losses in compartment
-            delta_pop[current_compartment_loc] <<- eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-              eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-              eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
-              kappa_t_h_g_p[1, h, g, policy_id]*compartment_pop[tb_compartment_1_loc] -
+            delta_pop[current_compartment_loc] <<- eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+              eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+              eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
+              kappa_t_h_g_p[t, h, g, policy_id]*compartment_pop[tb_compartment_1_loc] -
               #losses
               ((alpha + 
-                  mu_t_h_g[2,h,g] +
-                  omega_t_p[2, policy_id] + 
+                  mu_t_h_g[t,h,g] +
+                  omega_t_p[t, policy_id] + 
                   iota_r[DR_SUBSET_DS]*lambda_r[DR_SUBSET_DS] +
                   iota_r[DR_SUBSET_MDR]*lambda_r[DR_SUBSET_MDR] +
-                  sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                  sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
           }
           
           
@@ -594,19 +603,21 @@ seir <- function(time, compartment_pop, parameters) {
     })
 
     
-    ### TB compartment 3##
+    ### TB compartment 3 (infected recently) ##
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_INFECTED_RECENT
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[3, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #look up relative compartment pop locations in 1D array  
           other_hiv_ids <- HIV_SET[-h]
-          other_hiv_loc1 <- N_t_r_h_g_ref[3, r, other_hiv_ids[1], g]
-          other_hiv_loc2 <- N_t_r_h_g_ref[3, r, other_hiv_ids[2], g]
-          other_hiv_loc3 <- N_t_r_h_g_ref[3, r, other_hiv_ids[3], g]
+          other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+          other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+          other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
           
           tb_compartment_1_loc<-N_t_r_h_g_ref[1,1,h,g] #we ref DR compartment 1 since we assume unifected is in that compartment
           tb_compartment_2_loc<-N_t_r_h_g_ref[2,1,h,g]
@@ -615,121 +626,127 @@ seir <- function(time, compartment_pop, parameters) {
           tb_compartment_8_loc<-N_t_r_h_g_ref[8,r,h,g]
           
           #calculate net gains/losses in compartment
-          delta_pop[current_compartment_loc] <<- rho_t_h_g[3,h,g]*total_pop + 
-            eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-            eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-            eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
+          delta_pop[current_compartment_loc] <<- rho_t_h_g[t,h,g]*total_pop + 
+            eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+            eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+            eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
             lambda_r[r]*compartment_pop[tb_compartment_1_loc] +
             iota_r[r]*lambda_r[r]*compartment_pop[tb_compartment_2_loc]+
             ((zeta*lambda_r[r])*sum(compartment_pop[c(tb_compartment_4_loc, tb_compartment_7_loc)]))+
             ((upsilon*lambda_r[r])*compartment_pop[tb_compartment_8_loc]) -
             #losses
             ((alpha + 
-                mu_t_h_g[3,h,g] + 
-                pi_i_t[3,4] + 
-                kappa_t_h_g_p[3, h, g, policy_id] +
-                theta_h[h]*pi_i_t[3,6] +
-                sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                mu_t_h_g[t,h,g] + 
+                pi_i_t[t,4] + 
+                kappa_t_h_g_p[t, h, g, policy_id] +
+                theta_h[h]*pi_i_t[t,6] +
+                sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
     })
     
-    ### TB compartment 4##
+    ### TB compartment 4 (infected remotely) ##
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_INFECTED_REMOTE
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[4, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #look up relative compartment pop locations in 1D array 
           other_hiv_ids <- HIV_SET[-h]
-          other_hiv_loc1 <- N_t_r_h_g_ref[4, r, other_hiv_ids[1], g]
-          other_hiv_loc2 <- N_t_r_h_g_ref[4, r, other_hiv_ids[2], g]
-          other_hiv_loc3 <- N_t_r_h_g_ref[4, r, other_hiv_ids[3], g]
+          other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+          other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+          other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
           
           tb_compartment_3_pop_loc <- N_t_r_h_g_ref[3,r,h,g]
           
           #calculate net gains/losses in compartment
-          delta_pop[current_compartment_loc] <<- rho_t_h_g[4,h,g]*total_pop +
-            eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-            eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-            eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
-            pi_i_t[3,4]*compartment_pop[tb_compartment_3_pop_loc] -
+          delta_pop[current_compartment_loc] <<- rho_t_h_g[t,h,g]*total_pop +
+            eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+            eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+            eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
+            pi_i_t[3,t]*compartment_pop[tb_compartment_3_pop_loc] -
             #losses
             ((alpha + 
-                mu_t_h_g[4,h,g] + 
+                mu_t_h_g[t,h,g] + 
                 zeta*lambda_r[r] +
-                kappa_t_h_g_p[4,h,g,policy_id]+
-                theta_h[h]*pi_i_t[4,6]+
-                sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                kappa_t_h_g_p[t,h,g,policy_id]+
+                theta_h[h]*pi_i_t[t,6]+
+                sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
     })
     
-    ### TB compartment 5##
+    ### TB compartment 5 (LTBI, on IPT) ##
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_INFECTED_IPT
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[5, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #look up relative compartment pop locations in 1D array 
           other_hiv_ids <- HIV_SET[-h]
-          other_hiv_loc1 <- N_t_r_h_g_ref[5, r, other_hiv_ids[1], g]
-          other_hiv_loc2 <- N_t_r_h_g_ref[5, r, other_hiv_ids[2], g]
-          other_hiv_loc3 <- N_t_r_h_g_ref[5, r, other_hiv_ids[3], g]
+          other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+          other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+          other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
           
           tb_compartment_3_pop_loc <- N_t_r_h_g_ref[3, r, h, g]
           tb_compartment_4_pop_loc <- N_t_r_h_g_ref[4, r, h, g]
           
           #calculate net gains/losses in compartment
-          delta_pop[current_compartment_loc] <<- eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-            eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-            eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
+          delta_pop[current_compartment_loc] <<- eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+              eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+              eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
             kappa_t_h_g_p[3,h,g,policy_id]*compartment_pop[tb_compartment_3_pop_loc] +
             kappa_t_h_g_p[4,h,g,policy_id]*compartment_pop[tb_compartment_4_pop_loc] -
             ((alpha + 
-                mu_t_h_g[5,h,g] +
-                theta_h[h]*pi_i_t[5,6] +
-                gamma_r[r]*omega_t_p[5,policy_id] +
-                sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                mu_t_h_g[t,h,g] +
+                theta_h[h]*pi_i_t[t, 6] +
+                gamma_r[r]*omega_t_p[5, policy_id] +
+                sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
     })
     
-    ### TB compartment 6##
+    ### TB compartment 6 (Active TB) ##
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_ACTIVE
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[6, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #look up relative compartment pop locations in 1D array 
           other_hiv_ids <- HIV_SET[-h]
-          other_hiv_loc1 <- N_t_r_h_g_ref[6, r, other_hiv_ids[1], g]
-          other_hiv_loc2 <- N_t_r_h_g_ref[6, r, other_hiv_ids[2], g]
-          other_hiv_loc3 <- N_t_r_h_g_ref[6, r, other_hiv_ids[3], g]
+          other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+          other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+          other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
           
           tb_compartment_3_pop_loc <- N_t_r_h_g_ref[3, r, h, g]
           tb_compartment_4_pop_loc <- N_t_r_h_g_ref[4, r, h, g]
           tb_compartment_5_pop_loc <- N_t_r_h_g_ref[3, r, h, g]
           
           #calculate net gains/losses in compartment
-          delta_pop[current_compartment_loc] <<- rho_t_h_g[6,h,g]*total_pop + 
-            eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-            eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-            eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
-            theta_h[h]*pi_i_t[3,6]*compartment_pop[tb_compartment_3_pop_loc]+
-            theta_h[h]*pi_i_t[4,6]*compartment_pop[tb_compartment_4_pop_loc]+
-            theta_h[h]*pi_i_t[5,6]*compartment_pop[tb_compartment_5_pop_loc] -
+          delta_pop[current_compartment_loc] <<- rho_t_h_g[t,h,g]*total_pop + 
+            eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+            eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+            eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
+            theta_h[h]*pi_i_t[3,t]*compartment_pop[tb_compartment_3_pop_loc]+
+            theta_h[h]*pi_i_t[4,t]*compartment_pop[tb_compartment_4_pop_loc]+
+            theta_h[h]*pi_i_t[5,t]*compartment_pop[tb_compartment_5_pop_loc] -
             #losses
             ((alpha +
-                mu_t_h_g[6,h,g] +
-                pi_i_t[6,7] +
-                sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                mu_t_h_g[t,h,g] +
+                pi_i_t[t,7] +
+                sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
     })
@@ -739,27 +756,29 @@ seir <- function(time, compartment_pop, parameters) {
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_RECOVERED
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[7, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #look up relative compartment pop locations in 1D array 
           other_hiv_ids <- HIV_SET[-h]
-          other_hiv_loc1 <- N_t_r_h_g_ref[7, r, other_hiv_ids[1], g]
-          other_hiv_loc2 <- N_t_r_h_g_ref[7, r, other_hiv_ids[2], g]
-          other_hiv_loc3 <- N_t_r_h_g_ref[7, r, other_hiv_ids[3], g]
+          other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+          other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+          other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
           
           tb_compartment_6_pop_loc <- N_t_r_h_g_ref[6,r,h,g]
           
           #calculate net gains/losses in compartment
-          delta_pop[current_compartment_loc] <<- eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-            eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-            eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
-            pi_i_t[6,7]*compartment_pop[tb_compartment_6_pop_loc] -
+          delta_pop[current_compartment_loc] <<- eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+            eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+            eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
+            pi_i_t[6,t]*compartment_pop[tb_compartment_6_pop_loc] -
             #losses
             ((alpha + 
-                mu_t_h_g[7,h,g] + 
+                mu_t_h_g[t,h,g] + 
                 zeta*lambda_r[r] +
-                sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
     })
@@ -769,26 +788,28 @@ seir <- function(time, compartment_pop, parameters) {
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
           
+          t = TB_SUBSET_AFTERIPT
+          
           #lookup current compartment loc in 1D array
-          current_compartment_loc <- N_t_r_h_g_ref[8, r, h, g]
+          current_compartment_loc <- N_t_r_h_g_ref[t, r, h, g]
           
           #look up relative compartment pop locations in 1D array  
           other_hiv_ids <- HIV_SET[-h]
-          other_hiv_loc1 <- N_t_r_h_g_ref[8, r, other_hiv_ids[1], g]
-          other_hiv_loc2 <- N_t_r_h_g_ref[8, r, other_hiv_ids[2], g]
-          other_hiv_loc3 <- N_t_r_h_g_ref[8, r, other_hiv_ids[3], g]
+          other_hiv_loc1 <- N_t_r_h_g_ref[t, r, other_hiv_ids[1], g]
+          other_hiv_loc2 <- N_t_r_h_g_ref[t, r, other_hiv_ids[2], g]
+          other_hiv_loc3 <- N_t_r_h_g_ref[t, r, other_hiv_ids[3], g]
           
           tb_compartment_5_pop_loc <- N_t_r_h_g_ref[5,r,h,g]
           
           #calculate net gains/losses in compartment
-          delta_pop[current_compartment_loc] <<- eta_i_h[other_hiv_ids[1], h]*compartment_pop[other_hiv_loc1] +
-            eta_i_h[other_hiv_ids[2], h]*compartment_pop[other_hiv_loc2] + 
-            eta_i_h[other_hiv_ids[3], h]*compartment_pop[other_hiv_loc3] +
-            gamma_r[r]*omega_t_p[8, policy_id]*compartment_pop[tb_compartment_5_pop_loc] -
+          delta_pop[current_compartment_loc] <<- eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
+              eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
+              eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
+            gamma_r[r]*omega_t_p[t, policy_id]*compartment_pop[tb_compartment_5_pop_loc] -
             ((alpha + 
-                mu_t_h_g[8,h,g] + 
+                mu_t_h_g[t,h,g] + 
                 upsilon*lambda_r[r] + 
-                sum(eta_i_h[h, other_hiv_ids]))*compartment_pop[current_compartment_loc])
+                sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
     })
@@ -821,25 +842,40 @@ lapply(P_SET, function(p){
   
 })
 
+#calculate N(t)/total population at each timestep
+out_all_df <- out_all_df%>% mutate(total_pop = rowSums(.[1:129]))
+out_all_df$policy_id <-as.factor(out_all_df$policy_id)
+
 ######Graphs#######
 
 #all active
 active_pops_df <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, HIV_SET, G_SET])+1), 130)]
 active_pops_df <- melt(active_pops_df, id.vars = c('time', 'policy_id'))
+active_pops_df <- active_pops_df%>%
+  left_join(out_all_df[,c(1,ncol(out_all_df))], by = 'time')
+active_pops_df$policy_id <- as.factor(active_pops_df$policy_id)
 
+#total active pops
 active_pops_df_group_by_compartments <- active_pops_df%>%
   group_by(time, policy_id)%>%
   summarise(total_pop = sum(value))
 
+#percent in active pops
+active_pops_perc_df_group_by_compartments <- active_pops_df%>%
+  mutate(percent_of_total_pop = value/total_pop)%>%
+  group_by(time, policy_id)%>%
+  summarise(perc_pop = sum(percent_of_total_pop))
+
+active_pops_perc_df_group_by_compartments%>%
+ggplot(.,aes(x=time,y = perc_pop, group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Percent of Population", title = "Percent of popultion that has active TB over time \n by policy")
+
 #FOI over time
 FOI_overtime_graph_df<-melt(lambda_r_g_tau_p)
-colnames(FOI_overtime_graph_df)<-c('DRUG_RESISTANCE', 'GENDER', 'TIME', 'POLICY', 'FOI')
+colnames(FOI_overtime_graph_df)<-c('drug_resistance', 'gender', 'time', 'policy_id', 'FOI')
 FOI_overtime_graph_df_gender_grouped <- FOI_overtime_graph_df%>%
-  group_by(DRUG_RESISTANCE, TIME, POLICY)%>%
+  group_by(drug_resistance, time, policy_id)%>%
   summarise(FOI_by_DR = sum(FOI))
 
 
-FOI_overtime_graph_df_gender_grouped %>%filter(DRUG_RESISTANCE == 2) %>%
-ggplot(.,aes(x=TIME,y = FOI_by_DR, group = as.factor(POLICY), color = as.factor(POLICY))) +geom_line() + theme_bw() + labs (x = "Time", y = "Rate", title = "Plot")
-
-
+FOI_overtime_graph_df_gender_grouped %>%filter(drug_resistance == 2) %>%
+ggplot(.,aes(x=time,y = FOI_by_DR, group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "FOI Rate", title = "MDR FOI rate over time \n by policy")
