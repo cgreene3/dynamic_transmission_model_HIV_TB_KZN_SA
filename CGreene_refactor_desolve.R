@@ -10,6 +10,7 @@ sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2'), requir
 
 #Define input directory
 indir<-("~/GitHub/epi_model_HIV_TB/param_files")
+#indir<-("C:/Users/jross3/Repos/k01/epi_model_HIV_TB/param_files") #JR filepath location
 
 #Define output directory - Set to outdir loc
 #outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25")
