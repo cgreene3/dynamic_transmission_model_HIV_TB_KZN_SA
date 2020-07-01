@@ -9,10 +9,12 @@ gc()
 sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2'), require, character.only=T)
 
 #Define input directory
-indir<-("~/GitHub/epi_model_HIV_TB/param_files")
+indir<-("~/GitHub/epi_model_HIV_TB/param_files") #chelsea
+#indir<-("") #jen
 
 #Define output directory - Set to outdir loc
-#outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25")
+outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25") #chelsea
+#outdit<- #jen
 
 set.seed(1)
 
@@ -95,8 +97,8 @@ HIV_SUBSET_POS_NOART<-2:3
 
 #HIV subsets - individual compartments
 HIV_SUBSET_NEG <- 1
-HIV_SUBSET_POS_CD4LESS <-2
-HIV_SUBSET_POS_CD4MORE <-3
+HIV_SUBSET_POS_CD4MORE <-2
+HIV_SUBSET_POS_CD4LESS <-3
 HIV_SUBSET_POS_ART <- 4
 
 #Genders (G): Male : 1, Female : 2
@@ -123,7 +125,9 @@ TT_SET <- c(1:(12*TT))*time_interval
 
 ######create compartment ids and reference matrix to go between multidementional arrays and 1D array####
 n_compartments <- length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET)
-comparment_id<-rep(NA, n_compartments)
+compartment_id<-rep(NA, n_compartments)
+
+#create 1_D array that contains all compartment names (for ODE) - in the same order as the ref mat (below)
 
 #iterator for loop
 n = 0
@@ -133,13 +137,14 @@ lapply(TB_SET, function(t){
     lapply(HIV_SET, function(h){
       lapply(G_SET, function(g){
         n <<- n+1
-        comparment_id[n] <<- paste0("N_", t, "_", r, "_", h, "_", g)
+        compartment_id[n] <<- paste0("N_", t, "_", r, "_", h, "_", g)
       })
     })
   })
 })
 
 
+#create matrix to look up location of compartment in 1-D array
 N_t_r_h_g_ref <-array(data = 0, dim = c(length(TB_SET),
                                           length(DR_SET),
                                           length(HIV_SET),
@@ -162,7 +167,7 @@ lapply(TB_SET, function(t){
 })
 
 #create delta compartment ids
-d_comparment_id<-paste0('d', comparment_id)
+d_compartment_id<-paste0('d', compartment_id)
 
 ##########POPULATION##########
 
@@ -189,10 +194,19 @@ lapply(TB_SET, function(t){
 
 #make into 1D array for ODE
 compartments_init <- c(N_t_r_h_g_init) #under all policies the initial pop is the same so can just set init population using any aribritrary policy
-names(compartments_init) <- comparment_id
+names(compartments_init) <- compartment_id
 
-#create an matrix for recording FOI over time
+#create a matrix for recording FOI over time
 lambda_r_g_tau_p <-array(data=0, dim = c(length(DR_SET),
+                                         length(G_SET),
+                                         length(TT_SET),
+                                         length(P_SET)
+))
+
+#create a matrix for recording deaths over time
+mortality_t_r_h_g_tau_p <-array(data=0, dim = c(length(TB_SET),
+                                         length(DR_SET),
+                                         length(HIV_SET),
                                          length(G_SET),
                                          length(TT_SET),
                                          length(P_SET)
@@ -384,7 +398,6 @@ lapply(1:nrow(eta_params), function(x){
   p <- eta_params$P_compartment[x]
   
   eta_i_h_p [i,h, p] <<- eta_params$Reference_expected_value[x]
-  #eta_i_h_p[i,h,p] <<- .05
 })
 
 rm(eta_params)
@@ -400,16 +413,15 @@ rho_t_h_g <-array(data = 0, dim = c(length(TB_SET),
 rho_params <- param_df%>%
   filter(notation == 'rho')
 
-lapply(c(TB_SUBSET_UNINFECTED_NOIPT, TB_SUBSET_LTBI), function(t){
-  lapply(c(HIV_SUBSET_NEG, HIV_SUBSET_POS_NOART), function(h){
+lapply(c(TB_SUBSET_UNINFECTED_NOIPT, TB_SUBSET_INFECTED_RECENT, TB_SUBSET_INFECTED_RECENT, TB_SUBSET_ACTIVE), function(t){
+  lapply(c(HIV_SUBSET_NEG, HIV_SUBSET_POS_CD4MORE), function(h){
     lapply(G_SET, function(g){
       temp <- rho_params%>%
         filter(TB_compartment == t,
                HIV_compartment == h,
                G_compartment == g)
       
-      #rho_t_h_g[t,h,g] <<-temp$Reference_expected_value
-      rho_t_h_g[t,h,g] <<- .05
+      rho_t_h_g[t,h,g] <<-temp$Reference_expected_value
     })
   })
 })
@@ -435,7 +447,6 @@ lapply(TB_SET, function(t){
                G_compartment == g)
       
       mu_t_h_g[t,h,g] <<-temp$Reference_expected_value
-      #mu_t_h_g[t,h,g] <<-.05
     })
   })
 })
@@ -518,7 +529,7 @@ seir <- function(time, compartment_pop, parameters) {
     lambda <- sum(lambda_r)
     
     delta_pop <- rep(0, n_compartments) #net gains/losses in pop in compartment
-    names(delta_pop)<-d_comparment_id
+    names(delta_pop)<-d_compartment_id
     
     
     ### TB compartment 1 (Uninfected no IPT) ##
@@ -554,7 +565,6 @@ seir <- function(time, compartment_pop, parameters) {
                  lambda + 
                  kappa_t_h_g_p[t,h,g,policy_id] + 
                  sum(eta_i_h_p[h, other_hiv_ids, policy_id]))*compartment_pop[current_compartment_loc])
-              
           }
           
           
@@ -819,7 +829,7 @@ seir <- function(time, compartment_pop, parameters) {
 }
 
 out_all_df <- data.frame(matrix(ncol = n_compartments+2, nrow = 0))
-colnames(out_all_df) <- c('time', comparment_id, 'policy_id')
+colnames(out_all_df) <- c('time', compartment_id, 'policy_id')
 
 lapply(P_SET, function(p){
   
@@ -867,7 +877,7 @@ active_pops_perc_df_group_by_compartments <- active_pops_df%>%
   summarise(perc_pop = sum(percent_of_total_pop))
 
 active_pops_perc_df_group_by_compartments%>%
-ggplot(.,aes(x=time,y = perc_pop, group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Percent of Population", title = "Percent of popultion that has active TB over time \n by policy")
+ggplot(.,aes(x=time,y = perc_pop, group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Percent of Population", title = "Percent of population that has active TB over time \n by policy")
 
 #FOI over time
 FOI_overtime_graph_df<-melt(lambda_r_g_tau_p)
