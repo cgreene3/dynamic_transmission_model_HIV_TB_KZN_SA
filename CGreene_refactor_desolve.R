@@ -9,12 +9,12 @@ gc()
 sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2'), require, character.only=T)
 
 #Define input directory
-indir<-("~/GitHub/epi_model_HIV_TB/param_files") #chelsea
-#indir<-("") #jen
+#indir<-("~/GitHub/epi_model_HIV_TB/param_files") #chelsea
+indir<-("C:/Users/jross/repos/epi_model_HIV_TB/param_files")
 
 #Define output directory - Set to outdir loc
 outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25") #chelsea
-#outdit<- #jen
+#outdir<- #jen
 
 set.seed(1)
 
