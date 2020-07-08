@@ -6,11 +6,11 @@ rm(list = ls())
 gc()
 
 #load packages
-sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2'), require, character.only=T)
+sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2', 'varhandle'), require, character.only=T)
 
 #Define input directory
-#indir<-("~/GitHub/epi_model_HIV_TB/param_files") #chelsea
-indir<-("C:/Users/jross/repos/epi_model_HIV_TB/param_files")
+indir<-"~/ws/GitHub/ws.epi_model_HIV_TB/epi_model_HIV_TB/param_files" #chelsea
+#indir<-("C:/Users/jross/repos/epi_model_HIV_TB/param_files")
 
 #Define output directory - Set to outdir loc
 outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25") #chelsea
@@ -20,8 +20,13 @@ set.seed(1)
 
 #read parameter file
 setwd(indir)
-param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
-pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
+#param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
+#pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
+
+#sensitivity test
+param_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Model_Matched_Parameters')
+
+pop_init_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Pop_Init')
 
 
 ####clean df for input####
@@ -859,33 +864,65 @@ out_all_df$policy_id <-as.factor(out_all_df$policy_id)
 ######Graphs#######
 
 #all active
-active_pops_df <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, HIV_SET, G_SET])+1), 130)]
+active_pops_df <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, c(2,3,4), G_SET])+1), 130)]
 active_pops_df <- melt(active_pops_df, id.vars = c('time', 'policy_id'))
+
 active_pops_df <- active_pops_df%>%
   left_join(out_all_df[,c(1,ncol(out_all_df))], by = 'time')
 active_pops_df$policy_id <- as.factor(active_pops_df$policy_id)
 
+temp <- out_all_df[,c(1,130,131)]
+
 #total active pops
 active_pops_df_group_by_compartments <- active_pops_df%>%
   group_by(time, policy_id)%>%
-  summarise(total_pop = sum(value))
+  summarise(total_active_pop = sum(value))%>%
+  left_join(.,temp, by = c('time', 'policy_id'))%>%
+  ungroup()%>%
+  mutate(percent_active_pop = total_active_pop/total_pop)
 
-#percent in active pops
-active_pops_perc_df_group_by_compartments <- active_pops_df%>%
-  mutate(percent_of_total_pop = value/total_pop)%>%
-  group_by(time, policy_id)%>%
-  summarise(perc_pop = sum(percent_of_total_pop))
+active_pops_df_group_by_compartments$policy_id <- as.factor(active_pops_df_group_by_compartments$policy_id)
 
-active_pops_perc_df_group_by_compartments%>%
-ggplot(.,aes(x=time,y = perc_pop, group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Percent of Population", title = "Percent of population that has active TB over time \n by policy")
+active_pops_df_group_by_compartments %>%
+ggplot(.,aes(x=time,y = percent_active_pop, group = as.factor(policy_id), color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Percent of Population", title = "Percent of population that has active TB over time \n by policy") + xlim(.3, max(active_pops_df$time))
+
+active_pops_df_group_by_compartments %>%
+ggplot(.,aes(x=time,y = total_active_pop, group = as.factor(policy_id), color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Total Active Population", title = "Total population that has active TB over time \n by policy") + xlim(.3, max(active_pops_df$time))
+
+active_pops_df_group_by_compartments %>%
+ggplot(.,aes(x=time,y = total_pop, group = as.factor(policy_id), color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Total Population", title = "Total population over time \n by policy") + xlim(.3, max(active_pops_df$time))
+
+
+#debugging
+active_pops_df_t5 <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, HIV_SET, G_SET])+1), 130)]
+active_pops_df_t5 <-active_pops_df_t5 %>%filter(time == 2.5)
+active_pops_df_t5<-active_pops_df_t5%>%select(-c('time'))
+active_pops_df_t5<-t(active_pops_df_t5)
+colnames(active_pops_df_t5) <-c('policy_1', 'policy_2', 'policy_3')
+active_pops_df_t5 <- tibble::rownames_to_column(as.data.frame(active_pops_df_t5), "compartment")
+active_pops_df_t5$policy_1 <-unfactor(active_pops_df_t5$policy_1)
+active_pops_df_t5$policy_2 <-unfactor(active_pops_df_t5$policy_2)
+active_pops_df_t5$policy_3 <-unfactor(active_pops_df_t5$policy_3)
+active_pops_df_t5 <- active_pops_df_t5[-nrow(active_pops_df_t5),]
+active_pops_df_t5$diff <- active_pops_df_t5$policy_1 - active_pops_df_t5$policy_3
+
+totals<-sapply(active_pops_df_t5[,c(2,3,4)], sum)
 
 #FOI over time
 FOI_overtime_graph_df<-melt(lambda_r_g_tau_p)
 colnames(FOI_overtime_graph_df)<-c('drug_resistance', 'gender', 'time', 'policy_id', 'FOI')
-FOI_overtime_graph_df_gender_grouped <- FOI_overtime_graph_df%>%
-  group_by(drug_resistance, time, policy_id)%>%
-  summarise(FOI_by_DR = sum(FOI))
+FOI_overtime_graph_df <- FOI_overtime_graph_df%>%
+  group_by(time, policy_id)%>%
+  summarise(FOI = sum(FOI))
+
+colnames(FOI_overtime_graph_df)[colnames(FOI_overtime_graph_df) == 'time'] <- 'time_set_id'
+
+time_set_match_df<-as.data.frame(cbind(seq(length(TT_SET)), TT_SET))
+colnames(time_set_match_df) <-c('time_set_id', 'time')
+
+FOI_overtime_graph_df<- FOI_overtime_graph_df%>%
+  left_join(., time_set_match_df, by = 'time_set_id')
 
 
-FOI_overtime_graph_df_gender_grouped %>%filter(drug_resistance == 2) %>%
-ggplot(.,aes(x=time,y = FOI_by_DR, group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "FOI Rate", title = "MDR FOI rate over time \n by policy")
+FOI_overtime_graph_df%>%
+ggplot(.,aes(x=time,y = as.double(FOI), group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "FOI Rate", title = "Force of Infection (FOI) Rate \n Over Time By Policy") + xlim(.3, 5) + guides(color=guide_legend(title="Policy ID")) + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
