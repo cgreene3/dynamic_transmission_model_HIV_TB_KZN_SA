@@ -50,5 +50,6 @@ df<-read.csv(paste0(indir, "GBD_prev_1990_2017_jul28.csv"))
     #Use metric_id==3 to get rates and measure_id==5 for prevalence
 
 
-
+ 
 #Section 4 - Line graph of values in groups 5&6 with years on x-axis. Values should be substantially higher than groups 1-4.
+
