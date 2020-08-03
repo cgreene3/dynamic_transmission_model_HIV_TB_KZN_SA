@@ -8,25 +8,18 @@ gc()
 #load packages
 sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2', 'varhandle'), require, character.only=T)
 
-#Define input directory
-indir<-"~/ws/GitHub/ws.epi_model_HIV_TB/epi_model_HIV_TB/param_files" #chelsea
-#indir<-("C:/Users/jross/repos/epi_model_HIV_TB/param_files")
-
-#Define output directory - Set to outdir loc
-outdir<-("~/GitHub/epi_model_HIV_TB/test_outputs/Jun25") #chelsea
-#outdir<- #jen
-
-set.seed(1)
+#define input and output directories
+indir<-'param_files/'
+outdir<-'test_outputs/epi_model'
 
 #read parameter file
-setwd(indir)
-#param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
-#pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
+setwd(here(indir))
+param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
+pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
 
 #sensitivity test
-param_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Model_Matched_Parameters')
-
-pop_init_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Pop_Init')
+#param_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Model_Matched_Parameters')
+#pop_init_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Pop_Init')
 
 
 ####clean df for input####
