@@ -17,8 +17,8 @@ outdir<-'test_outputs/calibration'
 setwd(here(indir))
 
 prevalence_df<-read.csv("GBD_prev_1990_2017_jul28.csv")
-param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
-pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
+param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Model_Matched_Parameters')
+pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Pop_Init')
 
 ##########Section 1 - Assembling calibration dataset. For each year (1990 to 2017) generate TB prevalence rate (per 100,000 population) by HIV+, HIV-, and male/female#######
 

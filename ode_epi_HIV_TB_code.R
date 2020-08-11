@@ -6,7 +6,7 @@ rm(list = ls())
 gc()
 
 #load packages
-sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2', 'varhandle'), require, character.only=T)
+sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2', 'varhandle', 'here'), require, character.only=T)
 
 #define input and output directories
 indir<-'param_files/'
@@ -14,12 +14,8 @@ outdir<-'test_outputs/epi_model'
 
 #read parameter file
 setwd(here(indir))
-param_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Model_Matched_Parameters')
-pop_init_df <- read_excel("Epi_parameters_June_24_2020.xlsx", sheet = 'Pop_Init')
-
-#sensitivity test
-#param_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Model_Matched_Parameters')
-#pop_init_df <- read_excel("Epi_parameters_sensitivity_test.xlsx", sheet = 'Pop_Init')
+param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Model_Matched_Parameters')
+pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Pop_Init')
 
 
 ####clean df for input####
@@ -322,24 +318,12 @@ rm(kappa_params)
 
 #Rate rate of moving off of IPT from TB compartment t under policy p, per year
 #0 where not applicable
-omega_t_p<- array(data = 0, dim = c(length(TB_SET),
-                                    length(P_SET)
-                                    ))
 
 #filter dataframe for omega params
 omega_params <- param_df%>%
   filter(notation == 'omega')
 
-lapply(TB_SUBSET_IPT, function(t){
-  lapply(P_SET, function(p){
-    temp <- omega_params%>%
-          filter(TB_compartment == t,
-                 P_compartment == p)
-    
-    omega_t_p[t,p] <<- temp$Reference_expected_value
-    
-  })
-})
+omega <- omega_params$Reference_expected_value
 
 rm(omega_params)
 
@@ -362,7 +346,7 @@ lapply(1:nrow(pi_params), function(x){
 
 rm(pi_params)
 
-#elative risk for TB progression from LTBI to Active for HIV compartment h
+#relative risk for TB progression from LTBI to Active for HIV compartment h
 theta_h <- array(data = 0, dim = length(HIV_SET))
 
 #filter dataframe for theta params
@@ -378,6 +362,26 @@ rm(theta_params)
 
 #1 if in drug-susceptible, DR compartment r ∈ 1 ⊂ DR, 0 if in MDR-TB, DR com- partment r ∈ 2 ⊂ DR to indicate that populations with MDR-TB cannot move into LTBI after IPT
 gamma_r <- c(0,1)
+
+
+#IPT adherence by gender and policy
+varpi_g_p <- array(data = 0, dim = c(length(G_SET), length(P_SET)))
+
+#filter dataframe for varpi params
+varpi_params <- param_df%>%
+  filter(notation == 'varpi')
+
+lapply(G_SET, function(g){
+  lapply(P_SET, function(p){
+    temp<-varpi_params%>%filter(G_compartment == g,
+                                P_compartment == p)
+    
+    varpi_g_p[g,p] <<-temp$Reference_expected_value
+    
+  })
+})
+
+rm(varpi_params)
 
 ##########Parameters that describe HIV progression########
 #Rate of populations moving from HIV compartment i to HIV compartment h, per year, (i, h) ∈ HIV under policy p ∈ P #(set to zero where not applicable)
@@ -556,7 +560,7 @@ seir <- function(time, compartment_pop, parameters) {
               eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
               eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
               eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
-              omega_t_p[t,policy_id]*compartment_pop[tb_compartment_2_loc] -
+              omega*compartment_pop[tb_compartment_2_loc] -
               #losses
               ((alpha + 
                  mu_t_h_g[t,h,g] + 
@@ -599,7 +603,7 @@ seir <- function(time, compartment_pop, parameters) {
               #losses
               ((alpha + 
                   mu_t_h_g[t,h,g] +
-                  omega_t_p[t, policy_id] + 
+                  omega + 
                   iota_r[DR_SUBSET_DS]*lambda_r[DR_SUBSET_DS] +
                   iota_r[DR_SUBSET_MDR]*lambda_r[DR_SUBSET_MDR] +
                   sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
@@ -647,7 +651,7 @@ seir <- function(time, compartment_pop, parameters) {
                 mu_t_h_g[t,h,g] + 
                 pi_i_t[t,4] + 
                 kappa_t_h_g_p[t, h, g, policy_id] +
-                theta_h[h]*pi_i_t[t,6] +
+                varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[t,6] +
                 sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
@@ -682,7 +686,7 @@ seir <- function(time, compartment_pop, parameters) {
                 mu_t_h_g[t,h,g] + 
                 zeta*lambda_r[r] +
                 kappa_t_h_g_p[t,h,g,policy_id]+
-                theta_h[h]*pi_i_t[t,6]+
+                varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[t,6]+
                 sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
@@ -715,8 +719,8 @@ seir <- function(time, compartment_pop, parameters) {
             kappa_t_h_g_p[4,h,g,policy_id]*compartment_pop[tb_compartment_4_pop_loc] -
             ((alpha + 
                 mu_t_h_g[t,h,g] +
-                theta_h[h]*pi_i_t[t, 6] +
-                gamma_r[r]*omega_t_p[5, policy_id] +
+                varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[t, 6] +
+                gamma_r[r]*omega +
                 sum(eta_i_h_p[h, other_hiv_ids,policy_id]))*compartment_pop[current_compartment_loc])
         })
       })
@@ -747,9 +751,9 @@ seir <- function(time, compartment_pop, parameters) {
             eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
             eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
             eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
-            theta_h[h]*pi_i_t[3,t]*compartment_pop[tb_compartment_3_pop_loc]+
-            theta_h[h]*pi_i_t[4,t]*compartment_pop[tb_compartment_4_pop_loc]+
-            theta_h[h]*pi_i_t[5,t]*compartment_pop[tb_compartment_5_pop_loc] -
+            varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[3,t]*compartment_pop[tb_compartment_3_pop_loc]+
+            varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[4,t]*compartment_pop[tb_compartment_4_pop_loc]+
+            varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[5,t]*compartment_pop[tb_compartment_5_pop_loc] -
             #losses
             ((alpha +
                 mu_t_h_g[t,h,g] +
@@ -813,7 +817,7 @@ seir <- function(time, compartment_pop, parameters) {
           delta_pop[current_compartment_loc] <<- eta_i_h_p[other_hiv_ids[1], h, policy_id]*compartment_pop[other_hiv_loc1] +
               eta_i_h_p[other_hiv_ids[2], h, policy_id]*compartment_pop[other_hiv_loc2] + 
               eta_i_h_p[other_hiv_ids[3], h, policy_id]*compartment_pop[other_hiv_loc3] +
-            gamma_r[r]*omega_t_p[t, policy_id]*compartment_pop[tb_compartment_5_pop_loc] -
+            gamma_r[r]*omega*compartment_pop[tb_compartment_5_pop_loc] -
             ((alpha + 
                 mu_t_h_g[t,h,g] + 
                 upsilon*lambda_r[r] + 
@@ -830,24 +834,32 @@ out_all_df <- data.frame(matrix(ncol = n_compartments+2, nrow = 0))
 colnames(out_all_df) <- c('time', compartment_id, 'policy_id')
 
 lapply(P_SET, function(p){
+  lapply(seq(.001, .009, .001), function(b1){
+    lapply(seq(.001, .009, .001), function(b2){
+      
+      beta_g<<-c(b1, b2)
   
-  #set policy id
-  policy_id <<- p
+      #set policy id
+      policy_id <<- p
+      
+      #reset tau itr
+      tau_itr <<- 1
+      
+      out <- ode(y = compartments_init, 
+               times = TT_SET, 
+               func = seir, 
+               parms = c())
+      
+      out <- as.data.frame(out)
+      
+      out$policy_id <- rep(policy_id, length(TT_SET))
+      out$beta_1<- rep(b1, length(TT_SET))
+      out$beta_2<- rep(b2, length(TT_SET))
+      
+      out_all_df <<- rbind(out_all_df, out)
   
-  #reset tau itr
-  tau_itr <<- 1
-  
-  out <- ode(y = compartments_init, 
-           times = TT_SET, 
-           func = seir, 
-           parms = c())
-  
-  out <- as.data.frame(out)
-  
-  out$policy_id <- rep(policy_id, length(TT_SET))
-  
-  out_all_df <<- rbind(out_all_df, out)
-  
+    })
+  })
 })
 
 #calculate N(t)/total population at each timestep
@@ -857,18 +869,41 @@ out_all_df$policy_id <-as.factor(out_all_df$policy_id)
 ######Graphs#######
 
 #all active
-active_pops_df <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, c(2,3,4), G_SET])+1), 130)]
-active_pops_df <- melt(active_pops_df, id.vars = c('time', 'policy_id'))
+active_pops_df <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, c(2,3,4), G_SET])+1), 130, 131, 132, 133)]
+active_pops_df <- melt(active_pops_df, id.vars = c('time', 'policy_id', 'beta_1', 'beta_2', 'total_pop'))
+
+active_pops_df_grouped<-active_pops_df%>%
+  group_by(time, policy_id, beta_1, beta_2, total_pop)%>%
+  summarise(active_pop = sum(value))
+
+lapply(unique(active_pops_df_grouped$policy_id), function(p){
+  lapply(seq(.001, .009, .001), function(b1){
+    lapply(seq(.001, .009, .001), function(b2){
+      df_temp <- active_pops_df_grouped%>%
+        filter(policy_id = p,
+               beta_1 = b1,
+               beta_2 = b2)
+      
+      p <- df_temp %>%
+        ggplot(.,aes(x=time,y = total_active_pop, group = as.factor(policy_id), color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "Total Active Population", title = "Total population that has active TB over time \n by policy") + xlim(.3, max(active_pops_df$time))
+      
+      
+      
+      
+      })
+    })
+  })
 
 active_pops_df <- active_pops_df%>%
   left_join(out_all_df[,c(1,ncol(out_all_df))], by = 'time')
+
 active_pops_df$policy_id <- as.factor(active_pops_df$policy_id)
 
 temp <- out_all_df[,c(1,130,131)]
 
 #total active pops
 active_pops_df_group_by_compartments <- active_pops_df%>%
-  group_by(time, policy_id)%>%
+  group_by(time, policy_id, beta_1, beta_2)%>%
   summarise(total_active_pop = sum(value))%>%
   left_join(.,temp, by = c('time', 'policy_id'))%>%
   ungroup()%>%
@@ -915,7 +950,6 @@ colnames(time_set_match_df) <-c('time_set_id', 'time')
 
 FOI_overtime_graph_df<- FOI_overtime_graph_df%>%
   left_join(., time_set_match_df, by = 'time_set_id')
-
 
 FOI_overtime_graph_df%>%
 ggplot(.,aes(x=time,y = as.double(FOI), group = policy_id, color = as.factor(policy_id))) +geom_line() + theme_bw() + labs (x = "Time", y = "FOI Rate", title = "Force of Infection (FOI) Rate \n Over Time By Policy") + xlim(.3, 5) + guides(color=guide_legend(title="Policy ID")) + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
