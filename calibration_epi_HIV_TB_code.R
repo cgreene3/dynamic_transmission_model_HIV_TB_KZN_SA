@@ -319,7 +319,7 @@ mortality_t_r_h_g_tau_p <-array(data=0, dim = c(length(TB_SET),
 
 #Number of effective contact for TB transmission per infectious year for gender g
 beta_g <- array(data = 0, dim = length(G_SET)) #this will be set each time the calibration is run
-beta_combin <- seq(.004, .009, by = 0.0001)
+beta_combin <- seq(.004, .009, by = 0.001)
 
 
 #Relative transmissibility of TB in populations living in HIV compartment h
