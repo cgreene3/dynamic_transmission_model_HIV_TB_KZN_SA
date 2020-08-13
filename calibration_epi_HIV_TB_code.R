@@ -11,16 +11,17 @@ gc()
 sapply(c('dplyr', 'deSolve', 'readxl', 'stringr', 'reshape2', 'ggplot2', 'varhandle', 'here', 'paletteer'), require, character.only=T)
 
 indir<-'param_files/'
-outdir<-'test_outputs/calibration'
+outdir<-'model_outputs/calibration'
+
 
 #read parameter file
 setwd(here(indir))
 
-prevalence_df<-read.csv("GBD_prev_1990_2017_jul28.csv")
+GBD_df<-read.csv("GBD_prev_1990_2017_jul28.csv")
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Model_Matched_Parameters')
 pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Pop_Init')
 
-##########Section 1 - Assembling calibration dataset. For each year (1990 to 2017) generate TB prevalence rate (per 100,000 population) by HIV+, HIV-, and male/female#######
+##########Section 1 - Assembling calibration dataset. ##############
 
 #Group 1 - Active TB among HIV-negative males. One value per year (1990 to 2017). Use the number in "val"
     #For each year, sum across these three estimates: sex_id==1 & (cause_id==934|cause_id==946|cause_id==947)
@@ -46,7 +47,7 @@ pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Pop_Init')
     #Use sex_id==2 and cause_id==954
     #Use metric_id==3 to get rates and measure_id==5 for prevalence
 
-prevalence_df<-prevalence_df%>%
+GBD_df<-GBD_df%>%
   mutate(group_id = if_else(sex_id == 1 & cause_id == 934|
          sex_id == 1 & cause_id == 946|
          sex_id == 1 & cause_id == 947, 1,
@@ -63,8 +64,9 @@ prevalence_df<-prevalence_df%>%
                  if_else(sex_id == 2 & cause_id == 954, 6,
                          100)))))))
 
-#filter to only include relevant values
-prevalence_df<-prevalence_df%>%
+
+###################PREVALENCE For each year (1990 to 2017) generate TB prevalence rate (per 100,000 population) by HIV+, HIV-, and male/female filter to only include relevant values#############
+prevalence_df<-GBD_df%>%
   filter(group_id != 100)%>%
   filter(measure_id == 5 & metric_id == 3)%>%
   group_by(group_id, year)%>%
@@ -72,7 +74,7 @@ prevalence_df<-prevalence_df%>%
             upper = sum(upper),
             lower = sum(lower))
 
-#########Section 2 - Line graph of values in groups 1-4 with years on x axis#########
+#Section 2 - Line graph of values in groups 1-4 with years on x axis#
 
 df_active<-prevalence_df%>%
   filter(group_id == 1|
@@ -96,12 +98,20 @@ active_prev_overtime <- ggplot(df_active, aes(x = year,
   geom_errorbar(aes(ymin=lower, ymax=upper), width=.2,
                  position=position_dodge(0.05))+
   labs(title = "active prevalence overtime",
-       y = 'prevalence') +
-  scale_color_manual(values=c(paletteer_dynamic("cartography::green.pal", 4)))
+       y = 'prevalence') #+
+  #scale_color_manual(values=c(paletteer_dynamic("cartography::green.pal", 4)))
 
+#write graph to file
+setwd(here(outdir))
+
+# 1. Open jpeg file
+jpeg("active_prevalence_overtime.jpg")
+# 2. Create the plot
 print(active_prev_overtime)
- 
-##########Section 3 - Line graph of values in groups 5&6 with years on x-axis. Values should be substantially higher than groups 1-4.##########
+# 3. Close the file
+dev.off()
+
+#Section 3 - Line graph of values in groups 5&6 with years on x-axis. Values should be substantially higher than groups 1-4.#
 
 df_ltbi<-prevalence_df%>%
   filter(group_id == 5|
@@ -120,11 +130,133 @@ ltbi_prev_overtime <- ggplot(df_ltbi, aes(x = year,
   geom_errorbar(aes(ymin=lower, ymax=upper), width=.2,
                  position=position_dodge(0.05))+
   labs(title = "LTBI prevalence overtime",
-       y = 'prevalence') +
-  scale_color_manual(values=c(paletteer_dynamic("cartography::blue.pal", 2)))
+       y = 'prevalence') #+
+  #scale_color_manual(values=c(paletteer_dynamic("cartography::blue.pal", 2)))
 
+
+
+#write graph to file
+setwd(here(outdir))
+
+# 1. Open jpeg file
+jpeg("ltbi_prevalence_overtime.jpg")
+# 2. Create the plot
 print(ltbi_prev_overtime)
+# 3. Close the file
+dev.off()
 
+###################Incidence For each year (1990 to 2017) generate TB prevalence rate (per 100,000 population) by HIV+, HIV-, and male/female filter to only include relevant values#############
+incidence_df<-GBD_df%>%
+  filter(group_id != 100)%>%
+  filter(measure_id == 6 & metric_id == 3)%>%
+  group_by(group_id, year)%>%
+  summarise(expected = sum(val),
+            upper = sum(upper),
+            lower = sum(lower))
+
+#Section 2 - Line graph of values in groups 1-4 with years on x axis#
+
+df_active<-incidence_df%>%
+  filter(group_id == 1|
+           group_id == 2|
+           group_id == 3|
+           group_id == 4)
+
+df_active$compartment <- if_else(df_active$group_id == 1, 'HIV-, Male',
+                                 if_else(df_active$group_id == 2, 'HIV-, Female',
+                                         if_else(df_active$group_id == 3, 'HIV+, Male',
+                                                 'HIV+, Female'))) 
+
+df_active$group_id<-as.factor(df_active$group_id)
+
+active_incidence_overtime <- ggplot(df_active, aes(x = year, 
+                                              y = expected,
+                                              group = compartment,
+                                              color = compartment))+
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=.2,
+                 position=position_dodge(0.05))+
+  labs(title = "active incidence overtime",
+       y = 'incidence rate') #+
+  #scale_color_manual(values=c(paletteer_dynamic("cartography::green.pal", 4)))
+
+#write graph to file
+setwd(here(outdir))
+
+# 1. Open jpeg file
+jpeg("active_incidence_overtime.jpg")
+# 2. Create the plot
+print(active_incidence_overtime)
+# 3. Close the file
+dev.off()
+ 
+#Section 3 - Line graph of values in groups 5&6 with years on x-axis. Values should be substantially higher than groups 1-4.#
+
+df_ltbi<-incidence_df%>%
+  filter(group_id == 5|
+           group_id == 6)
+
+df_ltbi$group_name <- if_else(df_ltbi$group_id == 5, 'Male', 'Female')
+
+df_ltbi$group_id<-as.factor(df_ltbi$group_id)
+
+ltbi_incidence_overtime <- ggplot(df_ltbi, aes(x = year, 
+                                              y = expected,
+                                              group = group_name,
+                                              color = group_name))+
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=.2,
+                 position=position_dodge(0.05))+
+  labs(title = "LTBI incidence overtime",
+       y = 'prevalence') #+
+  #scale_color_manual(values=c(paletteer_dynamic("cartography::blue.pal", 2)))
+
+#print(ltbi_incidence_overtime)
+
+###################Death rates For each year (1990 to 2017) generate TB death rate (per 100,000 population) by HIV+, HIV-, and male/female filter to only include relevant values#############
+deaths_df<-GBD_df%>%
+  filter(group_id != 100)%>%
+  filter(measure_id == 1 & metric_id == 3)%>%
+  group_by(group_id, year)%>%
+  summarise(expected = sum(val),
+            upper = sum(upper),
+            lower = sum(lower))
+
+#Section 2 - Line graph of values in groups 1-4 with years on x axis#
+
+df_active<-deaths_df%>%
+  filter(group_id == 1|
+           group_id == 2|
+           group_id == 3|
+           group_id == 4)
+
+df_active$compartment <- if_else(df_active$group_id == 1, 'HIV-, Male',
+                                 if_else(df_active$group_id == 2, 'HIV-, Female',
+                                         if_else(df_active$group_id == 3, 'HIV+, Male',
+                                                 'HIV+, Female'))) 
+
+df_active$group_id<-as.factor(df_active$group_id)
+
+active_deaths_overtime <- ggplot(df_active, aes(x = year, 
+                                              y = expected,
+                                              group = compartment,
+                                              color = compartment))+
+  geom_line() +
+  geom_point()+
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=.2,
+                 position=position_dodge(0.05))+
+  labs(title = "active deaths overtime",
+       y = 'death rates') #+
+  #scale_color_manual(values=c(paletteer_dynamic("cartography::green.pal", 4)))
+
+# 1. Open jpeg file
+jpeg("active_deaths_overtime.jpg")
+# 2. Create the plot
+print(print(active_deaths_overtime))
+# 3. Close the file
+dev.off()
 
 ############Section 4 - run baseline model against ############
 ####clean df for input####
