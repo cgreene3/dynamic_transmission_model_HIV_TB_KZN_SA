@@ -14,8 +14,8 @@ outdir<-'test_outputs/epi_model'
 
 #read parameter file
 setwd(here(indir))
-param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Model_Matched_Parameters')
-pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'Pop_Init')
+param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
+pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'pop_init')
 
 
 ####clean df for input####
@@ -179,7 +179,7 @@ lapply(TB_SET, function(t){
                  HIV_compartment == h,
                  G_compartment == g)
         
-        N_t_r_h_g_init <<- c(N_t_r_h_g_init, temp$Reference_expected_value)
+        N_t_r_h_g_init <<- c(N_t_r_h_g_init, temp$initialized_population_in_compartment)
         
       })
     })
@@ -390,16 +390,18 @@ rm(varpi_params)
 eta_params <- param_df%>%
   filter(notation == 'eta')
 
-eta_i_h_p <-array(data = 0, dim = c(length(HIV_SET),
+eta_i_h_g_p <-array(data = 0, dim = c(length(HIV_SET),
                                   length(HIV_SET),
+                                  length(G_SET),
                                   length(P_SET)))
 
 lapply(1:nrow(eta_params), function(x){
   i <- as.integer(eta_params$HIV_compartment[x]/10)
   h <- eta_params$HIV_compartment[x]%%10
+  g <- eta_params$G_compartment[x]
   p <- eta_params$P_compartment[x]
   
-  eta_i_h_p [i,h, p] <<- eta_params$Reference_expected_value[x]
+  eta_i_h_g_p [i,h,g,p] <<- eta_params$Reference_expected_value[x]
 })
 
 rm(eta_params)
@@ -407,28 +409,36 @@ rm(eta_params)
 ######Parameters for death and aging rates#######
 
 #Rate of entry into the population due to aging into TB compartment t, HIV com- partment h and gender compartment g, per year, ∀t ∈ {1,3,4,5} ⊂ TB,h ∈ {1,2} ⊂ HIV,g ∈ G
-rho_t_h_g <-array(data = 0, dim = c(length(TB_SET),
-                                    length(HIV_SET),
-                                    length(G_SET)))
+alpha_in_t_r_h_g <-array(data = 0, dim = c(length(TB_SET),
+                                           length(DR_SET),
+                                           length(HIV_SET),
+                                           length(G_SET)))
 
 #filter dataframe for rho params
-rho_params <- param_df%>%
-  filter(notation == 'rho')
+alpha_in_params <- param_df%>%
+  filter(notation == 'alpha^in')
 
 lapply(c(TB_SUBSET_UNINFECTED_NOIPT, TB_SUBSET_INFECTED_RECENT, TB_SUBSET_INFECTED_RECENT, TB_SUBSET_ACTIVE), function(t){
-  lapply(c(HIV_SUBSET_NEG, HIV_SUBSET_POS_CD4MORE), function(h){
-    lapply(G_SET, function(g){
-      temp <- rho_params%>%
+  lapply(DR_SET, function(r){
+    lapply(c(HIV_SUBSET_NEG, HIV_SUBSET_POS_CD4MORE), function(h){
+      lapply(G_SET, function(g){
+        temp <- alpha_in_params%>%
         filter(TB_compartment == t,
+               DR_compartment == r,
                HIV_compartment == h,
                G_compartment == g)
       
-      rho_t_h_g[t,h,g] <<-temp$Reference_expected_value
+        
+      if (nrow(temp) != 0){
+        alpha_in_t_r_h_g[t,r,h,g] <<-temp$Reference_expected_value
+        }
     })
   })
 })
 
-rm(rho_params)
+})
+
+rm(alpha_in_params)
 
 #Mortality rates from populations in TB compartment t and HIV compartment h and gender compartment g, per year, ∀t ∈ T B, ∀h ∈ HIV, g ∈ G
 mu_t_h_g<-array(data = 0, dim = c(length(TB_SET),
@@ -456,7 +466,7 @@ lapply(TB_SET, function(t){
 rm(mu_params)
 
 #Rate of exit from the population due to aging
-alpha <- 1/(65-15)
+alpha_out <- 1/(60-15)
 
 ########Force of Infection (FOI) CALCULATIONS#####
 FOI_DS <- function(active_pop, total_pop){
