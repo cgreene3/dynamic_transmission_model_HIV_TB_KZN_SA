@@ -117,98 +117,6 @@ TT<-5
 time_interval <- 1/12
 TT_SET <- c(1:(12*TT))*time_interval
 
-######create compartment ids and reference matrix to go between multidementional arrays and 1D array####
-n_compartments <- length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET)
-compartment_id<-rep(NA, n_compartments)
-
-#create 1_D array that contains all compartment names (for ODE) - in the same order as the ref mat (below)
-
-#iterator for loop
-n = 0
-
-lapply(TB_SET, function(t){
-  lapply(DR_SET, function(r){
-    lapply(HIV_SET, function(h){
-      lapply(G_SET, function(g){
-        n <<- n+1
-        compartment_id[n] <<- paste0("N_", t, "_", r, "_", h, "_", g)
-      })
-    })
-  })
-})
-
-
-#create matrix to look up location of compartment in 1-D array
-N_t_r_h_g_ref <-array(data = 0, dim = c(length(TB_SET),
-                                          length(DR_SET),
-                                          length(HIV_SET),
-                                          length(G_SET)))
-
-#iterator for loop
-n = 0
-
-lapply(TB_SET, function(t){
-  lapply(DR_SET, function(r){
-    lapply(HIV_SET, function(h){
-      lapply(G_SET, function(g){
-        
-        n <<- n + 1
-        
-        N_t_r_h_g_ref[t,r,h,g] <<- n
-      })
-    })
-  })
-})
-
-#create delta compartment ids
-d_compartment_id<-paste0('d', compartment_id)
-
-#add in dN_in compartment????
-d_compartment_id_test <-c(d_compartment_id, "dN_in")
-
-##########POPULATION##########
-
-#set initial populations
-N_t_r_h_g_init <-c()
-
-lapply(TB_SET, function(t){
-  lapply(DR_SET, function(r){
-    lapply(HIV_SET, function(h){
-      lapply(G_SET, function(g){
-        
-        temp <- pop_init_df%>%
-          filter(TB_compartment == t,
-                 DR_compartment == r,
-                 HIV_compartment == h,
-                 G_compartment == g)
-        
-        N_t_r_h_g_init <<- c(N_t_r_h_g_init, temp$initialized_population_in_compartment)
-        
-      })
-    })
-  })
-})
-
-#make into 1D array for ODE
-compartments_init <- c(N_t_r_h_g_init) #under all policies the initial pop is the same so can just set init population using any aribritrary policy
-names(compartments_init) <- compartment_id
-
-#create a matrix for recording FOI over time
-lambda_r_g_tau_p <-array(data=0, dim = c(length(DR_SET),
-                                         length(G_SET),
-                                         length(TT_SET),
-                                         length(P_SET)
-))
-
-#create a matrix for recording deaths over time
-mortality_t_r_h_g_tau_p <-array(data=0, dim = c(length(TB_SET),
-                                         length(DR_SET),
-                                         length(HIV_SET),
-                                         length(G_SET),
-                                         length(TT_SET),
-                                         length(P_SET)
-))
-
 #############MODEL PARAMETERS#############
 
 #########Parameters that impact force of infection#######
@@ -521,6 +429,79 @@ FOI_MDR <- function(lambda_1_g){
   return(lambda_2_g)
 }
 
+
+######create compartment ids and reference matrix to go between multidementional arrays and 1D array####
+n_compartments <- length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET)
+compartment_id<-rep(NA, n_compartments)
+
+#create 1_D array that contains all compartment names (for ODE) - in the same order as the ref mat (below)
+
+#iterator for loop
+n = 0
+
+lapply(TB_SET, function(t){
+  lapply(DR_SET, function(r){
+    lapply(HIV_SET, function(h){
+      lapply(G_SET, function(g){
+        n <<- n+1
+        compartment_id[n] <<- paste0("N_", t, "_", r, "_", h, "_", g)
+      })
+    })
+  })
+})
+
+
+#create matrix to look up location of compartment in 1-D array
+N_t_r_h_g_ref <-array(data = 0, dim = c(length(TB_SET),
+                                          length(DR_SET),
+                                          length(HIV_SET),
+                                          length(G_SET)))
+
+#iterator for loop
+n = 0
+
+lapply(TB_SET, function(t){
+  lapply(DR_SET, function(r){
+    lapply(HIV_SET, function(h){
+      lapply(G_SET, function(g){
+        
+        n <<- n + 1
+        
+        N_t_r_h_g_ref[t,r,h,g] <<- n
+      })
+    })
+  })
+})
+
+#create delta compartment ids
+d_compartment_id<-paste0('d', compartment_id)
+
+##########POPULATION##########
+
+#set initial populations
+N_t_r_h_g_init <-c()
+
+lapply(TB_SET, function(t){
+  lapply(DR_SET, function(r){
+    lapply(HIV_SET, function(h){
+      lapply(G_SET, function(g){
+        
+        temp <- pop_init_df%>%
+          filter(TB_compartment == t,
+                 DR_compartment == r,
+                 HIV_compartment == h,
+                 G_compartment == g)
+        
+        N_t_r_h_g_init <<- c(N_t_r_h_g_init, temp$initialized_population_in_compartment)
+        
+      })
+    })
+  })
+})
+
+#make into 1D array for ODE
+compartments_init <- c(N_t_r_h_g_init) #under all policies the initial pop is the same so can just set init population using any aribritrary policy
+
 #aging in calcs
 aging_in_calcs<-function(compartment_pop){
   N_in_total_temp <- alpha_out*sum(compartment_pop)
@@ -534,6 +515,27 @@ aging_in_calcs<-function(compartment_pop){
   return(N_in_total_temp)
 }
 
+#N_in_init <- aging_in_calcs(compartments_init)
+
+#compartments_init <- c(compartments_init, N_in_init)
+
+names(compartments_init) <- c(compartment_id)#, 'N_in')
+
+#create a matrix for recording FOI over time
+lambda_r_g_tau_p <-array(data=0, dim = c(length(DR_SET),
+                                         length(G_SET),
+                                         length(TT_SET),
+                                         length(P_SET)
+))
+
+#create a matrix for recording deaths over time
+mortality_t_r_h_g_tau_p <-array(data=0, dim = c(length(TB_SET),
+                                         length(DR_SET),
+                                         length(HIV_SET),
+                                         length(G_SET),
+                                         length(TT_SET),
+                                         length(P_SET)
+))
 
 ######TB/SEIR model equations#####
 
@@ -542,9 +544,6 @@ policy_id <- 1 #iterator for recording current policy evaluated
 tau_itr <- 1 #iterator for recording current time
 active_DS_pop_subset <- c(N_t_r_h_g_ref[TB_SUBSET_ACTIVE, DR_SUBSET_MDR, HIV_SET, G_SUBSET_M], 
                        N_t_r_h_g_ref[TB_SUBSET_ACTIVE, DR_SUBSET_MDR, HIV_SET, G_SUBSET_F]) #ensures correct order males--> females
-
-#to track the population calculated to go into the model
-#N_in_total_ref <- c()
 
 seir <- function(time, compartment_pop, parameters) {
   with(as.list(c(compartment_pop, parameters)), {
@@ -555,10 +554,6 @@ seir <- function(time, compartment_pop, parameters) {
     
     lambda_1_g <- FOI_DS(active_pop, total_pop)
     lambda_2_g <- FOI_MDR(lambda_1_g)
-    
-    #calculate N_in_total
-    N_in_total <- aging_in_calcs(compartment_pop)
-    #N_in_total_ref <<- c(N_in_total_ref, N_in_total)
     
     #record FOI for evaluation
     if ((time >= TT_SET[tau_itr]) & (tau_itr <= length(TT_SET))){
@@ -573,9 +568,9 @@ seir <- function(time, compartment_pop, parameters) {
     lambda <- sum(lambda_r)
     
     delta_pop <- rep(0, n_compartments) #net gains/losses in pop in compartment
-    names(delta_pop)<-d_compartment_id
+    names(delta_pop)<-c(d_compartment_id)
     
-    ################ TB compartment 1 (Uninfected no IPT) #########################
+    ########## TB compartment 1 (Uninfected no IPT) ##############
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -608,10 +603,8 @@ seir <- function(time, compartment_pop, parameters) {
                  lambda + 
                  kappa_t_h_g_p[t,h,g,policy_id] + 
                  sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
-          }
-          
-          if((t == 1)&(h ==1) &(r ==1)& (g==1) & (time < .9) & (policy_id == 1)){
-            print(delta_pop[current_compartment_loc])
+            
+            
           }
           
           
@@ -621,7 +614,7 @@ seir <- function(time, compartment_pop, parameters) {
       })
     })
         
-    ################## TB compartment 2 (uninfected no IPT_###################
+    ########### TB compartment 2 (uninfected no IPT_############
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -654,6 +647,7 @@ seir <- function(time, compartment_pop, parameters) {
                   iota_r[DR_SUBSET_DS]*lambda_r[DR_SUBSET_DS] +
                   iota_r[DR_SUBSET_MDR]*lambda_r[DR_SUBSET_MDR] +
                   sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
+            
           }
           
           
@@ -662,7 +656,7 @@ seir <- function(time, compartment_pop, parameters) {
     })
 
     
-    ################# TB compartment 3 (infected recently) #######################
+    ############### TB compartment 3 (infected recently) #############
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -700,11 +694,12 @@ seir <- function(time, compartment_pop, parameters) {
                 kappa_t_h_g_p[t, h, g, policy_id] +
                 varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[t,6] +
                 sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
+          
         })
       })
     })
     
-    ####################### TB compartment 4 (infected remotely) #################
+    ############### TB compartment 4 (infected remotely) #############
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -735,11 +730,12 @@ seir <- function(time, compartment_pop, parameters) {
                 kappa_t_h_g_p[t,h,g,policy_id]+
                 varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[t,6]+
                 sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
+          
         })
       })
     })
     
-    ############### TB compartment 5 (LTBI, on IPT) ###################
+    ################ TB compartment 5 (LTBI, on IPT) #################
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -769,11 +765,12 @@ seir <- function(time, compartment_pop, parameters) {
                 varpi_g_p[g,policy_id]*theta_h[h]*pi_i_t[t, 6] +
                 gamma_r[r]*omega +
                 sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
+          
         })
       })
     })
     
-    ############## TB compartment 6 (Active TB) #########################
+    ################ TB compartment 6 (Active TB) #################
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -806,11 +803,13 @@ seir <- function(time, compartment_pop, parameters) {
                 mu_t_h_g[t,h,g] +
                 pi_i_t[t,7] +
                 sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
+          
+          
         })
       })
     })
     
-    ############### TB compartment 7####################
+    ############## TB compartment 7######################
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -838,11 +837,12 @@ seir <- function(time, compartment_pop, parameters) {
                 mu_t_h_g[t,h,g] + 
                 zeta*lambda_r[r] +
                 sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
+          
         })
       })
     })
     
-    ################## TB compartment 8#################
+    ################ TB compartment 8##################
     lapply(DR_SET, function(r){
       lapply(HIV_SET, function(h){
         lapply(G_SET, function(g){
@@ -869,12 +869,10 @@ seir <- function(time, compartment_pop, parameters) {
                 mu_t_h_g[t,h,g] + 
                 upsilon*lambda_r[r] + 
                 sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
+          
         })
       })
     })
-    
-    return(list(c(delta_pop)))
-  })
 }
 
 out_all_df <- data.frame(matrix(ncol = n_compartments+2, nrow = 0))
@@ -913,7 +911,7 @@ lapply(P_SET, function(p){
 out_all_df <- out_all_df%>% mutate(total_pop = rowSums(.[1:129]))
 out_all_df$policy_id <-as.factor(out_all_df$policy_id)
 
-######Graphs#######
+# ######Graphs#######
 # 
 # #all active
 # active_pops_df <- out_all_df[,c(1, (c(N_t_r_h_g_ref[6, DR_SET, c(2,3,4), G_SET])+1), 130, 131, 132, 133)]
