@@ -521,6 +521,8 @@ FOI_MDR <- function(lambda_1_g){
   return(lambda_2_g)
 }
 
+#FOI 
+
 #aging in calcs
 aging_in_calcs<-function(compartment_pop){
   N_in_total_temp <- alpha_out*sum(compartment_pop)
@@ -540,37 +542,42 @@ aging_in_calcs<-function(compartment_pop){
 #Create iterators that will be updated as they go through the different for loops
 policy_id <- 1 #iterator for recording current policy evaluated 
 tau_itr <- 1 #iterator for recording current time
+lambda_r <- c(0,0)
+lambda <- 0
+N_in_total <- 0
+
 active_DS_pop_subset <- c(N_t_r_h_g_ref[TB_SUBSET_ACTIVE, DR_SUBSET_MDR, HIV_SET, G_SUBSET_M], 
                        N_t_r_h_g_ref[TB_SUBSET_ACTIVE, DR_SUBSET_MDR, HIV_SET, G_SUBSET_F]) #ensures correct order males--> females
 
-#to track the population calculated to go into the model
-#N_in_total_ref <- c()
+current_time <- 0
+
 
 seir <- function(time, compartment_pop, parameters) {
   with(as.list(c(compartment_pop, parameters)), {
     
-    # force of infection and entry calculations
-    active_pop <- compartment_pop[active_DS_pop_subset] # total active TB compartment populations
-    total_pop <- sum(compartment_pop) #sum total population
-    
-    lambda_1_g <- FOI_DS(active_pop, total_pop)
-    lambda_2_g <- FOI_MDR(lambda_1_g)
-    
-    #calculate N_in_total
-    N_in_total <- aging_in_calcs(compartment_pop)
-    #N_in_total_ref <<- c(N_in_total_ref, N_in_total)
-    
+    #current_time <<- time
     #record FOI for evaluation
     if ((time >= TT_SET[tau_itr]) & (tau_itr <= length(TT_SET))){
+    
+      # force of infection and entry calculations
+      active_pop <- compartment_pop[active_DS_pop_subset] # total active TB compartment populations
+      total_pop <- sum(compartment_pop) #sum total population
+      
+      lambda_1_g <<- FOI_DS(active_pop, total_pop)
+      lambda_2_g <<- FOI_MDR(lambda_1_g)
+      
+      #calculate N_in_total
+      N_in_total <<- aging_in_calcs(compartment_pop)
+    
       
       lambda_r_g_tau_p[DR_SUBSET_DS, G_SET, tau_itr, policy_id] <<- lambda_1_g
       lambda_r_g_tau_p[DR_SUBSET_MDR, G_SET, tau_itr, policy_id] <<- lambda_2_g
       
       tau_itr <<- tau_itr + 1 #id loc in TT set getting evaluated for proper recording
+      
+      lambda_r <-c(sum(lambda_1_g), sum(lambda_2_g))
+      lambda <- sum(lambda_r)
     }
-    
-    lambda_r <-c(sum(lambda_1_g), sum(lambda_2_g))
-    lambda <- sum(lambda_r)
     
     delta_pop <- rep(0, n_compartments) #net gains/losses in pop in compartment
     names(delta_pop)<-d_compartment_id
@@ -610,9 +617,9 @@ seir <- function(time, compartment_pop, parameters) {
                  sum(eta_i_h_g_p[h, other_hiv_ids, g, policy_id]))*compartment_pop[current_compartment_loc])
           }
           
-          if((t == 1)&(h ==1) &(r ==1)& (g==1) & (time < .9) & (policy_id == 1)){
-            print(delta_pop[current_compartment_loc])
-          }
+          #if((t == 1)&(h ==1) &(r ==1)& (g==1) & (time < .9) & (policy_id == 1)){
+          #  print(delta_pop[current_compartment_loc])
+          #}
           
           
           
@@ -892,10 +899,13 @@ lapply(P_SET, function(p){
       #reset tau itr
       tau_itr <<- 1
       
+      N_in_total <<- aging_in_calcs(compartments_init)
+      
       out <- ode(y = compartments_init, 
                times = TT_SET, 
                func = seir, 
-               parms = c())
+               parms = NULL,
+               method = "lsodar")
       
       out <- as.data.frame(out)
       
