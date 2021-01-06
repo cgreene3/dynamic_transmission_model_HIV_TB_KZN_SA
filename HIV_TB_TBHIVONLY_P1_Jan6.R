@@ -31,12 +31,12 @@ pop_init_df$TB_compartment<-as.integer(pop_init_df$TB_compartment)
 pop_init_df$DR_compartment<-as.integer(pop_init_df$DR_compartment)
 pop_init_df$HIV_compartment<-as.integer(pop_init_df$HIV_compartment)
 pop_init_df$G_compartment<-as.integer(pop_init_df$G_compartment)
-
-pop_init_df_TB_temp <- pop_init_df%>%
-  group_by(TB_compartment)%>%
+ 
+pop_init_df_TBHIV_temp <- pop_init_df%>%
+  group_by(TB_compartment, HIV_compartment)%>%
   summarise(value = sum(initialized_population_in_compartment))%>%
-  mutate(compartment_id = paste0("N_", TB_compartment),
-         dcompartment_id = paste0("dN_", TB_compartment))
+  mutate(compartment_id = paste0("N_", TB_compartment, "_", HIV_compartment),
+         dcompartment_id = paste0("dN_", TB_compartment, "_", HIV_compartment))
 
 ################ DEFINE SETS ###############################
 
@@ -52,6 +52,14 @@ pop_init_df_TB_temp <- pop_init_df%>%
 
 TB_SET<-1:8
 
+#4 HIV compartments (HIV)#
+#1 : HIV Negative
+#2 : HIV Positive CD4 > 200 - No ART
+#3 : HIV Positive CD4 =<: 200 - No Art
+#4 : HIV Positive - ART 
+
+HIV_SET<-1:4
+
 #param extraction
 
 #beta
@@ -64,6 +72,15 @@ beta <- beta$value
 #beta<-1
 
 #phi
+phi_h <- array(0, dim = length(HIV_SET))
+
+lapply(HIV_SET, function(h){
+  temp <- param_df%>%
+    filter(notation == 'phi',
+           HIV_compartment == h)
+  
+  phi_h[h] <<- temp$Reference_expected_value
+})
 
 #epsilon
 
@@ -82,19 +99,22 @@ zeta <-zeta$Reference_expected_value
 
 #zeta <- .7
 
-kappa_t <- array(data = 0, length(TB_SET))
+kappa_t_h <- array(data = 0, c(length(TB_SET), length(HIV_SET)))
 
 lapply(TB_SET, function(t){
+  lapply(HIV_SET, function(h){
   temp <- param_df%>%
     filter(P_compartment == 1,
            notation == 'kappa')%>%
-    group_by(TB_compartment)%>%
+    group_by(TB_compartment, HIV_compartment)%>%
     summarise(value = median(Reference_expected_value))%>%
-    filter(TB_compartment == t)
+    filter(TB_compartment == t,
+           HIV_compartment == h)
   
   if (nrow(temp) == 1){
-    kappa_t[t] <<- temp$value
+    kappa_t_h[t,h] <<- temp$value
   }
+})
 })
 
 varpi <- param_df%>%
@@ -102,13 +122,11 @@ varpi <- param_df%>%
   summarise(value = median(Reference_expected_value))
 
 varpi <- varpi$value
-#test
-#varpi <- .02
 
 omega <-param_df%>%filter(notation == 'omega')
 omega <- omega$Reference_expected_value
 
-omega <- 1
+#omega <- 1
 
 pi_t_t <- array(data = 0, c(length(TB_SET), length(TB_SET)))
 
@@ -134,32 +152,74 @@ pi_t_t[8,6] <- .02
 #pi_t_t[4,6]<-.02
 
 #phi
+theta_h <-array(0, dim = length(HIV_SET))
+
+lapply(HIV_SET, function(h){
+  temp <- param_df%>%
+    filter(notation == 'theta',
+           HIV_compartment == h)
+  
+  theta_h[h]<<- temp$Reference_expected_value
+  
+})
 
 #gamma
 
-#eta
+eta_i_h <- array(0, dim=c(length(HIV_SET), length(HIV_SET)))
 
-mu_t <- param_df%>%
-  filter(notation == 'mu')%>%
-  group_by(TB_compartment)%>%
-  summarise(value = median(Reference_expected_value))
-mu_t <- mu_t$value
+#eta
+lapply(HIV_SET, function(h_from){
+  lapply(HIV_SET, function(h_to){
+    num_temp = (h_from*10) + h_to
+    
+    temp <- param_df%>%
+      filter(notation == 'eta',
+             HIV_compartment == num_temp,
+             P_compartment == 1,
+             G_compartment == 1)
+      
+    
+    
+    if (nrow(temp) == 1){
+    eta_i_h[h_from, h_to] <<-temp$Reference_expected_value 
+    }
+    
+  })
+})
+
+mu_t_h <- array(0, dim = c(length(TB_SET), length(HIV_SET)))
+
+lapply(TB_SET, function(t){
+  lapply(HIV_SET, function(h){
+    temp <- param_df%>%
+      filter(notation == 'mu')%>%
+      group_by(TB_compartment, HIV_compartment)%>%
+      summarise(value = median(Reference_expected_value))%>%
+      filter(TB_compartment == t,
+             HIV_compartment == h)
+    
+    mu_t_h[t,h] <<- temp$value
+    
+  })
+})
 
 #test impacts of mu
 #mu_t <- rep(.01, times = length(TB_SET))
 
-alpha_in_t <- array(data = 0, length(TB_SET))
+alpha_in_t_h <- array(data = 0, c(length(TB_SET), length(HIV_SET)))
 
 lapply(TB_SET, function(t){
-  temp <- param_df%>%
-    filter(notation == 'alpha^in')%>%
-    group_by(notation, TB_compartment)%>%
-    summarise(value = sum(Reference_expected_value))%>%
-    filter(TB_compartment == t)
+  lapply(HIV_SET, function(h){
+    temp <- param_df%>%
+      filter(notation == 'alpha^in')%>%
+      group_by(notation, TB_compartment, HIV_compartment)%>%
+      summarise(value = sum(Reference_expected_value))%>%
+      filter(TB_compartment == t, HIV_compartment == h)
   
   if (nrow(temp) == 1){
-    alpha_in_t[t] <<- temp$value
+    alpha_in_t_h[t,h] <<- temp$value
   }
+  })
 })
 
 #alpha_in_t[1] <- 0
@@ -169,84 +229,121 @@ lapply(TB_SET, function(t){
 alpha_out <- param_df%>%filter(notation == 'alpha^out')
 alpha_out <- alpha_out$Reference_expected_value
 
-total_out_t <- (mu_t*(1-alpha_out))+((1-mu_t)*alpha_out)+(mu_t*alpha_out)
+total_out_t_h <- array(0, dim = length(TB_SET)*length(HIV_SET))
+count_temp <- 1
 
-N_init <- pop_init_df_TB_temp$value
-names(N_init) <- c(pop_init_df_TB_temp$compartment_id)
+#calculate totals
+lapply(TB_SET, function(t){
+  lapply(HIV_SET, function(h){
+    total_out_t_h[count_temp] <<- (mu_t_h[t,h]*(1-alpha_out))+
+      ((1-mu_t_h[t,h])*alpha_out)+
+      (mu_t_h[t,h]*alpha_out)
+    count_temp <<- count_temp + 1
+  })
+})
 
+N_init <- pop_init_df_TBHIV_temp$value
+names(N_init) <- c(pop_init_df_TBHIV_temp$compartment_id)
 
-open_seir_model <- function(t, N_t, parms){
+N_t_h_ref <- array(0, dim = c(length(TB_SET), length(HIV_SET)))
+count_temp <- 1
+
+lapply(TB_SET, function(t){
+  lapply(HIV_SET, function(h){
+    N_t_h_ref[t,h] <<- count_temp
+    count_temp <<- count_temp + 1
+  })
+})
+
+open_seir_model <- function(time, N_t_h, parms){
   
-  dN_t <- array(0, dim = length(TB_SET))
-  names(dN_t) <- pop_init_df_TB_temp$dcompartment_id
+  dN_t_h <- array(0, dim = length(TB_SET)*length(HIV_SET))
+  names(dN_t_h) <- pop_init_df_TBHIV_temp$dcompartment_id
   
-  FOI <- beta*(N_t[6]/sum(N_t))
+  FOI <- beta*(sum(N_t_h[N_t_h_ref[6, HIV_SET]])/sum(N_t_h))
   
-  B <- sum(total_out_t*N_t)
+  B <- sum(total_out_t_h*N_t_h)
   
-  dN_t[1]<-((alpha_in_t[1]*B) + #entries from births
-            (omega*N_t[2]) - #entries from off IPT 
-              (total_out_t[1]*N_t[1]) - #exists from aging out and death
-              (FOI*N_t[1])- #exists from TB infection 
-              (kappa_t[1]*N_t[1])) #exists from on to IPT 
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[1,h]]<<-((alpha_in_t_h[1,h]*B) + #entries from births
+                (omega*N_t_h[N_t_h_ref[2,h]]) - #entries from off IPT 
+                (total_out_t_h[N_t_h_ref[1,h]]*N_t_h[N_t_h_ref[1,h]]) - #exists from aging out and death
+                (FOI*N_t_h[N_t_h_ref[1,h]])- #exists from TB infection 
+                (kappa_t_h[1,h]*N_t_h[N_t_h_ref[1,h]])) #exists from on to IPT 
+  })
   
-  dN_t[2]<-((kappa_t[1]*N_t[1])- #entries from on to IPT 
-              (total_out_t[2]*N_t[2])- #exists from aging out and death
-              (omega*N_t[2])- #exits from off IPT 
-              (iota*FOI*N_t[2])) #exits from infection (diminished for IPT) 
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[2,h]]<<-((kappa_t_h[1,h]*N_t_h[N_t_h_ref[1,h]])- #entries from on to IPT 
+                (total_out_t_h[N_t_h_ref[2,h]]*N_t_h[N_t_h_ref[2,h]])- #exists from aging out and death
+                (omega*N_t_h[N_t_h_ref[2,h]])- #exits from off IPT 
+                (iota*FOI*N_t_h[N_t_h_ref[2,h]])) #exits from infection (diminished for IPT)
+  })
+   
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[3, h]]<<-((alpha_in_t_h[3,h]*B) + #entries from births
+                     (FOI*N_t_h[N_t_h_ref[1,h]])+ #infection from compartment 1 
+                      (iota*FOI*N_t_h[N_t_h_ref[2,h]])+ #infections from compartment 2 
+                      (zeta*FOI*N_t_h[N_t_h_ref[4,h]])+ #re-infection from compartment 4
+                      (zeta*FOI*N_t_h[N_t_h_ref[7,h]])+ #re-infection from compartment 7
+                      (upsilon*FOI*N_t_h[N_t_h_ref[8,h]])- #re-infection from compartment 8
+                      (total_out_t_h[N_t_h_ref[3,h]]*N_t_h[N_t_h_ref[3,h]]) - #exists from aging out and death
+                      (pi_t_t[3,4]*N_t_h[N_t_h_ref[3,h]]) - #from recent to remote infection
+                      (kappa_t_h[N_t_h_ref[3,h]]*N_t_h[N_t_h_ref[3,h]]) - #from recent to on IPT 
+                      ((1/varpi)*pi_t_t[3,6]*N_t_h[N_t_h_ref[3,h]]) #from recent TB infection to active 
+                    )
+  })
   
-  dN_t[3]<-((alpha_in_t[3]*B) + #entries from births
-              (FOI*N_t[1])+ #infection from compartment 1 
-              (iota*FOI*N_t[2])+ #infections from compartment 2 
-              (zeta*FOI*N_t[4])+ #re-infection from compartment 4
-              (zeta*FOI*N_t[7])+ #re-infection from compartment 7
-              (upsilon*FOI*N_t[8])- #re-infection from compartment 8
-              (total_out_t[3]*N_t[3]) - #exists from aging out and death
-              (pi_t_t[3,4]*N_t[3]) - #from recent to remote infection
-              (kappa_t[3]*N_t[3]) - #from recent to on IPT 
-              ((1/varpi)*pi_t_t[3,6]*N_t[3]) #from recent TB infection to active 
-            )
-  
-  dN_t[4]<-((alpha_in_t[4]*B) + #entries from births
-              (pi_t_t[3,4]*N_t[3]) - #from recent to remote infection
-              (total_out_t[4]*N_t[4]) - #exists from aging out and death
-              (zeta*FOI*N_t[4])- #re-infection
-              (kappa_t[4]*N_t[4]) - #onto IPT
-              ((1/varpi)*pi_t_t[4,6]*N_t[4]) #from remote TB infection to active 
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[4, h]]<<-((alpha_in_t_h[4,h]*B) + #entries from births
+              (pi_t_t[3,4]*N_t_h[N_t_h_ref[3, h]]) - #from recent to remote infection
+              (total_out_t_h[N_t_h_ref[4, h]]*N_t_h[N_t_h_ref[4, h]]) - #exists from aging out and death
+              (zeta*FOI*N_t_h[N_t_h_ref[4, h]])- #re-infection
+              (kappa_t_h[4,h]*N_t_h[N_t_h_ref[4, h]]) - #onto IPT
+              ((1/varpi)*pi_t_t[4,6]*N_t_h[N_t_h_ref[4, h]]) #from remote TB infection to active 
   )
+  })
   
-  dN_t[5] <-(kappa_t[3]*N_t[3] + #from recent to on IPT  
-               (kappa_t[4]*N_t[4]) - #onto IPT
-               (total_out_t[5]*N_t[5]) - #exists from aging out and death
-               ((1/varpi)*pi_t_t[5,6]*N_t[5]) - #from TB infection on IPT to active
-               (omega*N_t[5])  #off IPT to after IPT
-    
-  )
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[5, h]] <<-(kappa_t_h[3,h]*N_t_h[N_t_h_ref[5, h]] + #from recent to on IPT  
+                 (kappa_t_h[4,h]*N_t_h[N_t_h_ref[4, h]]) - #onto IPT
+                 (total_out_t_h[N_t_h_ref[5, h]]*N_t_h[N_t_h_ref[5, h]]) - #exists from aging out and death
+                 ((1/varpi)*pi_t_t[5,6]*N_t_h[N_t_h_ref[5, h]]) - #from TB infection on IPT to active
+                 (omega*N_t_h[N_t_h_ref[5, h]])  #off IPT to after IPT
+      
+    )
+  })
   
-  dN_t[6] <- ((alpha_in_t[6]*B) + #entries from births
-                ((1/varpi)*pi_t_t[3,6]*N_t[3]) + #from recent TB infection to active 
-                ((1/varpi)*pi_t_t[4,6]*N_t[4]) + #from remote TB infection to active 
-                ((1/varpi)*pi_t_t[5,6]*N_t[5]) + #from TB infection on IPT to active
-                ((1/varpi)*pi_t_t[8,6]*N_t[8]) - #from TB after on IPT to active
-                (total_out_t[6]*N_t[6]) - #total out
-                (pi_t_t[6,7]*N_t[6]) #from active to recovered
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[6, h]] <<- ((alpha_in_t_h[6,h]*B) + #entries from births
+                ((1/varpi)*pi_t_t[3,6]*N_t_h[N_t_h_ref[3, h]]) + #from recent TB infection to active 
+                ((1/varpi)*pi_t_t[4,6]*N_t_h[N_t_h_ref[4, h]]) + #from remote TB infection to active 
+                ((1/varpi)*pi_t_t[5,6]*N_t_h[N_t_h_ref[5, h]]) + #from TB infection on IPT to active
+                ((1/varpi)*pi_t_t[8,6]*N_t_h[N_t_h_ref[8, h]]) - #from TB after on IPT to active
+                (total_out_t_h[N_t_h_ref[6,h]]*N_t_h[N_t_h_ref[6, h]]) - #total out
+                (pi_t_t[6,7]*N_t_h[N_t_h_ref[6, h]]) #from active to recovered
               )
   
-  dN_t[7] <- ((pi_t_t[6,7]*N_t[6]) - #from active to recovered
-                (total_out_t[7]*N_t[7]) - #total out
-                (zeta*FOI*N_t[7])) #re-infection from compartment 7
+  })
   
-  dN_t[8] <- ((omega*N_t[5]) - #off IPT to after IPT
-                ((1/varpi)*pi_t_t[8,6]*N_t[8]) - #from TB after on IPT to active
-                (total_out_t[8]*N_t[8]) - #total out
-                (upsilon*FOI*N_t[8])
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[7, h]] <<- ((pi_t_t[6,7]*N_t_h[N_t_h_ref[6, h]]) - #from active to recovered
+                  (total_out_t_h[N_t_h_ref[7, h]]*N_t_h[N_t_h_ref[7, h]]) - #total out
+                  (zeta*FOI*N_t_h[N_t_h_ref[7,h]])) #re-infection from compartment 7
+  })
+  
+  lapply(HIV_SET, function(h){
+    dN_t_h[N_t_h_ref[8, h]] <<- ((omega*N_t_h[N_t_h_ref[5,h]]) - #off IPT to after IPT
+                ((1/varpi)*pi_t_t[8,6]*N_t_h[N_t_h_ref[8,h]]) - #from TB after on IPT to active
+                (total_out_t_h[N_t_h_ref[8,h]]*N_t_h[N_t_h_ref[8,h]]) - #total out
+                (upsilon*FOI*N_t_h[N_t_h_ref[8,h]])
               )
+  })
   
-  list(dN_t)
+  list(dN_t_h)
 }
 
 #Time Horizon 
-TT<-100 #2017-1990
+TT<-5 #2017-1990
 time_interval <- 1/12
 TT_SET <- seq(from = 0, to = TT, by = time_interval)
 
@@ -254,17 +351,17 @@ out<-as.data.frame(ode(times = TT_SET, y = N_init,
          func = open_seir_model, method = 'lsoda',
            parms = NULL))
 
-out_melt<-melt(data = out, 
-               id.vars = c("time"))
+#out_melt<-melt(data = out, 
+ #              id.vars = c("time"))
 
-colnames(out_melt)[2] <- 'TB_compartment'
+#colnames(out_melt)[2] <- 'TB_compartment'
 
-ggplot(out_melt, aes(x = time, y = value, group = TB_compartment, color = TB_compartment))+
-  geom_line()+
-  ylab('total in compartment')
+#ggplot(out_melt, aes(x = time, y = value, group = TB_compartment, color = TB_compartment))+
+#  geom_line()+
+#  ylab('total in compartment')
 
 out <-out%>%
   mutate(total_pop = rowSums(.[2:ncol(out)]))
 
-setwd(outdir)
-write_csv(out, 'out.csv')
+#setwd(outdir)
+#write_csv(out, 'out.csv')
