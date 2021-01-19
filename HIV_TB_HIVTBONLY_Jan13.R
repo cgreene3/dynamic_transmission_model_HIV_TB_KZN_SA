@@ -30,8 +30,10 @@ param_df$P_compartment<-as.integer(param_df$P_compartment)
 pop_init_df$TB_compartment<-as.integer(pop_init_df$TB_compartment)
 pop_init_df$DR_compartment<-as.integer(pop_init_df$DR_compartment)
 pop_init_df$HIV_compartment<-as.integer(pop_init_df$HIV_compartment)
+
 pop_init_df$G_compartment<-as.integer(pop_init_df$G_compartment)
 
+#Chelsea - can you add a note about the purpose of this data frame?
 pop_init_df_TBHIV_temp <- pop_init_df%>%
   group_by(TB_compartment, HIV_compartment)%>%
   summarise(value = sum(initialized_population_in_compartment))%>%
@@ -62,7 +64,7 @@ HIV_SET<-1:4
 
 #param extraction
 
-#beta
+#beta - Is this taking the median of beta_1 and beta_2 while our model doesn't have gender?
 beta <- param_df%>%
   filter(notation == 'beta')%>%
   group_by(TB_compartment)%>%
@@ -71,7 +73,7 @@ beta <- param_df%>%
 beta <- beta$value
 #beta<-1
 
-#phi
+#phi - relative transmissibility of TB in PLWH
 phi_h <- array(0, dim = length(HIV_SET))
 
 lapply(HIV_SET, function(h){
@@ -82,23 +84,25 @@ lapply(HIV_SET, function(h){
   phi_h[h] <<- temp$Reference_expected_value
 })
 
-#epsilon
+#epsilon - MDR-TB fraction
 
-#iota
+#iota - indicator for whether infection with strain can occur while on IPT
 iota <- param_df%>%
   filter(notation == 'iota', DR_compartment == 1)
 iota <- iota$Reference_expected_value
 
+#upsilon - partially protective effect of IPT after completing IPT course
 upsilon <- param_df%>%
   filter(notation == 'upsilon')
 upsilon <-upsilon$Reference_expected_value
 
+#zeta <- .7 - partially protective effect of LTBI on acquiring new infection
 zeta <- param_df%>%
   filter(notation == 'zeta')
 zeta <-zeta$Reference_expected_value
 
-#zeta <- .7
 
+#kappas - rates of IPT initiation by group
 kappa_t_h <- array(data = 0, c(length(TB_SET), length(HIV_SET)))
 
 
@@ -119,18 +123,18 @@ lapply(TB_SET, function(t){
   })
 })
 
+#varpi - IPT adherence
 varpi <- param_df%>%
   filter(P_compartment == 1, notation == 'varpi')%>%
   summarise(value = median(Reference_expected_value))
 
 varpi <- varpi$value
-#varpi <- 1
 
+#omega - rate of moving off IPT per year = 2
 omega <-param_df%>%filter(notation == 'omega')
 omega <- omega$Reference_expected_value
 
-#omega <- 1
-
+#pi - rates of progression through TB compartments
 pi_t_t <- array(data = 0, c(length(TB_SET), length(TB_SET)))
 
 lapply(TB_SET, function(t_from){
@@ -153,8 +157,9 @@ pi_t_t[8,6] <- .02
 #pi_t_t <- pi_t_t*1.5
 #pi_t_t[6,7] <- .5
 #pi_t_t[4,6]<-.02
+#Jen question - does this show our new arrow from TB compartment 8 to 6?
 
-#phi
+#theta - HIV impact on relative risk of TB progression
 theta_h <-array(0, dim = length(HIV_SET))
 
 lapply(HIV_SET, function(h){
@@ -166,11 +171,11 @@ lapply(HIV_SET, function(h){
   
 })
 
-#gamma
+#gamma - indicator so that populations with MDR-TB can't move into LTBI after IPT
 
 eta_i_h <- array(0, dim=c(length(HIV_SET), length(HIV_SET)))
 
-#eta
+#eta - movement between HIV compartments
 lapply(HIV_SET, function(h_from){
   lapply(HIV_SET, function(h_to){
     num_temp = (h_from*10) + h_to
@@ -190,6 +195,7 @@ lapply(HIV_SET, function(h_from){
   })
 })
 
+#mu - mortality rates by HIV and TB status
 mu_t_h <- array(0, dim = c(length(TB_SET), length(HIV_SET)))
 
 lapply(TB_SET, function(t){
@@ -209,6 +215,7 @@ lapply(TB_SET, function(t){
 #test impacts of mu
 #mu_t <- rep(.01, times = length(TB_SET))
 
+#alpha - aging in and aging out
 alpha_in_t_h <- array(data = 0, c(length(TB_SET), length(HIV_SET)))
 
 lapply(TB_SET, function(t){
