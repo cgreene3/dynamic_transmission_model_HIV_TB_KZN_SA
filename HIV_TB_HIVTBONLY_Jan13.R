@@ -14,6 +14,8 @@ indir <- paste0(here(),'/param_files')
 outdir <- paste0(here(),'/model_outputs')
 setwd(indir)
 
+#Need to set project (upper R corner of screen) to epi_model_HIV_TB for here to work
+
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
 pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'pop_init')
 
@@ -33,7 +35,7 @@ pop_init_df$HIV_compartment<-as.integer(pop_init_df$HIV_compartment)
 
 pop_init_df$G_compartment<-as.integer(pop_init_df$G_compartment)
 
-#Chelsea - can you add a note about the purpose of this data frame?
+#placeholder reminder to group across gender and DR status
 pop_init_df_TBHIV_temp <- pop_init_df%>%
   group_by(TB_compartment, HIV_compartment)%>%
   summarise(value = sum(initialized_population_in_compartment))%>%
@@ -91,7 +93,7 @@ iota <- param_df%>%
   filter(notation == 'iota', DR_compartment == 1)
 iota <- iota$Reference_expected_value
 
-#upsilon - partially protective effect of IPT after completing IPT course
+#upsilon - partially protective effect of IPT after completing IPT course on new infection
 upsilon <- param_df%>%
   filter(notation == 'upsilon')
 upsilon <-upsilon$Reference_expected_value
