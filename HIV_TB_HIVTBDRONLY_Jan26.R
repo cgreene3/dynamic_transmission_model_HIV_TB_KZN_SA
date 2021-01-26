@@ -10,13 +10,18 @@ sapply(c('dplyr', 'deSolve',
          'readxl', 'stringr', 
          'reshape2', 'ggplot2', 'varhandle', 'here', 'readr'), require, character.only=T)
 
+#set in directory and out directory
+#Make sure you have the epi_model_HIV_TB.Rproj open, otherwise 
+#you will need to change the working directory manually.
 indir <- paste0(here(),'/param_files')
 outdir <- paste0(here(),'/model_outputs')
-setwd(indir)
 
+#read in data
+setwd(indir)
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
 pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'pop_init')
 
+#clean dataframe column names for consistency
 names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
 names(pop_init_df)<-str_replace_all(names(pop_init_df), c(" " = "_" , "-" = "_" ))
 
@@ -27,12 +32,7 @@ param_df$HIV_compartment<-as.integer(param_df$HIV_compartment)
 param_df$G_compartment<-as.integer(param_df$G_compartment)
 param_df$P_compartment<-as.integer(param_df$P_compartment)
 
-pop_init_df$TB_compartment<-as.integer(pop_init_df$TB_compartment)
-pop_init_df$DR_compartment<-as.integer(pop_init_df$DR_compartment)
-pop_init_df$HIV_compartment<-as.integer(pop_init_df$HIV_compartment)
-pop_init_df$G_compartment<-as.integer(pop_init_df$G_compartment)
-
-#placeholder reminder to group across gender status
+#placeholder reminder to group across gender status (this will eventually just be pop init)
 pop_init_df_TBDRHIV_temp <- pop_init_df%>%
   group_by(TB_compartment, DR_compartment, HIV_compartment)%>%
   summarise(value = sum(initialized_population_in_compartment))%>%
@@ -133,7 +133,6 @@ varpi <- param_df%>%
   summarise(value = median(Reference_expected_value))
 
 varpi <- varpi$value
-#varpi <- 1
 
 ##### omega - Rate of moving off of IPT, per year ####
 omega <-param_df%>%filter(notation == 'omega')
