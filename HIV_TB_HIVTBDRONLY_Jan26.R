@@ -41,7 +41,7 @@ pop_init_df_TBDRHIV_temp <- pop_init_df%>%
 
 ################ DEFINE SETS ###############################
 
-#TB states (TB)
+#######8 TB set description (TB)#########
 #1:Uninfected, not on IPT;
 #2:Uninfected, on IPT; 
 #3:LTBI, infected recently (within the past two-years)
@@ -53,7 +53,7 @@ pop_init_df_TBDRHIV_temp <- pop_init_df%>%
 
 TB_SET<-1:8
 
-#4 HIV compartments (HIV)#
+######4 HIV compartments description (HIV)#########
 #1 : HIV Negative
 #2 : HIV Positive CD4 > 200 - No ART
 #3 : HIV Positive CD4 =<: 200 - No Art
@@ -61,13 +61,13 @@ TB_SET<-1:8
 
 HIV_SET<-1:4
 
-#2 Drug Resistance compartments (DR)#
+######2 Drug Resistance compartments description (DR)#########
 #1 : Drug Susceptible
 #2 : Multi Drug Resistant
 
 DR_SET<-1:2
 
-#param extraction
+#######Parameter extraction########
 
 ######## PARAMETERS THAT IMPACT FORCE OF INFECTION #######
 
