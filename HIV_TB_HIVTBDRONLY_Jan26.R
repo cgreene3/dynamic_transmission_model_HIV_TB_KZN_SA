@@ -1,0 +1,456 @@
+#model calibration Jan 26 2021
+#TB/HIV/DR only
+
+#clean workspace
+rm(list = ls())
+gc()
+
+#load packages
+sapply(c('dplyr', 'deSolve', 
+         'readxl', 'stringr', 
+         'reshape2', 'ggplot2', 'varhandle', 'here', 'readr'), require, character.only=T)
+
+#set in directory and out directory
+#Make sure you have the epi_model_HIV_TB.Rproj open, otherwise 
+#you will need to change the working directory manually.
+indir <- paste0(here(),'/param_files')
+outdir <- paste0(here(),'/model_outputs')
+
+#read in data
+setwd(indir)
+param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
+pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'pop_init')
+
+#clean dataframe column names for consistency
+names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
+names(pop_init_df)<-str_replace_all(names(pop_init_df), c(" " = "_" , "-" = "_" ))
+
+#make sure all compartments are integer type for proper indexing#
+param_df$TB_compartment<-as.integer(param_df$TB_compartment)
+param_df$DR_compartment<-as.integer(param_df$DR_compartment)
+param_df$HIV_compartment<-as.integer(param_df$HIV_compartment)
+param_df$G_compartment<-as.integer(param_df$G_compartment)
+param_df$P_compartment<-as.integer(param_df$P_compartment)
+
+#placeholder reminder to group across gender status (this will eventually just be pop init)
+pop_init_df_TBDRHIV_temp <- pop_init_df%>%
+  group_by(TB_compartment, DR_compartment, HIV_compartment)%>%
+  summarise(value = sum(initialized_population_in_compartment))%>%
+  mutate(compartment_id = paste0("N_", TB_compartment, "_", DR_compartment ,"_", HIV_compartment),
+         dcompartment_id = paste0("dN_", TB_compartment, "_", DR_compartment ,"_", HIV_compartment))
+
+################ DEFINE SETS ###############################
+
+#######8 TB set description (TB)#########
+#1:Uninfected, not on IPT;
+#2:Uninfected, on IPT; 
+#3:LTBI, infected recently (within the past two-years)
+#4: LTBI, infected remotely (more than two-years ago)
+#5: LTBI, on IPT
+#6: Active
+#7: Recovered/Treated
+#8: LTBI, after IPT
+
+TB_SET<-1:8
+
+######4 HIV compartments description (HIV)#########
+#1 : HIV Negative
+#2 : HIV Positive CD4 > 200 - No ART
+#3 : HIV Positive CD4 =<: 200 - No Art
+#4 : HIV Positive - ART 
+
+HIV_SET<-1:4
+
+######2 Drug Resistance compartments description (DR)#########
+#1 : Drug Susceptible
+#2 : Multi Drug Resistant
+
+DR_SET<-1:2
+
+#######Parameter extraction########
+
+######## PARAMETERS THAT IMPACT FORCE OF INFECTION #######
+
+######### beta_g - Number of effective contacts for TB transmission per infectious year (currently averaged over gender) ######
+beta <- param_df%>%
+  filter(notation == 'beta')%>%
+  group_by(TB_compartment)%>%
+  summarise(value = median(Reference_expected_value))
+
+beta <- beta$value
+#beta<-1
+
+###### phi_h - Relative transmissibility of TB in populations living in HIV compartment h #########
+phi_h <- array(0, dim = length(HIV_SET))
+
+for (h in HIV_SET){
+  temp <- param_df%>%
+    filter(notation == 'phi',
+           HIV_compartment == h)
+  phi_h[h] <- temp$Reference_expected_value
+}
+
+#### varepsilon_g - Fraction of new TB infections that are MDR-TB (currently averaged over gender) ####
+varepsilon <- param_df%>%filter(notation == 'varepsilon')
+varepsilon <- median(varepsilon$Reference_expected_value)
+
+##### iota_r - Indicator for whether infection with given TB strain can occur while on IPT for populations in DR compartment r#####
+iota_r <- param_df%>%
+  filter(notation == 'iota')
+iota_r <- iota_r$Reference_expected_value
+
+##### zeta - Indicator that diminishes force of infection due to the partially-protective effect of LTBI infection and acquiring a new TB infection ######
+zeta <- param_df%>%
+  filter(notation == 'zeta')
+zeta <-zeta$Reference_expected_value
+
+#########Parameters that Describe TB progression ######
+
+#### kappa_t_h_g_p - Rate of IPT initiation from TB compartment t and HIV compartment h for gender g under policy p, per year ####
+#currently averaged over gender, and only testing for policy 1
+kappa_t_h <- array(data = 0, c(length(TB_SET), length(HIV_SET)))
+
+for (t in TB_SET){
+  for (h in HIV_SET){
+    temp <- param_df%>%
+      filter(P_compartment == 1,
+             notation == 'kappa')%>%
+      group_by(TB_compartment, HIV_compartment)%>%
+      summarise(value = median(Reference_expected_value))%>%
+      filter(TB_compartment == t,
+             HIV_compartment == h)
+    
+    if (nrow(temp) == 1){
+      kappa_t_h[t,h] <- temp$value
+    }
+  }
+}
+
+####### varpi - IPT adherence for gender g under policy p #######
+#currently averaged over gender, and only testing for policy 1
+varpi <- param_df%>%
+  filter(P_compartment == 1, notation == 'varpi')%>%
+  summarise(value = median(Reference_expected_value))
+
+varpi <- varpi$value
+
+##### omega - Rate of moving off of IPT, per year ####
+omega <-param_df%>%filter(notation == 'omega')
+omega <- omega$Reference_expected_value
+
+
+######### pi_i_t - Base rates of TB progression of infected populations from TB compartment i to TB compartment t, per year #####
+pi_i_t <- array(data = 0, c(length(TB_SET), length(TB_SET)))
+
+for (t_from in TB_SET){
+  for (t_to in TB_SET){
+    num_temp = (t_from*10) + t_to
+    
+    temp <- param_df%>%
+      filter(notation == 'pi',
+             TB_compartment == num_temp)
+    
+    if (nrow(temp) == 1){
+      pi_i_t[t_from,t_to] <- temp$Reference_expected_value
+    }
+  }
+}
+
+#test impact of pi_i_t
+pi_i_t[8,6] <- .02
+
+#########theta_h - relative risk of TB progression from LTBI to Active for HIV compartment h ###########
+theta_h <-array(0, dim = length(HIV_SET))
+
+for (h in HIV_SET){
+  temp <- param_df%>%
+    filter(notation == 'theta',
+           HIV_compartment == h)
+  
+  theta_h[h]<- temp$Reference_expected_value
+}
+
+###########gamma_r -indicator if DR compartment can move onto after IPT due to protective effects for LTBI, DS####
+gamma_r <- c(1,0)
+
+#######Parameters that describe HIV progression########
+#####eta_i_h_g rate of populations moving from HIV compartment i to hiv compartment h by gender g ######
+#(currently averaged over gender)#
+eta_i_h <- array(0, dim=c(length(HIV_SET), length(HIV_SET)))
+
+#eta
+for (h_from in HIV_SET){
+  for (h_to in HIV_SET){
+    num_temp = (h_from*10) + h_to
+    
+    temp <- param_df%>%
+      filter(notation == 'eta',
+             HIV_compartment == num_temp,
+             P_compartment == 1,
+             G_compartment == 1)
+    
+    
+    
+    if (nrow(temp) == 1){
+      eta_i_h[h_from, h_to] <-temp$Reference_expected_value 
+    }
+  }
+}
+
+#########parameters for death and aging rates ###########
+
+######mu_t_h_g - mortality rates for TB compartment t and HIV compartment h for gender g ########
+#currently averaged over gender#
+mu_t_h <- array(0, dim = c(length(TB_SET), length(HIV_SET)))
+
+for (t in TB_SET){
+  for (h in HIV_SET){
+    temp <- param_df%>%
+      filter(notation == 'mu')%>%
+      group_by(TB_compartment, HIV_compartment)%>%
+      summarise(value = median(Reference_expected_value))%>%
+      filter(TB_compartment == t,
+             HIV_compartment == h)
+    
+    mu_t_h[t,h] <- temp$value
+  }
+}
+
+########alpha_in_t_h_g - Proportion of population that enters into TB compartment t, DR compartment r, HIV compartment h, and gender compartment g#####
+alpha_in_t_r_h <- array(data = 0, c(length(TB_SET), length(DR_SET), length(HIV_SET)))
+
+for (t in TB_SET){
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      temp <- param_df%>%
+        filter(notation == 'alpha^in')%>%
+        group_by(notation, TB_compartment, DR_compartment, HIV_compartment)%>%
+        summarise(value = sum(Reference_expected_value))%>%
+        filter(TB_compartment == t, HIV_compartment == h, DR_compartment == r)
+      
+      if (nrow(temp) == 1){
+        alpha_in_t_r_h[t,r,h] <- temp$value
+      }
+    }
+  }
+}
+
+####### alpha_out - Rate of exit from the population ######
+alpha_out <- param_df%>%filter(notation == 'alpha^out')
+alpha_out <- alpha_out$Reference_expected_value
+
+
+#############Pre-processing parameter equations, for ease of use in ode solver#######
+
+####total_out_t_r_h - total amount leaving from compartment######
+total_out_t_r_h <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET))
+count_temp <- 1
+
+for (t in TB_SET){
+  for (r in DR_SET){
+    for (h in HIV_SET){
+        total_out_t_r_h[count_temp] <- (mu_t_h[t,h]*(1-alpha_out))+
+          ((1-mu_t_h[t,h])*alpha_out)+
+          (mu_t_h[t,h]*alpha_out)
+        count_temp <- count_temp + 1
+    }
+  }
+}
+
+#####N_init - total initial population in each compartment flattened in 1D array for ODE solver #####
+N_init <- pop_init_df_TBDRHIV_temp$value
+names(N_init) <- c(pop_init_df_TBDRHIV_temp$compartment_id)
+
+####N_t_r_h_ref - matrix that identifies the location of compartment in 1D array#####
+N_t_r_h_ref <- array(0, dim = c(length(TB_SET), length(DR_SET), length(HIV_SET)))
+count_temp <- 1
+
+for (t in TB_SET){
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      N_t_r_h_ref[t,r,h] <- count_temp
+      count_temp <- count_temp + 1
+    }
+  }
+}
+
+open_seir_model <- function(time, N_t_r_h, parms){
+  
+  dN_t_r_h <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET))
+  names(dN_t_r_h) <- pop_init_df_TBDRHIV_temp$dcompartment_id
+  
+  FOI_1 <- (beta*(sum((phi_h)*N_t_r_h[N_t_r_h_ref[6, 1, HIV_SET]])/sum(N_t_r_h)))
+  FOI_2 <- (varepsilon*(FOI_1))/(1-varepsilon)
+  FOI_r <- c(FOI_1, FOI_2)
+  FOI <- sum(FOI_r)
+  
+  B <- sum(total_out_t_r_h*N_t_r_h)
+  
+  #######TB compartment 1 Equations #########
+  #Set DR compartment to 1, since not applicable to drug resistant compartments#
+  for (h in HIV_SET){
+    dN_t_r_h[N_t_r_h_ref[1,1,h]]<-(sum(alpha_in_t_r_h[1,1,h]*B) + #entries from births
+                               (omega*N_t_r_h[N_t_r_h_ref[2,1,h]]) - #entries from off IPT 
+                               (total_out_t_r_h[N_t_r_h_ref[1,1,h]]*N_t_r_h[N_t_r_h_ref[1,1,h]]) - #exists from aging out and death
+                               (FOI*N_t_r_h[N_t_r_h_ref[1,1,h]])- #exists from TB infection 
+                               (kappa_t_h[1,h]*N_t_r_h[N_t_r_h_ref[1,1,h]])) + #exists from on to IPT 
+      (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[1,1,HIV_SET]])) - #entries into HIV compartment
+      (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[1,1,h]]) #exit from HIV compartment
+  }
+  
+  #############TB compartment 2 Equations########
+  #Set DR compartment to 1, since not applicable to drug resistant compartments#
+  for (h in HIV_SET){
+    dN_t_r_h[N_t_r_h_ref[2,1,h]]<-((kappa_t_h[1,h]*N_t_r_h[N_t_r_h_ref[1,1,h]])- #entries from on to IPT 
+                                (total_out_t_r_h[N_t_r_h_ref[2,1,h]]*N_t_r_h[N_t_r_h_ref[2,1,h]])- #exists from aging out and death
+                                (omega*N_t_r_h[N_t_r_h_ref[2,1,h]])- #exits from off IPT 
+                                ((sum(iota_r*FOI_r))*N_t_r_h[N_t_r_h_ref[2,1,h]]) +#exits from infection (diminished for IPT)
+    (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[2,1,HIV_SET]])) - #entries into HIV compartment
+      (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[2,1,h]]) #exit from HIV compartment
+    )
+  }
+  
+  #############TB compartment 3 Equations########
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      dN_t_r_h[N_t_r_h_ref[3,r,h]]<-((alpha_in_t_r_h[3,r,h]*B) + #entries from births
+                                   (FOI_r[r]*N_t_r_h[N_t_r_h_ref[1,1,h]])+ #infection from compartment 1 
+                                   (iota_r[r]*FOI_r[r]*N_t_r_h[N_t_r_h_ref[2,1,h]])+ #infections from compartment 2 
+                                   (zeta*FOI_r[r]*sum(N_t_r_h[N_t_r_h_ref[4,DR_SET,h]]))+ #re-infection from compartment 4
+                                   (zeta*FOI_r[r]*sum(N_t_r_h[N_t_r_h_ref[7,DR_SET,h]]))+ #re-infection from compartment 7
+                                   (zeta*FOI_r[r]*sum(N_t_r_h[N_t_r_h_ref[8,DR_SET,h]]))- #re-infection from compartment 8
+                                   (total_out_t_r_h[N_t_r_h_ref[3,r,h]]*N_t_r_h[N_t_r_h_ref[3,r,h]]) - #exists from aging out and death
+                                   (pi_i_t[3,4]*N_t_r_h[N_t_r_h_ref[3,r,h]]) - #from recent to remote infection
+                                   (kappa_t_h[3,h]*N_t_r_h[N_t_r_h_ref[3,r,h]]) - #from recent to on IPT 
+                                   ((1/varpi)*theta_h[h]*pi_i_t[3,6]*N_t_r_h[N_t_r_h_ref[3,r,h]]) + #from recent TB infection to active
+                                   (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[3,r,HIV_SET]])) - #entries into HIV compartment
+                                   (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[3,r,h]]) #exit from HIV compartment
+      )
+    }
+  }
+  
+  #############TB compartment 4 Equations########
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      dN_t_r_h[N_t_r_h_ref[4,r,h]]<-((alpha_in_t_r_h[4,r,h]*B) + #entries from births
+                                  (pi_i_t[3,4]*N_t_r_h[N_t_r_h_ref[3,r,h]]) - #from recent to remote infection
+                                  (total_out_t_r_h[N_t_r_h_ref[4,r,h]]*N_t_r_h[N_t_r_h_ref[4,r,h]]) - #exists from aging out and death
+                                  (zeta*FOI*N_t_r_h[N_t_r_h_ref[4,r,h]])- #re-infection
+                                  (kappa_t_h[4,h]*N_t_r_h[N_t_r_h_ref[4,r,h]]) - #onto IPT
+                                  ((1/varpi)*theta_h[h]*pi_i_t[4,6]*N_t_r_h[N_t_r_h_ref[4,r,h]]) + #from remote TB infection to active 
+                                  (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[4,r,HIV_SET]])) - #entries into HIV compartment
+                                  (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[4,r,h]]) #exit from HIV compartment
+      )
+    }
+  }
+  
+  #############TB compartment 5 Equations########
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      dN_t_r_h[N_t_r_h_ref[5,r,h]] <-((kappa_t_h[3,h]*N_t_r_h[N_t_r_h_ref[3,r,h]]) + #from recent to on IPT  
+                                    (kappa_t_h[4,h]*N_t_r_h[N_t_r_h_ref[4,r,h]]) - #onto IPT
+                                    (total_out_t_r_h[N_t_r_h_ref[5,r,h]]*N_t_r_h[N_t_r_h_ref[5,r,h]]) - #exists from aging out and death
+                                    ((1/varpi)*theta_h[h]*pi_i_t[5,6]*N_t_r_h[N_t_r_h_ref[5,r,h]]) - #from TB infection on IPT to active
+                                    (gamma_r[r]*omega*N_t_r_h[N_t_r_h_ref[5,r,h]]) + #off IPT to after IPT
+                                    (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[5,r,HIV_SET]])) - #entries into HIV compartment
+                                    (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[5,r,h]]) #exit from HIV compartment
+      )
+    }
+  }
+  
+  #############TB compartment 6 Equations########
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      dN_t_r_h[N_t_r_h_ref[6,r,h]] <- ((alpha_in_t_r_h[6,r,h]*B) + #entries from births
+                                       ((1/varpi)*theta_h[h]*pi_i_t[3,6]*N_t_r_h[N_t_r_h_ref[3,r,h]]) + #from recent TB infection to active 
+                                       ((1/varpi)*theta_h[h]*pi_i_t[4,6]*N_t_r_h[N_t_r_h_ref[4,r,h]]) + #from remote TB infection to active 
+                                       ((1/varpi)*theta_h[h]*pi_i_t[5,6]*N_t_r_h[N_t_r_h_ref[5,r,h]]) + #from TB infection on IPT to active
+                                       ((1/varpi)*theta_h[h]*pi_i_t[8,6]*N_t_r_h[N_t_r_h_ref[8,r,h]]) - #from TB after on IPT to active
+                                       (total_out_t_r_h[N_t_r_h_ref[6,r,h]]*N_t_r_h[N_t_r_h_ref[6,r,h]]) - #total out
+                                       (pi_i_t[6,7]*N_t_r_h[N_t_r_h_ref[6,r,h]]) +#from active to recovered
+                                       (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[6,r,HIV_SET]])) - #entries into HIV compartment
+                                       (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[6,r,h]]) #exit from HIV compartment
+      )
+    }
+  }
+  
+  #############TB compartment 7 Equations########
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      dN_t_r_h[N_t_r_h_ref[7,r,h]] <- ((pi_i_t[6,7]*N_t_r_h[N_t_r_h_ref[6,r,h]]) - #from active to recovered
+                                     (total_out_t_r_h[N_t_r_h_ref[7,r,h]]*N_t_r_h[N_t_r_h_ref[7,r,h]]) - #total out
+                                     (zeta*FOI*N_t_r_h[N_t_r_h_ref[7,r,h]]) + #re-infection from compartment 7
+                                     (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[7,r,HIV_SET]])) - #entries into HIV compartment
+                                     (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[7,r,h]]) #exit from HIV compartment
+      )
+    }
+  }
+  
+  #############TB compartment 8 Equations########
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      dN_t_r_h[N_t_r_h_ref[8,r,h]] <- ((gamma_r[r]*omega*N_t_r_h[N_t_r_h_ref[5,r,h]]) - #off IPT to after IPT
+                                    ((1/varpi)*theta_h[h]*pi_i_t[8,6]*N_t_r_h[N_t_r_h_ref[8,r,h]]) - #from TB after on IPT to active
+                                    (total_out_t_r_h[N_t_r_h_ref[8,r,h]]*N_t_r_h[N_t_r_h_ref[8,r,h]]) - #total out
+                                    (zeta*FOI*N_t_r_h[N_t_r_h_ref[8,r,h]])+ 
+                                    (sum(eta_i_h[HIV_SET, h]*N_t_r_h[N_t_r_h_ref[8,r,HIV_SET]])) - #entries into HIV compartment
+                                    (sum(eta_i_h[h,HIV_SET])*N_t_r_h[N_t_r_h_ref[8,r,h]]) #exit from HIV compartment
+      )
+    }
+  }
+  
+  list(dN_t_r_h)
+}
+
+#Time Horizon 
+TT<-5 #2017-1990
+time_interval <- 1/12
+TT_SET <- seq(from = 0, to = TT, by = time_interval)
+
+out<-as.data.frame(ode(times = TT_SET, y = N_init, 
+                       func = open_seir_model, method = 'lsoda',
+                       parms = NULL))
+
+#out_melt<-melt(data = out, 
+#              id.vars = c("time"))
+
+#colnames(out_melt)[2] <- 'TB_compartment'
+
+#ggplot(out_melt, aes(x = time, y = value, group = TB_compartment, color = TB_compartment))+
+#  geom_line()+
+#  ylab('total in compartment')
+
+out <-out%>%
+  mutate(total_pop = rowSums(.[2:ncol(out)]))
+
+#setwd(outdir)
+#write_csv(out, 'out.csv')
+
+out_melt = melt(out, id.vars = c('time', 'total_pop'))
+temp <- strsplit(as.character(out_melt$variable), "_")
+
+TB_compartment_temp <- rep(0, times = length(temp))
+HIV_compartment_temp <- rep(0, times = length(temp))
+
+for (n in 1:length(temp)){
+  listt <- temp[[n]]
+  TB_compartment_temp[n] <-listt[2]
+  HIV_compartment_temp[n] <- listt[3]
+}
+
+out_melt$TB_compartment <- TB_compartment_temp
+out_melt$HIV_compartment <- HIV_compartment_temp
+
+out_melt_grouped <- out_melt%>%
+  #filter(TB_compartment == '6')%>%
+  group_by(TB_compartment, time)%>%
+  summarise(total_pop = sum(value))
+
+ggplot(out_melt_grouped, aes(x = time, y = total_pop, group = TB_compartment, color = TB_compartment))+
+  geom_line()+
+  ylab('total in compartment')
+
+ggplot(out_melt_grouped%>%filter(TB_compartment=='6'), aes(x = time, y = total_pop))+
+  geom_line()+
+  ylab('total with Active TB')+
+  ylim(0, 2500)
