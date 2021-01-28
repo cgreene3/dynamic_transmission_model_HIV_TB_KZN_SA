@@ -274,11 +274,13 @@ for (t in TB_SET){
   }
 }
 
+#where the equations are stored
 open_seir_model <- function(time, N_t_r_h, parms){
   
   dN_t_r_h <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET))
   names(dN_t_r_h) <- pop_init_df_TBDRHIV_temp$dcompartment_id
   
+  #time varying parameters
   FOI_1 <- (beta*(sum((phi_h)*N_t_r_h[N_t_r_h_ref[6, 1, HIV_SET]])/sum(N_t_r_h)))
   FOI_2 <- (varepsilon*(FOI_1))/(1-varepsilon)
   FOI_r <- c(FOI_1, FOI_2)
@@ -407,6 +409,7 @@ TT<-5 #2017-1990
 time_interval <- 1/12
 TT_SET <- seq(from = 0, to = TT, by = time_interval)
 
+#feed in to solve, evaluation time intervals, initial
 out<-as.data.frame(ode(times = TT_SET, y = N_init, 
                        func = open_seir_model, method = 'lsoda',
                        parms = NULL))
