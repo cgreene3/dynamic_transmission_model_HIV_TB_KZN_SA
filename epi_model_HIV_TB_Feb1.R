@@ -75,15 +75,15 @@ G_SET<-1:2
 
 ######## PARAMETERS THAT IMPACT FORCE OF INFECTION #######
 
-######### beta_g - Number of effective contacts for TB transmission per infectious year (currently averaged over gender) ######
-beta <- param_df%>%
+######### beta_g - Number of effective contacts for TB transmission per infectious year######
+beta_g <- param_df%>%
   filter(notation == 'beta')%>%
   arrange(G_compartment)
 
-beta_g <- beta$Reference_expected_value
+beta_g <- beta_g$Reference_expected_value
 #beta<-1
 
-###### phi_h - Relative transmissibility of TB in populations living in HIV compartment h #########
+###### phi_h - Relative transmissibility of TB in HIV pops#########
 phi_h <- array(0, dim = length(HIV_SET))
 
 for (h in HIV_SET){
@@ -93,14 +93,14 @@ for (h in HIV_SET){
   phi_h[h] <- temp$Reference_expected_value
 }
 
-#### varepsilon_g - Fraction of new TB infections that are MDR-TB (currently averaged over gender) ####
+#### varepsilon_g - Fraction of new TB infections that are MDR-TB ####
 varepsilon_g <- param_df%>%
   filter(notation == 'varepsilon')%>%
   arrange(G_compartment)
 
 varepsilon_g <- varepsilon_g$Reference_expected_value
 
-##### iota_r - Indicator for whether infection with given TB strain can occur while on IPT for populations in DR compartment r#####
+##### iota_r - Indicator for whether infection with given TB strain can occur while on IPT by DR compartment#####
 iota_r <- param_df%>%
   filter(notation == 'iota')
 iota_r <- iota_r$Reference_expected_value
@@ -112,7 +112,7 @@ zeta <-zeta$Reference_expected_value
 
 #########Parameters that Describe TB progression ######
 
-#### kappa_t_h_g_p - Rate of IPT initiation from TB compartment t and HIV compartment h for gender g under policy p, per year ####
+#### kappa_t_h_g_p - Rate of IPT initiation, per year ####
 #currently averaged over gender, and only testing for policy 1
 kappa_t_h_g <- array(data = 0, c(length(TB_SET), length(HIV_SET), length(G_SET)))
 
@@ -133,7 +133,7 @@ for (t in TB_SET){
   }
 }
 
-####### varpi - IPT adherence for gender g under policy p #######
+####### varpi_g - IPT adherence #######
 #currently averaged over gender, and only testing for policy 1
 varpi_g <- param_df%>%
   filter(P_compartment == 1, notation == 'varpi')%>%
@@ -146,7 +146,7 @@ omega <-param_df%>%filter(notation == 'omega')
 omega <- omega$Reference_expected_value
 
 
-######### pi_i_t - Base rates of TB progression of infected populations from TB compartment i to TB compartment t, per year #####
+######### pi_i_t - Base rates of TB progression  #####
 pi_i_t <- array(data = 0, c(length(TB_SET), length(TB_SET)))
 
 for (t_from in TB_SET){
@@ -166,7 +166,7 @@ for (t_from in TB_SET){
 #test impact of pi_i_t
 pi_i_t[8,6] <- .02
 
-#########theta_h - relative risk of TB progression from LTBI to Active for HIV compartment h ###########
+#########theta_h - relative risk of TB progression###########
 theta_h <-array(0, dim = length(HIV_SET))
 
 for (h in HIV_SET){
@@ -177,11 +177,11 @@ for (h in HIV_SET){
   theta_h[h]<- temp$Reference_expected_value
 }
 
-###########gamma_r -indicator if DR compartment can move onto after IPT due to protective effects for LTBI, DS####
+###########gamma_r -indicator if DR compartment can move onto after IPT####
 gamma_r <- c(1,0)
 
 #######Parameters that describe HIV progression########
-#####eta_i_h_g rate of populations moving from HIV compartment i to hiv compartment h by gender g ######
+#####eta_i_h_g rate HIV transitions ######
 #(currently averaged over gender)#
 eta_i_h_g <- array(0, dim=c(length(HIV_SET), length(HIV_SET), length(G_SET)))
 
@@ -208,7 +208,7 @@ for (h_from in HIV_SET){
 
 #########parameters for death and aging rates ###########
 
-######mu_t_h_g - mortality rates for TB compartment t and HIV compartment h for gender g ########
+######mu_t_h_g - mortality rates ########
 mu_t_h_g <- array(0, dim = c(length(TB_SET), length(HIV_SET), length(G_SET)))
 
 for (t in TB_SET){
@@ -225,7 +225,7 @@ for (t in TB_SET){
   }
 }
 
-########alpha_in_t_h_g - Proportion of population that enters into TB compartment t, DR compartment r, HIV compartment h, and gender compartment g#####
+########alpha_in_t_h_g - Proportion of population that enters each compartment#####
 alpha_in_t_r_h_g <- array(data = 0, c(length(TB_SET), length(DR_SET), length(HIV_SET), length(G_SET)))
 
 for (t in TB_SET){
@@ -513,11 +513,11 @@ out_melt_grouped_by_TB_compartment <- out_melt%>%
   group_by(TB_compartment, time)%>%
   summarise(total_pop = sum(value))
 
-ggplot(out_melt_grouped, aes(x = time, y = total_pop, group = TB_compartment, color = TB_compartment))+
+ggplot(out_melt_grouped_by_TB_compartment, aes(x = time, y = total_pop, group = TB_compartment, color = TB_compartment))+
   geom_line()+
   ylab('total in compartment')
 
-ggplot(out_melt_grouped%>%filter(TB_compartment=='6'), aes(x = time, y = total_pop))+
+ggplot(out_melt_grouped_by_TB_compartment%>%filter(TB_compartment=='6'), aes(x = time, y = total_pop))+
   geom_line()+
   ylab('total with Active TB')+
   ylim(0, 2500)
