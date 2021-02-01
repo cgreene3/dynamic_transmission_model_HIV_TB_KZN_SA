@@ -457,12 +457,17 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   list(dN_t_r_h_g)
 }
 
-#Time Horizon 
+#Time Horizon and Evaluation intervals (1 month)
 TT<-5 #2017-1990
 time_interval <- 1/12
 TT_SET <- seq(from = 0, to = TT, by = time_interval)
 
-#feed in to solve, evaluation time intervals, initial
+#feed in to solve, evaluation time intervals (TT_SET), 
+#initial population (N_init)
+#differential equations and dynamic parameter (open_seir_model)
+#specify differential solver (lsoda)
+# read params from global (NULL)
+
 out<-as.data.frame(ode(times = TT_SET, y = N_init, 
                        func = open_seir_model, method = 'lsoda',
                        parms = NULL))
@@ -495,7 +500,7 @@ for (n in 1:length(temp)){
   TB_compartment_temp[n] <-compartment_split[2]
   DR_compartment_temp[n] <- compartment_split[3]
   HIV_compartment_temp[n] <- compartment_split[4]
-  HIV_compartment_temp[n] <- compartment_split[5]
+  G_compartment_temp[n] <- compartment_split[5]
 }
 
 out_melt$TB_compartment <- TB_compartment_temp
@@ -503,8 +508,8 @@ out_melt$DR_compartment <- DR_compartment_temp
 out_melt$HIV_compartment <- HIV_compartment_temp
 out_melt$G_compartment <- G_compartment_temp
 
-out_melt_grouped <- out_melt%>%
-  #filter(TB_compartment == '6')%>%
+#TB compartment grouped
+out_melt_grouped_by_TB_compartment <- out_melt%>%
   group_by(TB_compartment, time)%>%
   summarise(total_pop = sum(value))
 
@@ -516,3 +521,19 @@ ggplot(out_melt_grouped%>%filter(TB_compartment=='6'), aes(x = time, y = total_p
   geom_line()+
   ylab('total with Active TB')+
   ylim(0, 2500)
+
+#TB HIV compartment grouped
+out_melt_grouped_by_TB_HIV_compartment <- out_melt%>%
+  group_by(TB_compartment, HIV_compartment, time)%>%
+  summarise(total_pop = sum(value))
+
+#par(mfrow=c(2,2))
+HIV_TB_graphs <- ggplot(out_melt_grouped_by_TB_HIV_compartment,#%>%filter(TB_compartment == 6), 
+                        aes(x = time, y = total_pop, 
+                            group = TB_compartment, 
+                            color = TB_compartment))+
+  geom_line()+
+  ylab('total in compartment')+
+  facet_wrap(~HIV_compartment)+
+  ggtitle('TB compartment populations by HIV compartment')
+dev.off()
