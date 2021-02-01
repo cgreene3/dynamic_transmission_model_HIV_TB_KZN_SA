@@ -280,7 +280,7 @@ open_seir_model <- function(time, N_t_h, parms){
   
   #TB compartment 1
   lapply(HIV_SET, function(h){
-    dN_t_h[N_t_h_ref[1,h]]<-((alpha_in_t_h[1,h]*B) + #entries from births
+    dN_t_h[N_t_h_ref[1,h]]<<-((alpha_in_t_h[1,h]*B) + #entries from births
                                 (omega*N_t_h[N_t_h_ref[2,h]]) - #entries from off IPT 
                                 (total_out_t_h[N_t_h_ref[1,h]]*N_t_h[N_t_h_ref[1,h]]) - #exists from aging out and death
                                 (FOI*N_t_h[N_t_h_ref[1,h]])- #exists from TB infection 
