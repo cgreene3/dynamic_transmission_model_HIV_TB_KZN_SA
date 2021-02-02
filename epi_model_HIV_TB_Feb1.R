@@ -458,7 +458,7 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
 }
 
 #Time Horizon and Evaluation intervals (1 month)
-TT<-5 #2017-1990
+TT<-10 #2017-1990
 time_interval <- 1/12
 TT_SET <- seq(from = 0, to = TT, by = time_interval)
 
@@ -528,7 +528,7 @@ out_melt_grouped_by_TB_HIV_compartment <- out_melt%>%
   summarise(total_pop = sum(value))
 
 #par(mfrow=c(2,2))
-HIV_TB_graphs <- ggplot(out_melt_grouped_by_TB_HIV_compartment,#%>%filter(TB_compartment == 6), 
+HIV_TB_graphs <- ggplot(out_melt_grouped_by_TB_HIV_compartment%>%filter(TB_compartment == 6), 
                         aes(x = time, y = total_pop, 
                             group = TB_compartment, 
                             color = TB_compartment))+
