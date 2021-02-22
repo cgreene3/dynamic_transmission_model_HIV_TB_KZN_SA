@@ -1,4 +1,4 @@
-#model Feb 3
+#model Feb 22
 #TB/HIV/DR/G + mort changing over time
 #+ HIV incidence and initiation changing overtime
 
@@ -22,7 +22,7 @@ setwd(indir)
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
 pop_init_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'pop_init')
 mort_df <- read.csv('mort_df.csv')
-hiv_transition_df<-read.csv('hiv_transition.csv')
+hiv_transition_df<-read.csv('hiv_transmission_df.csv')
 
 #clean dataframe column names for consistency
 names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
@@ -200,19 +200,21 @@ HIV_transitions_param_func<-function(yr){
     #get HIV progression CD4 counts
     temp <- param_df%>%
       filter(notation == 'eta',
-             HIV_compartment == 34,
+             HIV_compartment == 23,
              P_compartment == 1,
              G_compartment == g)
     
-    eta_i_h_g[3,4,g]<-temp$Reference_expected_value
+    eta_i_h_g[2,3,g]<-temp$Reference_expected_value
+    
+    gender_name <-if_else(g == 1, 'Males', 'Females')
     
     temp2<-hiv_transition_df%>%
-      filter(G_compartment == g,
-             Year == yr)
+      filter(gender == gender_name,
+             year == yr)
     
-    eta_i_h_g[1,2,g]<-temp2$incidence_rate
-    eta_i_h_g[2,4,g]<-temp2$art_initiation_rate_cd4more
-    eta_i_h_g[3,4,g]<-temp2$art_initiation_rate_cd4less
+    eta_i_h_g[1,2,g]<-temp2$hiv_incidence
+    eta_i_h_g[2,4,g]<-temp2$eta_24
+    eta_i_h_g[3,4,g]<-temp2$eta_34
   }
   return(eta_i_h_g)
 }
@@ -340,6 +342,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   
   #write year parameter for parameters that change over time
   current_yr <-as.integer(start_yr+time)
+  
+  print(current_yr)
   
   #HIV transitions
   eta_i_h_g<-HIV_transitions_param_func(current_yr)
@@ -486,7 +490,7 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
 
 #Time Horizon and Evaluation intervals (1 month)
 start_yr = 1990
-end_yr = 2000
+end_yr = 2017
 TT<-end_yr-start_yr
 time_interval <- 1/12
 TT_SET <- seq(from = 0, to = TT, by = time_interval)
