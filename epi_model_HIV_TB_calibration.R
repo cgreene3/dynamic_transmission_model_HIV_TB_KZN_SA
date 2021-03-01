@@ -501,24 +501,69 @@ TT_SET <- seq(from = 0, to = TT, by = time_interval)
 #specify differential solver (lsoda)
 # read params from global (NULL)
 
-out<-as.data.frame(ode(times = TT_SET, y = N_init, 
+out_df<-as.data.frame(ode(times = TT_SET, y = N_init, 
                        func = open_seir_model, method = 'lsoda',
                        parms = NULL))
 
 #out_melt<-melt(data = out, 
 #              id.vars = c("time"))
 
-#colnames(out_melt)[2] <- 'TB_compartment'
+out_df <-out_df%>%
+  mutate(total_pop = rowSums(.[2:ncol(out_df)]))
 
-#ggplot(out_melt, aes(x = time, y = value, group = TB_compartment, color = TB_compartment))+
-#  geom_line()+
-#  ylab('total in compartment')
+out_df<- cbind(year = as.integer(start_yr+out_df$time), 
+            beta_1 = rep(beta_g[1], times = nrow(out_df)), beta_2 = rep(beta_g[2], times = nrow(out_df)), 
+            out_df)
 
-out <-out%>%
-  mutate(total_pop = rowSums(.[2:ncol(out)]))
+out_df_melt <-melt(out_df,
+                   id.vars = c("time", "year", "beta_1", "beta_2", "total_pop"))
 
-#setwd(outdir)
-#write_csv(out, 'out.csv')
+out_df_melt <- cbind(out_df_melt, data.frame(do.call('rbind', strsplit(as.character(out_df_melt$variable),'_',fixed=TRUE))))
+
+names(out_df_melt)[names(out_df_melt) == "X2"] <- "TB_compartment"
+names(out_df_melt)[names(out_df_melt) == "X3"] <- "DR_compartment"
+names(out_df_melt)[names(out_df_melt) == "X4"] <- "HIV_compartment"
+names(out_df_melt)[names(out_df_melt) == "X5"] <- "G_compartment"
+out_df_melt<-out_df_melt%>%select(-c('X1'))
+out_df_melt$month <- as.integer(((out_df_melt$time%%1)*(12)+1))
+
+
+#####Calibration Calculations######
+
+mort_est <- array(data = 0, dim = nrow(out_df_melt))
+
+#so I do not need to call on mort_param_func too many times
+out_df_melt<-out_df_melt%>%
+  arrange(year)
+
+counter <-1
+for (yr in start_yr:end_yr){
+  temp<-out_df_melt%>%
+    filter(year == yr)
+  mu_t_h_g<-mort_param_func(yr)
+  print(yr)
+  for (row in 1:nrow(temp)){
+    tb <- as.integer(out_df_melt[row, 'TB_compartment'])
+    hiv <- as.integer(out_df_melt[row, 'HIV_compartment'])
+    gender <-as.integer(out_df_melt[row, 'G_compartment'])
+    pop<-as.double(out_df_melt[row, 'value'])
+    mort_rate<-(mu_t_h_g[tb,hiv,gender]*(1/12))
+    
+    mort_est[counter]<-(mort_rate*pop)
+    counter <- counter + 1
+  }
+}
+
+out_df_melt$mort_est <- mort_est
+
+TB_mort_summary_df<-out_df_melt%>%
+  filter(TB_compartment ==6,
+         HIV_compartment==1)%>%
+  group_by(year)%>%
+  summarise(total_mort=sum(mort_est))
+
+
+#######graphs######
 
 out_melt = melt(out, id.vars = c('time', 'total_pop'))
 temp <- strsplit(as.character(out_melt$variable), "_")
