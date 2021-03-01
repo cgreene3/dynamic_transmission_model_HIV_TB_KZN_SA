@@ -176,6 +176,12 @@ for (cause1 in unique(mort_rate_plots_df$cause)){
 }
 
 
+ggplot(filtered, aes(x = year, 
+                     y = mort_rate,
+                     group = sex_name)) + 
+  geom_point() + 
+  geom_line(aes(color = sex_name))
+
 
 setwd(outdir)
 write.csv(df_input_data, 'mort_df.csv')
