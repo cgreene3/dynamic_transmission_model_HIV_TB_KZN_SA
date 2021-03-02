@@ -14,10 +14,12 @@ indir <- paste0(here(),'/param_files/mortality_param_gen')
 outdir <- paste0(here(),'/param_files')
 setwd(indir)
 
+#to name plots according to date generated
+data_pull_date<-'02_28_2021'
+#also need to update read files 50,57,61
 
-
-#read in pop files
-
+#####read in pop files
+#data pull date 02/28/2021
 #put GBD estimates into seperate folder so can read in all
 setwd(paste0(indir,'/GBD_pop_estimates')) 
 pop_files = list.files(pattern="*.CSV")
@@ -83,7 +85,7 @@ non_disease_mort_graph<-ggplot(non_disease_mort_df, aes(x = year,
        colour = "Gender")+
   ylim(0,.01)
 
-png('non_disease_mort_graph.png', width=450,height=350,res=100)
+png(paste0('non_disease_mort_graph',data_pull_date,'.png'), width=450,height=350,res=100)
 print(non_disease_mort_graph)
 dev.off()
 
@@ -163,7 +165,7 @@ for (cause1 in unique(mort_rate_plots_df$cause)){
   plot_file_name<-str_replace_all(string=cause1, pattern=" ", repl="_")
   plot_file_name<-str_replace_all(string=plot_file_name, pattern=",", repl="")
   plot_file_name<-str_replace_all(string=plot_file_name, pattern="/", repl="_")
-  png(paste0(plot_file_name,'.png'), width=450,height=350,res=100)
+  png(paste0(plot_file_name,data_pull_date,'.png'), width=450,height=350,res=100)
   print(ggplot(mort_rate_plots_df%>%filter(cause == cause1), aes(x = year, 
                                  y = mort_rate,
                                  group = Gender)) + 
@@ -174,13 +176,6 @@ for (cause1 in unique(mort_rate_plots_df$cause)){
     ylim(0,.5))
   dev.off()
 }
-
-
-ggplot(filtered, aes(x = year, 
-                     y = mort_rate,
-                     group = sex_name)) + 
-  geom_point() + 
-  geom_line(aes(color = sex_name))
 
 
 setwd(outdir)
