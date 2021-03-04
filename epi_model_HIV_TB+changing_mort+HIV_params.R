@@ -234,7 +234,7 @@ mort_param_func <-function(yr){
                  HIV_compartment == h,
                  G_compartment == g)
         
-        mu_t_h_g[t,h,g] <- temp$total_mort
+        mu_t_h_g[t,h,g] <- temp$mort_rate
       }
     }
   }

@@ -1,6 +1,7 @@
-#model Feb 22
+#model March 4th
 #TB/HIV/DR/G + mort changing over time
 #+ HIV incidence and initiation changing overtime
+#calibration calcs to HIV/TB deaths and TB only deaths
 
 #clean workspace
 rm(list = ls())
@@ -234,7 +235,7 @@ mort_param_func <-function(yr){
                  HIV_compartment == h,
                  G_compartment == g)
         
-        mu_t_h_g[t,h,g] <- temp$total_mort
+        mu_t_h_g[t,h,g] <- temp$mort_rate
       }
     }
   }
@@ -501,25 +502,47 @@ TT_SET <- seq(from = 0, to = TT, by = time_interval)
 #specify differential solver (lsoda)
 # read params from global (NULL)
 
-out_df<-as.data.frame(ode(times = TT_SET, y = N_init, 
-                       func = open_seir_model, method = 'lsoda',
-                       parms = NULL))
+out_df_all<-data.frame()
+sim_id <-1
 
-#out_melt<-melt(data = out, 
-#              id.vars = c("time"))
+beta_1_test<-c(.005, .006)
+beta_2_test<-c(.005, .006)
 
-out_df <-out_df%>%
-  mutate(total_pop = rowSums(.[2:ncol(out_df)]))
+for (beta_1 in beta_1_test){
+  for (beta_2 in beta_2_test){
+    
+    beta_g[1]<-beta_1
+    beta_g[2]<-beta_2
+    
+    out_df<-as.data.frame(ode(times = TT_SET, y = N_init, 
+                              func = open_seir_model, method = 'lsoda',
+                              parms = NULL))
+    
+    out_df<- cbind(year = as.integer(start_yr+out_df$time), sim_id = rep(sim_id, times = nrow(out_df)),
+                   beta_1 = rep(beta_1, times = nrow(out_df)), beta_2 = rep(beta_2, times = nrow(out_df)), 
+                   out_df)
+    
+    out_df_all<-rbind(out_df_all, out_df)
+    
+    sim_id <- sim_id + 1
+    
+  }
+}
 
-out_df<- cbind(year = as.integer(start_yr+out_df$time), 
-            beta_1 = rep(beta_g[1], times = nrow(out_df)), beta_2 = rep(beta_g[2], times = nrow(out_df)), 
-            out_df)
+#out_df_all_2<-out_df_all%>%
+#  select(-c('sim_id'))%>%
+#  left_join(sim_id_df, by = c('beta_1', 'beta_2'))
 
-out_df_melt <-melt(out_df,
-                   id.vars = c("time", "year", "beta_1", "beta_2", "total_pop"))
 
-out_df_melt <- cbind(out_df_melt, data.frame(do.call('rbind', strsplit(as.character(out_df_melt$variable),'_',fixed=TRUE))))
 
+#####Calibration Calculations######
+
+#melt out all df for easy manipulation
+out_df_melt <-melt(out_df_all_2, id.vars = c("time", "year", 'sim_id', "beta_1", "beta_2"))
+out_df_melt <- cbind(out_df_melt, 
+                     data.frame(do.call('rbind', 
+                                        strsplit(as.character(out_df_melt$variable),
+                                                 '_',fixed=TRUE))))
 names(out_df_melt)[names(out_df_melt) == "X2"] <- "TB_compartment"
 names(out_df_melt)[names(out_df_melt) == "X3"] <- "DR_compartment"
 names(out_df_melt)[names(out_df_melt) == "X4"] <- "HIV_compartment"
@@ -527,91 +550,53 @@ names(out_df_melt)[names(out_df_melt) == "X5"] <- "G_compartment"
 out_df_melt<-out_df_melt%>%select(-c('X1'))
 out_df_melt$month <- as.integer(((out_df_melt$time%%1)*(12)+1))
 
-
-#####Calibration Calculations######
-
-mort_est <- array(data = 0, dim = nrow(out_df_melt))
+#filter only active TB compartments, since that is what we are calibrating to
+out_df_TB_active<-out_df_melt%>%
+  filter(TB_compartment == 6)%>%
+  mutate(calibration_group = if_else((HIV_compartment == 1 & G_compartment == 1),
+                                     'HIV-, Male',
+                                     if_else((HIV_compartment != 1 & G_compartment == 1),
+                                             'HIV+, Male',
+                                             if_else((HIV_compartment == 1 & G_compartment == 2),
+                                             'HIV-, Female',
+                                             'HIV+, Female'))),
+         calibration_group_id = if_else((HIV_compartment == 1 & G_compartment == 1),
+                                     1,
+                                     if_else((HIV_compartment != 1 & G_compartment == 1),
+                                             2,
+                                             if_else((HIV_compartment == 1 & G_compartment == 2),
+                                                     3,
+                                                     4))))
 
 #so I do not need to call on mort_param_func too many times
-out_df_melt<-out_df_melt%>%
+out_df_TB_active<-out_df_TB_active%>%
   arrange(year)
 
 counter <-1
+mort_est <- rep(0, times = nrow(out_df_TB_active))
+
 for (yr in start_yr:end_yr){
-  temp<-out_df_melt%>%
+  temp<-out_df_TB_active%>%
     filter(year == yr)
   mu_t_h_g<-mort_param_func(yr)
-  print(yr)
   for (row in 1:nrow(temp)){
-    tb <- as.integer(out_df_melt[row, 'TB_compartment'])
-    hiv <- as.integer(out_df_melt[row, 'HIV_compartment'])
-    gender <-as.integer(out_df_melt[row, 'G_compartment'])
-    pop<-as.double(out_df_melt[row, 'value'])
-    mort_rate<-(mu_t_h_g[tb,hiv,gender]*(1/12))
+    hiv <- as.integer(temp[row, 'HIV_compartment'])
+    gender <-as.integer(temp[row, 'G_compartment'])
+    pop<-as.double(temp[row, 'value'])
+    mort_rate<-(mu_t_h_g[6,hiv,gender]*(1/12))
     
     mort_est[counter]<-(mort_rate*pop)
     counter <- counter + 1
   }
 }
 
-out_df_melt$mort_est <- mort_est
+out_df_TB_active$mort_est <- mort_est
 
-TB_mort_summary_df<-out_df_melt%>%
-  filter(TB_compartment ==6,
-         HIV_compartment==1)%>%
-  group_by(year)%>%
-  summarise(total_mort=sum(mort_est))
+#group and combine data for calibration
+calibration_df<-out_df_TB_active%>%
+  group_by(sim_id, beta_1, beta_2, calibration_group_id, calibration_group,
+           year, time)%>%
+  summarise(model_est_mortality_per_100K = sum(value))
 
+#read in calibration data
 
-#######graphs######
-
-out_melt = melt(out, id.vars = c('time', 'total_pop'))
-temp <- strsplit(as.character(out_melt$variable), "_")
-
-TB_compartment_temp <- rep(0, times = length(temp))
-DR_compartment_temp <- rep(0, times = length(temp))
-HIV_compartment_temp <- rep(0, times = length(temp))
-G_compartment_temp <- rep(0, times = length(temp))
-
-for (n in 1:length(temp)){
-  compartment_split <- temp[[n]]
-  TB_compartment_temp[n] <-compartment_split[2]
-  DR_compartment_temp[n] <- compartment_split[3]
-  HIV_compartment_temp[n] <- compartment_split[4]
-  G_compartment_temp[n] <- compartment_split[5]
-}
-
-out_melt$TB_compartment <- TB_compartment_temp
-out_melt$DR_compartment <- DR_compartment_temp
-out_melt$HIV_compartment <- HIV_compartment_temp
-out_melt$G_compartment <- G_compartment_temp
-
-#TB compartment grouped
-out_melt_grouped_by_TB_compartment <- out_melt%>%
-  group_by(TB_compartment, time)%>%
-  summarise(total_pop = sum(value))
-
-ggplot(out_melt_grouped_by_TB_compartment, aes(x = time, y = total_pop, group = TB_compartment, color = TB_compartment))+
-  geom_line()+
-  ylab('total in compartment')
-
-ggplot(out_melt_grouped_by_TB_compartment%>%filter(TB_compartment=='6'), aes(x = time, y = total_pop))+
-  geom_line()+
-  ylab('total with Active TB')+
-  ylim(0, 2500)
-
-#TB HIV compartment grouped
-out_melt_grouped_by_TB_HIV_compartment <- out_melt%>%
-  group_by(TB_compartment, HIV_compartment, time)%>%
-  summarise(total_pop = sum(value))
-
-#par(mfrow=c(2,2))
-HIV_TB_graphs <- ggplot(out_melt_grouped_by_TB_HIV_compartment%>%filter(TB_compartment == 6), 
-                        aes(x = time, y = total_pop, 
-                            group = TB_compartment, 
-                            color = TB_compartment))+
-  geom_line()+
-  ylab('total in compartment')+
-  facet_wrap(~HIV_compartment)+
-  ggtitle('TB compartment populations by HIV compartment')
-dev.off()
