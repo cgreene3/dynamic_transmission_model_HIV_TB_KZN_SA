@@ -27,50 +27,34 @@ eta_34<-rep(0, times = nrow(hiv_transmission_df))
 
 eta_24<-rep(0, times = nrow(hiv_transmission_df))
 
-counter = 1
-
-for (r in 1:nrow(hiv_transmission_df)){
-  
-  #when ART only available to cd4 less
-  if ((hiv_transmission_df$year[counter] >= 2004)&(hiv_transmission_df$year[counter] <= 2010)){
-    n4_prop_next_yr <- hiv_transmission_df$n4_prop[counter+1]
-    n4_prop_current_yr <- hiv_transmission_df$n4_prop[counter]
-    n3_prop_current_yr <- hiv_transmission_df$n3_prop[counter]
+for (yr in calib_years){
+  for (g in genders){
     
-    eta_34[counter]<-(n4_prop_next_yr-n4_prop_current_yr)/n3_prop_current_yr
-  }
-  
-  if ((hiv_transmission_df$year[counter] >= 2011)&(hiv_transmission_df$year[counter] <= 2015)) {
-    #need this
-    n4_prop_next_yr <- hiv_transmission_df$n4_prop[counter+1]
-    n4_prop_current_yr <- hiv_transmission_df$n4_prop[counter]
-    n3_prop_current_yr <- hiv_transmission_df$n3_prop[counter]
-    n2_prop_eligible_current_yr <-hiv_transmission_df$n2_prop[counter]*hiv_transmission_df$n2_prop_eligible[counter]
-    
-    art_inititation<-(n4_prop_next_yr-n4_prop_current_yr)/(n3_prop_current_yr+n2_prop_eligible_current_yr)
-    eta_24[counter]<-art_inititation*hiv_transmission_df$n2_prop_eligible[counter]
-    eta_34[counter]<-art_inititation
-  } 
-  
-  if(hiv_transmission_df$year[counter]> 2015){
-    n4_prop_next_yr <- hiv_transmission_df$n4_prop[counter+1]
-    n4_prop_current_yr <- hiv_transmission_df$n4_prop[counter]
-    n3_prop_current_yr <- hiv_transmission_df$n3_prop[counter]
-    n2_prop_current_yr <-hiv_transmission_df$n2_prop[counter]
-    
-    if(hiv_transmission_df$year[counter] == 2017){
-      print(n4_prop_next_yr)
+    #before 2004 no ART is available
+    if(yr >= 2004){
+      
+      current_yr_age_gender_eval_temp<-paste0(yr, '_', g)
+      nxt_yr_age_gender_eval_temp<-paste0(yr+1, '_', g)
+      
+      current_yr_row_temp<-which(grepl(current_yr_age_gender_eval_temp, hiv_transmission_df$year_gender))
+      nxt_yr_row_temp<-which(grepl(nxt_yr_age_gender_eval_temp, hiv_transmission_df$year_gender))
+      
+      n4_prop_next_yr <- hiv_transmission_df$art_coverage[nxt_yr_row_temp]
+      n4_prop_current_yr <- hiv_transmission_df$art_coverage[current_yr_row_temp]
+      n3_prop_current_yr <- hiv_transmission_df$PLHIV_3_CD4_200_less[current_yr_row_temp]
+      n2_prop_eligible_current_yr <- hiv_transmission_df$n2_prop_eligible[current_yr_row_temp]
+      n2_prop_current_yr <- hiv_transmission_df$PLHIV_2_CD4_200_more[current_yr_row_temp]*
+        n2_prop_eligible_current_yr
+      
+      
+      art_inititation<-(n4_prop_next_yr-n4_prop_current_yr)/(n3_prop_current_yr+n2_prop_current_yr)
+      eta_24[current_yr_row_temp]<-art_inititation*n2_prop_eligible_current_yr
+      eta_34[current_yr_row_temp]<-art_inititation
+      
     }
-    
-    
-    art_inititation<-(n4_prop_next_yr-n4_prop_current_yr)/(n3_prop_current_yr+n2_prop_current_yr)
-    eta_24[counter]<-art_inititation
-    eta_34[counter]<-art_inititation
-    
   }
-  
-  counter <- counter + 1
-} 
+    
+}
 
 hiv_transmission_df$eta_24<-eta_24
 hiv_transmission_df$eta_34<-eta_34
@@ -96,12 +80,11 @@ print(ggplot(hiv_transition_rate_plot_df,
                  colour = transition_categories))+
         geom_point() + 
         geom_line(aes(color = transition_categories)))
-   #   +
-  #        labs(title = 'test',
-  #             y = 'Mortality rate')+
-  #        ylim(0,.5))
-  #dev.off()
+#   +
+#        labs(title = 'test',
+#             y = 'Mortality rate')+
+#        ylim(0,.5))
+#dev.off()
 
 setwd(outdir)
 write.csv(hiv_transmission_df, 'hiv_transmission_df.csv')
-

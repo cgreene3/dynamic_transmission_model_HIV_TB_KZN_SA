@@ -505,8 +505,8 @@ TT_SET <- seq(from = 0, to = TT, by = time_interval)
 out_df_all<-data.frame()
 sim_id <-1
 
-beta_1_test<-c(.005, .006)
-beta_2_test<-c(.005, .006)
+beta_1_test<-c(.005)
+beta_2_test<-c(.005)
 
 for (beta_1 in beta_1_test){
   for (beta_2 in beta_2_test){
@@ -526,19 +526,16 @@ for (beta_1 in beta_1_test){
     
     sim_id <- sim_id + 1
     
+    print(sim_id)
+    
   }
 }
-
-#out_df_all_2<-out_df_all%>%
-#  select(-c('sim_id'))%>%
-#  left_join(sim_id_df, by = c('beta_1', 'beta_2'))
-
 
 
 #####Calibration Calculations######
 
 #melt out all df for easy manipulation
-out_df_melt <-melt(out_df_all_2, id.vars = c("time", "year", 'sim_id', "beta_1", "beta_2"))
+out_df_melt <-melt(out_df_all, id.vars = c("time", "year", 'sim_id', "beta_1", "beta_2"))
 out_df_melt <- cbind(out_df_melt, 
                      data.frame(do.call('rbind', 
                                         strsplit(as.character(out_df_melt$variable),
@@ -548,18 +545,32 @@ names(out_df_melt)[names(out_df_melt) == "X3"] <- "DR_compartment"
 names(out_df_melt)[names(out_df_melt) == "X4"] <- "HIV_compartment"
 names(out_df_melt)[names(out_df_melt) == "X5"] <- "G_compartment"
 out_df_melt<-out_df_melt%>%select(-c('X1'))
-out_df_melt$month <- as.integer(((out_df_melt$time%%1)*(12)+1))
+out_df_melt$month <- round(((out_df_melt$time%%1)*(12)+1),0)
+
+#hiv compartments overtime test to compare with caras coverages
+#yay it works!!!
+#out_df_by_HIV<-out_df_melt%>%
+#  filter(sim_id == 1)%>%
+#  group_by(HIV_compartment, G_compartment, year)%>%
+#  summarise(total_pop = sum(value))%>%
+#  ungroup()
+
+#out_df_by_HIV<-dcast(out_df_by_HIV, year+G_compartment~HIV_compartment)
+#out_df_by_HIV$ART_coverage=rowSums(out_df_by_HIV[6])/rowSums(out_df_by_HIV[4:6])
+
+#ggplot(out_df_by_HIV, aes(x = year, y = ART_coverage, colour = G_compartment))+
+#  geom_line()
 
 #filter only active TB compartments, since that is what we are calibrating to
 out_df_TB_active<-out_df_melt%>%
   filter(TB_compartment == 6)%>%
-  mutate(calibration_group = if_else((HIV_compartment == 1 & G_compartment == 1),
-                                     'HIV-, Male',
+  mutate(calibration_group_name = if_else((HIV_compartment == 1 & G_compartment == 1),
+                                     'TB_only_Male',
                                      if_else((HIV_compartment != 1 & G_compartment == 1),
-                                             'HIV+, Male',
+                                             'HIV/TB_coinfection_Male',
                                              if_else((HIV_compartment == 1 & G_compartment == 2),
-                                             'HIV-, Female',
-                                             'HIV+, Female'))),
+                                             'TB_only_Female',
+                                             'HIV/TB_coinfection_Female'))),
          calibration_group_id = if_else((HIV_compartment == 1 & G_compartment == 1),
                                      1,
                                      if_else((HIV_compartment != 1 & G_compartment == 1),
@@ -593,10 +604,26 @@ for (yr in start_yr:end_yr){
 out_df_TB_active$mort_est <- mort_est
 
 #group and combine data for calibration
-calibration_df<-out_df_TB_active%>%
-  group_by(sim_id, beta_1, beta_2, calibration_group_id, calibration_group,
-           year, time)%>%
-  summarise(model_est_mortality_per_100K = sum(value))
+setwd(indir)
+calibration_rates_df<-read.csv('calibration_rates_df.csv')
 
-#read in calibration data
+calibration_df<-out_df_TB_active%>%
+  group_by(calibration_group_id, calibration_group_name,
+           year)%>%
+  summarise(model_rate = sum(mort_est))%>%
+  left_join(calibration_rates_df, by = c('calibration_group_name', 'year'))
+
+calibration_df$within<-if_else((calibration_df$model_rate<=calibration_df$max_rate)&(calibration_df$model_rate>=calibration_df$min_rate),
+                               1, 0)
+calibration_df$diff <-calibration_df$model_rate-calibration_df$expected_rate
+calibration_df$mse <-(calibration_df$diff)^2
+
+
+test<-mort_df%>%
+  filter(HIV_compartment == 2 | HIV_compartment == 3)%>%
+  group_by(year)%>%
+  
+
+ggplot(calibration_df%>%filter(calibration_group_id ==1), aes(x = year, y = model_rate, colour = calibration_group_name))+
+  geom_line()
 
