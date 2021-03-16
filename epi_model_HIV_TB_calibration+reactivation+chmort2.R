@@ -1,4 +1,7 @@
-#model March 10th
+#model March 14th
+#testing relapse rate based same from remote
+#testing changing hiv and tb morts
+
 #TB/HIV/DR/G + mort changing over time
 #+ HIV incidence and initiation changing overtime
 #calibration calcs to HIV/TB deaths and TB only deaths
@@ -23,7 +26,7 @@ outdir <- paste0(here(),'/model_outputs')
 setwd(indir)
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
 pop_init_df <- read.csv('pop_init_df.csv')
-mort_df <- read.csv('mort_df.csv')
+mort_df <- read.csv('mort_df_increaseTB_decreaseHIV.csv')
 hiv_transition_df<-read.csv('hiv_transmission_df.csv')
 birth_rate_df<-read.csv('birth_rate_df.csv')
 
@@ -325,8 +328,6 @@ for (t in TB_SET){
 #where the equations are stored
 open_seir_model <- function(time, N_t_r_h_g, parms){
   
-  print(time)
-  
   dN_t_r_h_g <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET))
   names(dN_t_r_h_g) <- pop_init_df$dcompartment_id
   
@@ -349,6 +350,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   
   #write year parameter for parameters that change over time
   current_yr <-as.integer(start_yr+time)
+  
+  print(time)
   
   #HIV transitions
   eta_i_h_g<-HIV_transitions_param_func(current_yr)
@@ -458,7 +461,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
                                            (total_out_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #total out
                                            (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) +#from active to recovered
                                            (sum(eta_i_h_g[HIV_SET, h, g]*N_t_r_h_g[N_t_r_h_g_ref[6,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) #exit from HIV compartment
+                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #exit from HIV compartment
+                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #testing reactivation (based on remote rates)
         )
       }
     }
@@ -472,7 +476,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
                                            (total_out_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #total out
                                            (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) + #re-infection from compartment 7
                                            (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[7,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #exit from HIV compartment
+                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) + #exit from HIV compartment
+                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #testing reactivation (based on remote rates)
         )
       }
     }
@@ -541,7 +546,7 @@ for (beta_1 in beta_1_test){
   }
 }
 
-out_df$total_pop<-rowSums(out_df[6:ncol(out_df)])
+#out_df$total_pop<-rowSums(out_df[6:ncol(out_df)])
 
 #####Calibration Calculations######
 
@@ -559,7 +564,7 @@ out_df_melt<-out_df_melt%>%select(-c('X1'))
 out_df_melt$month <- round(((out_df_melt$time%%1)*(12)+1),0)
 
 
-#########sanity checks#########
+#########santity checks#########
 outdir_sanity_check <- paste0(here(),'/model_outputs/sanity_check')
 setwd(outdir_sanity_check)
 
@@ -568,11 +573,13 @@ TB_overtime<-out_df_melt%>%
   group_by(time)%>%
   summarise(TB_prev = sum(value)/100000)
 
-png("TB_overtime_current.png")
+png("TB_overtime_reactivation_chmort2.png")
 tbplot <- ggplot(data = TB_overtime, 
                  mapping = aes(x = time, y = TB_prev))+
   geom_line()+
-  labs(title = 'CURRENT - Active TB Prev Over Time')
+  labs(title = 'REACTIVATION (based on remote rates)
+  and decrease HIV increase TB mort rates
+       - Active TB Prev Over Time')
 print(tbplot)
 dev.off()
 
@@ -583,13 +590,15 @@ HIV_overtime<-out_df_melt%>%
   group_by(time, G_compartment, total_in_g_compartment)%>%
   summarise(total_hiv_pos = sum(HIV_temp))%>%
   mutate(hiv_prev = total_hiv_pos/total_in_g_compartment)
-  
-png("HIV_prev_overtime_current.png")
+
+png("HIV_prev_overtime_reactivation_chmort2.png")
 hivplot1 <- ggplot(data = HIV_overtime, 
-                 mapping = aes(x = time, y = hiv_prev, color = G_compartment))+
+                   mapping = aes(x = time, y = hiv_prev, color = G_compartment))+
   geom_line()+
   lims(y = c(0,1), x = c(0,27))+
-  labs(title = 'CURRENT - HIV Prev Over Time')
+  labs(title = 'REACTIVATION (based on remote rates)
+  and decrease HIV increase TB mort rates
+       - HIV Prev Over Time')
 print(hivplot1)
 dev.off()
 
@@ -603,9 +612,9 @@ ART_coverage_overtime<-out_df_melt%>%
   filter(HIV_compartment == 4)%>%
   mutate(ART_coverage = total/total_PLHIV)
 
-png("ART_coverage_overtime_current.png")
+png("ART_coverage_overtime_reactivation_chmort2.png")
 artcov_plot <- ggplot(data = ART_coverage_overtime, 
-                   mapping = aes(x = time, y = ART_coverage, color = G_compartment))+
+                      mapping = aes(x = time, y = ART_coverage, color = G_compartment))+
   geom_line()
 print(artcov_plot)
 dev.off()

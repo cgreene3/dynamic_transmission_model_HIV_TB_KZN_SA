@@ -1,0 +1,22 @@
+measure_id,measure_name,location_id,location_name,sex_id,sex_name,age_id,age_name,cause_id,cause_name,metric_id,metric_name,year,val,upper,lower
+5,Prevalence,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,2,Percent,1990,0.0046710139415252335,0.005635070456634925,0.003816183725345362
+5,Prevalence,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,2,Percent,1990,0.009956074036332842,0.012154947817661063,0.007974148100654853
+5,Prevalence,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,2,Percent,1990,0.007407718907603001,0.008924289272721033,0.006025388243535521
+5,Prevalence,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,2,Percent,1990,1.8982911501391406e-05,5.7591765949898225e-05,3.273312909955082e-06
+5,Prevalence,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,2,Percent,1990,4.0806252865552806e-05,0.0001244529746872464,6.84125696931385e-06
+5,Prevalence,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,2,Percent,1990,3.028343787516349e-05,9.119167568620904e-05,5.1551400436398145e-06
+5,Prevalence,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,2,Percent,1990,0.0,0.0,0.0
+5,Prevalence,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,2,Percent,1990,0.0,0.0,0.0
+5,Prevalence,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,2,Percent,1990,0.0,0.0,0.0
+5,Prevalence,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,2,Percent,1990,0.0015610891089560272,0.001787087633784141,0.0013567910505242592
+5,Prevalence,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,2,Percent,1990,0.0024652685498142333,0.0028268927409347226,0.0021439030288328983
+5,Prevalence,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,2,Percent,1990,0.002029297372278114,0.002324189788183842,0.0017653971427895926
+5,Prevalence,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,2,Percent,1990,7.691707742891878e-06,2.558590280589024e-05,1.2777822203474647e-06
+5,Prevalence,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,2,Percent,1990,1.228016180861569e-05,3.953635429094923e-05,2.0373650700493586e-06
+5,Prevalence,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,2,Percent,1990,1.0067697114451424e-05,3.264093875472967e-05,1.648662833669941e-06
+5,Prevalence,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,2,Percent,1990,0.0,0.0,0.0
+5,Prevalence,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,2,Percent,1990,0.0,0.0,0.0
+5,Prevalence,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,2,Percent,1990,0.0,0.0,0.0
+5,Prevalence,196,South Africa,1,Male,24,15-49 years,954,Latent tuberculosis infection,2,Percent,1990,0.48684379248412823,0.5354246544256841,0.43124012603576345
+5,Prevalence,196,South Africa,2,Female,24,15-49 years,954,Latent tuberculosis infection,2,Percent,1990,0.47692364095539574,0.5281992137963285,0.41907712724881296
+5,Prevalence,196,South Africa,3,Both,24,15-49 years,954,Latent tuberculosis infection,2,Percent,1990,0.4817067830163695,0.5305297822442191,0.42553653968070787

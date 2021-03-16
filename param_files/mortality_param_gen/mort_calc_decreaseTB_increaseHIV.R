@@ -136,14 +136,14 @@ for (yr in unique(df_input_data$year)){
 }
 
 #adjusted mortality
-HIV_2_increase <- 5
-HIV_3_increase <- 10
-HIV_4_increase <- 1.2
+HIV_2_increase <- 5*2
+HIV_3_increase <- 10*2
+HIV_4_increase <- 1.2*2
 
 TB_Active_HIV_1<-20 #20x total increase in mort rate from non-disease mort
-TB_Active_HIV_2<-10 #50x total increase in mort rate from non-disease mort
-TB_Active_HIV_3<-10 #100x total increase in mort rate from non-disease mort
-TB_Active_HIV_4<-25 #30x total increase in mort rate from non-disease mort
+TB_Active_HIV_2<-10/2 #50x total increase in mort rate from non-disease mort
+TB_Active_HIV_3<-10/2 #100x total increase in mort rate from non-disease mort
+TB_Active_HIV_4<-25/2 #30x total increase in mort rate from non-disease mort
 
 df_input_data<-df_input_data%>%
     mutate(hiv_adj = if_else(HIV_compartment == 1, 1,
@@ -188,5 +188,5 @@ for (cause1 in unique(mort_rate_plots_df$cause)){
 
 
 setwd(outdir)
-write.csv(df_input_data, paste0('mort_df.csv'), row.names = FALSE)
+write.csv(df_input_data, paste0('mort_df_decreaseTB_increaseHIV.csv'), row.names = FALSE)
 
