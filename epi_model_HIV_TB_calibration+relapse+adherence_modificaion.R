@@ -1,4 +1,4 @@
-#model March 14th
+#model March 19th
 #testing relapse rate based same from remote
 
 #TB/HIV/DR/G + mort changing over time
@@ -306,7 +306,7 @@ pop_init_df<-pop_init_df%>%
   arrange(TB_compartment)
 
 
-N_init <- pop_init_df$total_pop
+N_init <- pop_init_df$pop_in_compartment
 names(N_init) <- c(pop_init_df$compartment_id)
 
 ####N_t_r_h_g - matrix that identifies the location of compartment in 1D array#####
@@ -369,13 +369,14 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   #Set DR compartment to 1, since not applicable to drug resistant compartments#
   for (h in HIV_SET){
     for (g in G_SET){
-      dN_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]<-(sum(alpha_in_t_r_h_g[1,1,h,g]*B) + #entries from births
-                                 (omega*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]) - #entries from off IPT 
-                                 (total_out_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]) - #exists from aging out and death
-                                 (FOI*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]])- #exists from TB infection 
-                                 (kappa_t_h_g[1,h,g]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]) + #exists from on to IPT 
-        (sum(eta_i_h_g[HIV_SET, h, g]*N_t_r_h_g[N_t_r_h_g_ref[1,1,HIV_SET,g]])) - #entries into HIV compartment
-        (sum(eta_i_h_g[h,HIV_SET, g])*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]) #exit from HIV compartment
+      dN_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]<-(
+        (omega*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]) - #entries from off IPT
+          (FOI*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]])- #exists from TB infection 
+          (kappa_t_h_g[1,h,g]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]) + #exists from on to IPT
+          sum(alpha_in_t_r_h_g[1,1,h,g]*B) - #entries from births
+          (total_out_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]) + #exists from aging out and death
+          (sum(eta_i_h_g[HIV_SET, h, g]*N_t_r_h_g[N_t_r_h_g_ref[1,1,HIV_SET,g]])) - #entries into HIV compartment
+          (sum(eta_i_h_g[h,HIV_SET, g])*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]]) #exit from HIV compartment
       )
     }
   }
@@ -384,12 +385,13 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   #Set DR compartment to 1, since not applicable to drug resistant compartments#
   for (h in HIV_SET){
     for (g in G_SET){
-      dN_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]<-((kappa_t_h_g[1,h,g]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]])- #entries from on to IPT 
-                                         (total_out_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]])- #exists from aging out and death
-                                         (omega*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]])- #exits from off IPT 
-                                         ((sum(iota_r*FOI_r))*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]) +#exits from infection (diminished for IPT)
-                                         (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[2,1,HIV_SET,g]])) - #entries into HIV compartment
-                                         (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]) #exit from HIV compartment
+      dN_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]<-(
+        (kappa_t_h_g[1,h,g]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]])- #entries from on to IPT
+          (omega*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]])- #exits from off IPT
+          ((sum(iota_r*FOI_r))*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]) - #exits from infection (diminished for IPT)
+          (total_out_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]])+ #exists from aging out and death
+          (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[2,1,HIV_SET,g]])) - #entries into HIV compartment
+          (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]]) #exit from HIV compartment
       )
     }
   }
@@ -398,18 +400,19 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   for (r in DR_SET){
     for (h in HIV_SET){
       for (g in G_SET){
-        dN_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]<-((alpha_in_t_r_h_g[3,r,h,g]*B) + #entries from births
-                                         (FOI_r[r]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]])+ #infection from compartment 1 
-                                         (iota_r[r]*FOI_r[r]*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]])+ #infections from compartment 2 
-                                         (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,DR_SET,h,g]]))+ #re-infection from compartment 4
-                                         (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[7,DR_SET,h,g]]))+ #re-infection from compartment 7
-                                         (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,DR_SET,h,g]]))- #re-infection from compartment 8
-                                         (total_out_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #exists from aging out and death
-                                         (pi_i_t[3,4]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #from recent to remote infection
-                                         (kappa_t_h_g[3,h,g]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #from recent to on IPT 
-                                         ((1/varpi_g[g])*theta_h[h]*pi_i_t[3,6]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #from recent TB infection to active
-                                         (sum(eta_i_h_g[HIV_SET,h,g]*N_t_r_h_g[N_t_r_h_g_ref[3,r,HIV_SET,g]])) - #entries into HIV compartment
-                                         (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) #exit from HIV compartment
+        dN_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]<-(
+          (FOI_r[r]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]])+ #infection from compartment 1
+            (iota_r[r]*FOI_r[r]*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]])+ #infections from compartment 2
+            (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,DR_SET,h,g]]))+ #re-infection from compartment 4
+            (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[7,DR_SET,h,g]]))+ #re-infection from compartment 7
+            (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,DR_SET,h,g]]))- #re-infection from compartment 8
+            (pi_i_t[3,4]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #from recent to remote infection
+            (kappa_t_h_g[3,h,g]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #from recent to on IPT
+            (theta_h[h]*pi_i_t[3,6]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #from recent TB infection to active
+            (alpha_in_t_r_h_g[3,r,h,g]*B) - #entries from births
+            (total_out_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #exists from aging out and death
+            (sum(eta_i_h_g[HIV_SET,h,g]*N_t_r_h_g[N_t_r_h_g_ref[3,r,HIV_SET,g]])) - #entries into HIV compartment
+            (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) #exit from HIV compartment
         )
       }
     }
@@ -419,14 +422,16 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   for (r in DR_SET){
     for (h in HIV_SET){
       for (g in G_SET){
-        dN_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]<-((alpha_in_t_r_h_g[4,r,h,g]*B) + #entries from births
-                                           (pi_i_t[3,4]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #from recent to remote infection
-                                           (total_out_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) - #exists from aging out and death
-                                           (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]])- #re-infection
-                                           (kappa_t_h_g[4,h,g]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) - #onto IPT
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) + #from remote TB infection to active 
-                                           (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[4,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) #exit from HIV compartment
+        dN_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]<-(
+          (pi_i_t[3,4]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #from recent to remote infection
+            ((omega - (omega*gamma_r[r]*varpi_g[g]))*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) - #off of IPT (and inadherence)
+            (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]])- #re-infection
+            (kappa_t_h_g[4,h,g]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) - #onto IPT
+            (theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) + #from remote TB infection to active
+            (alpha_in_t_r_h_g[4,r,h,g]*B) - #entries from births
+            (total_out_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) + #exists from aging out and death
+            (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[4,r,HIV_SET,g]])) - #entries into HIV compartment
+            (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) #exit from HIV compartment
         )
       }
     }
@@ -436,13 +441,14 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   for (r in DR_SET){
     for (h in HIV_SET){
       for (g in G_SET){
-        dN_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]] <-((kappa_t_h_g[3,h,g]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #from recent to on IPT  
-                                          (kappa_t_h_g[4,h,g]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) - #onto IPT
-                                          (total_out_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) - #exists from aging out and death
-                                          ((1/varpi_g[g])*theta_h[h]*pi_i_t[5,6]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) - #from TB infection on IPT to active
-                                          (gamma_r[r]*omega*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) + #off IPT to after IPT
-                                          (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[5,r,HIV_SET,g]])) - #entries into HIV compartment
-                                          (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) #exit from HIV compartment
+        dN_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]] <-(
+          (kappa_t_h_g[3,h,g]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #from recent to on IPT  
+            (kappa_t_h_g[4,h,g]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) - #onto remote to on IPT
+            (theta_h[h]*pi_i_t[5,6]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) - #from TB infection on IPT to active
+            (omega*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) - #off of IPT
+            (total_out_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) + #exists from aging out and death
+            (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[5,r,HIV_SET,g]])) - #entries into HIV compartment
+            (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) #exit from HIV compartment
         )
       }
     }
@@ -452,16 +458,17 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   for (r in DR_SET){
     for (h in HIV_SET){
       for (g in G_SET){
-        dN_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]] <- ((alpha_in_t_r_h_g[6,r,h,g]*B) + #entries from births
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[3,6]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #from recent TB infection to active 
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) + #from remote TB infection to active 
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[5,6]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) + #from TB infection on IPT to active
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[8,6]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) - #from TB after on IPT to active
-                                           (total_out_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #total out
-                                           (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) +#from active to recovered
-                                           (sum(eta_i_h_g[HIV_SET, h, g]*N_t_r_h_g[N_t_r_h_g_ref[6,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #exit from HIV compartment
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #testing reactivation (based on remote rates)
+        dN_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]] <- (
+          (theta_h[h]*pi_i_t[3,6]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) + #from recent TB infection to active 
+            (theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) + #from remote TB infection to active 
+            (theta_h[h]*pi_i_t[5,6]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) + #from TB infection on IPT to active
+            (theta_h[h]*pi_i_t[8,6]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) + #from TB after on IPT to active
+            (theta_h[h]*pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #TB relapse rate
+            (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #from active to recovered
+            (alpha_in_t_r_h_g[6,r,h,g]*B) - #entries from births
+            (total_out_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #total out
+            (sum(eta_i_h_g[HIV_SET, h, g]*N_t_r_h_g[N_t_r_h_g_ref[6,r,HIV_SET,g]])) - #entries into HIV compartment
+            (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) #exit from HIV compartment
         )
       }
     }
@@ -471,12 +478,13 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   for (r in DR_SET){
     for (h in HIV_SET){
       for (g in G_SET){
-        dN_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]] <- ((pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #from active to recovered
-                                           (total_out_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #total out
-                                           (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) + #re-infection from compartment 7
-                                           (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[7,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) + #exit from HIV compartment
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #testing reactivation (based on remote rates)
+        dN_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]] <- (
+          (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #from active to recovered
+            (theta_h[h]*pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #relapse rate
+            (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #re-infection from compartment 7
+            (total_out_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) + #total out
+            (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[7,r,HIV_SET,g]])) - #entries into HIV compartment
+            (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #exit from HIV compartment
         )
       }
     }
@@ -486,12 +494,13 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   for (r in DR_SET){
     for (h in HIV_SET){
       for (g in G_SET){
-        dN_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]] <- ((gamma_r[r]*omega*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) - #off IPT to after IPT
-                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[8,6]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) - #from TB after on IPT to active
-                                           (total_out_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) - #total out
-                                           (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]])+ 
-                                           (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[8,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) #exit from HIV compartment
+        dN_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]] <- (
+          (gamma_r[r]*omega*varpi_g[g]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) - #off IPT to after IPT
+            (theta_h[h]*pi_i_t[8,6]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) - #from TB after on IPT to active
+            (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]])- #reinfection
+            (total_out_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) + #total out
+            (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[8,r,HIV_SET,g]])) - #entries into HIV compartment
+            (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) #exit from HIV compartment
         )
       }
     }
@@ -545,7 +554,7 @@ for (beta_1 in beta_1_test){
   }
 }
 
-out_df$total_pop<-rowSums(out_df[6:ncol(out_df)])
+#out_df$total_pop<-rowSums(out_df[6:ncol(out_df)])
 
 #####Calibration Calculations######
 
@@ -567,16 +576,30 @@ out_df_melt$month <- round(((out_df_melt$time%%1)*(12)+1),0)
 outdir_sanity_check <- paste0(here(),'/model_outputs/sanity_check')
 setwd(outdir_sanity_check)
 
-TB_overtime<-out_df_melt%>%
-  filter(TB_compartment == 6)%>%
-  group_by(time)%>%
-  summarise(TB_prev = sum(value)/100000)
+TB_all_overtime<-out_df_melt%>%
+  group_by(TB_compartment, time)%>%
+  summarise(total_in_compartment = sum(value))%>%
+  filter(TB_compartment != 'pop')
 
-png("TB_overtime_reactivation.png")
-tbplot <- ggplot(data = TB_overtime, 
-                 mapping = aes(x = time, y = TB_prev))+
-  geom_line()+
-  labs(title = 'REACTIVATION (based on remote rates)\n - Active TB Prev Over Time')
+ggplot(data = TB_all_overtime, mapping = aes(x = time, 
+                                             y = total_in_compartment, 
+                                             color = TB_compartment))+
+  geom_line()
+
+TB_overtime<-out_df_melt%>%
+  group_by(time, G_compartment)%>%
+  mutate(total_gender = sum(value))%>%
+  ungroup()%>%
+  filter(TB_compartment == 6)%>%
+  group_by(time, G_compartment)%>%
+  summarise(TB_prev = sum(value)/total_gender)%>%
+  mutate(TB_prev = TB_prev*100000,
+         time = time + start_yr)
+
+ggplot(data = TB_overtime, mapping = aes(x = time, y = TB_prev))+
+  geom_line(aes(colour = G_compartment))+
+  labs(title = 'Active TB prevalence overtime')+
+  scale_y_continuous(name="TB prevalence percent", limits=c(0, 1000))
 print(tbplot)
 dev.off()
 

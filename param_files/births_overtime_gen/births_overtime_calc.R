@@ -5,7 +5,7 @@ rm(list = ls())
 gc()
 
 #load packages
-sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
+sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr', 'normalr'), require, character.only=T)
 
 #Need to set project (upper R corner of screen) 
 #to epi_model_HIV_TB for here to work
@@ -120,14 +120,10 @@ for (row in 1:nrow(birth_rate_df)){
     hiv_adj <- c(hiv_adj, (unique(hiv_prop_df$n1_prop[(hiv_prop_df$year == yr_temp) &
                                                       (hiv_prop_df$gender== g_temp)])))
   } else if (birth_rate_df[row, 'HIV_compartment'] == 2){
-    hiv_adj <- c(hiv_adj, (unique(hiv_prop_df$n2_prop[(hiv_prop_df$year == yr_temp) &
+    hiv_adj <- c(hiv_adj, (unique(hiv_prop_df$hiv_prevalence[(hiv_prop_df$year == yr_temp) &
                                                       (hiv_prop_df$gender== g_temp)])))
-#  } else if (birth_rate_df[row, 'HIV_compartment'] == 3){
-    #hiv_adj <- 0#c(hiv_adj, (unique(hiv_prop_df$n3_prop[(hiv_prop_df$year == yr_temp) &
-                 #                                     (hiv_prop_df$gender== g_temp)])))
-  } else {
-    hiv_adj <- c(hiv_adj, 0)#c(hiv_adj, (unique(hiv_prop_df$n4_prop[(hiv_prop_df$year == yr_temp) &
-                #                                        (hiv_prop_df$gender== g_temp)])))
+  } else{
+    hiv_adj<-c(hiv_adj, 0)
   }
 }
 
@@ -136,9 +132,9 @@ birth_rate_df$hiv_adj <- hiv_adj
 rm(tb_adj, hiv_adj, dr_adj)
 
 birth_rate_df<-birth_rate_df%>%
-  mutate(total_adj = round(tb_adj*dr_adj*hiv_adj,4))%>%
+  mutate(total_adj = tb_adj*dr_adj*hiv_adj)%>%
   group_by(year)%>%
-  mutate(prop_of_pop = round(total_adj/sum(total_adj),5))
+  mutate(prop_of_pop = total_adj/sum(total_adj))
 
 #to make sure all proportions add to 1 (fixing rounding error)
 test<-birth_rate_df%>%
@@ -147,16 +143,25 @@ test<-birth_rate_df%>%
 
 birth_rate_df<-birth_rate_df%>%
   left_join(test, by = c('year'))%>%
-  mutate(prop_of_pop = prop_of_pop*(1/total_birth_perc))%>%
+  mutate(prop_of_pop = as.double(round(prop_of_pop*(1/total_birth_perc),2)))%>%
   select(c('year', 'TB_compartment', 'DR_compartment',
-           'HIV_compartment', 'G_compartment', 'prop_of_pop'))
+           'HIV_compartment', 'G_compartment', 'prop_of_pop'))%>%
+  mutate(prop_of_pop2 = if_else((TB_compartment == 1) & 
+                                 (HIV_compartment == 1) & 
+                                 (DR_compartment == 1) &
+                                 (G_compartment == 1), prop_of_pop + 1-(sum(prop_of_pop)), 
+                               prop_of_pop))%>%
+  mutate(prop_of_pop3 = as.double(if_else((TB_compartment == 1) & 
+                                  (HIV_compartment == 1) & 
+                                  (DR_compartment == 2) &
+                                  (G_compartment == 1), prop_of_pop2 + 1-(sum(prop_of_pop2)), 
+                                prop_of_pop2)))%>%
+  mutate(prop_of_pop4 = if_else(prop_of_pop3 < 0, 0, prop_of_pop3))%>%
+  select(c('year', 'TB_compartment', 'DR_compartment',
+           'HIV_compartment', 'G_compartment', 'prop_of_pop4'))%>%
+  rename(prop_of_pop = prop_of_pop4)
 
-test2<-birth_rate_df%>%
-  group_by(year, TB_compartment, G_compartment)%>%
-  summarise(total_prop = sum(prop_of_pop)*2)%>%
-  filter(TB_compartment == 6,
-         G_compartment == 2)
+
 
 setwd(outdir)
 write.csv(birth_rate_df, 'birth_rate_df.csv', row.names = FALSE)
-

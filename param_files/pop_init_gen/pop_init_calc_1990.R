@@ -12,6 +12,7 @@ sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, 
 #note: only hiv prev changing over time according to caras model
 
 hiv_indir<-paste0(here(),'/param_files/hiv_param_gen')
+indir <- paste0(here(),'/param_files')
 outdir <- paste0(here(),'/param_files')
 
 #to name plots according to date generated
@@ -138,6 +139,21 @@ pop_init_df<-pop_init_df%>%
   select(c('TB_compartment', 'DR_compartment', 
            'HIV_compartment', 'G_compartment',
            'total_pop'))
+
+
+#####warm up TB compartments######
+pop_init_df_warmup<-pop_init_df%>%
+  group_by(TB_compartment)%>%
+  summarise(total_pop = sum(total_pop))
+
+
+#read in data
+setwd(indir)
+param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
+pop_init_df <- 
+mort_df <- read.csv('mort_df.csv')
+hiv_transition_df<-read.csv('hiv_transmission_df.csv')
+birth_rate_df<-read.csv('birth_rate_df.csv')
 
 
 setwd(outdir)
