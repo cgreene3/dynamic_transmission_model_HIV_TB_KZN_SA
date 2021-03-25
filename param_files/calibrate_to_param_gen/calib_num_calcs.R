@@ -49,11 +49,6 @@ setwd(indir_pop)
 #read pop
 pop_df<-read.csv('pop_df.csv')
 
-#group pop df by gender since rate will be per 100k people
-pop_df<-pop_df%>%
-  group_by(year)%>%
-  summarise(expected_total_pop = sum(expected_total_pop))
-
 #read in TB mort estimates
 setwd(indir)
 total_mort_df<-read.csv('IHME_TB_deaths_1990_2017_Mar4.csv')
@@ -68,7 +63,7 @@ total_mort_calibration_params<-total_mort_df%>%
             max_calib_total = sum(upper),
             expected_calib_total = sum(val))%>%
   mutate(sex_name = tolower(sex_name))%>%
-  left_join(pop_df, by = c('year'))%>%
+  left_join(pop_df, by = c('year', 'sex_name'))%>%
   mutate(min_percent = min_calib_total/expected_total_pop,
          max_percent =max_calib_total/expected_total_pop,
          expected_percent =expected_calib_total/expected_total_pop,
@@ -76,6 +71,30 @@ total_mort_calibration_params<-total_mort_df%>%
          max_rate = max_percent*100000,
          expected_rate = expected_percent*100000)%>%
   select(c('year', 'sex_name', 'calibration_group', 'min_rate', 'max_rate', 'expected_rate'))
+
+setwd(paste0(here(),'/model_outputs/calibration'))
+
+for (g in unique(total_mort_calibration_params$sex_name)){
+  
+  file_name <- paste0('TB_moratlity_g_compartment_', g, '.png')
+  
+  df_temp <- total_mort_calibration_params%>%filter(sex_name == g)
+  df1<-df_temp%>%filter(calibration_group == unique(df_temp$calibration_group)[1])
+  df2<-df_temp%>%filter(calibration_group == unique(df_temp$calibration_group)[2])
+  
+  graph_temp <- ggplot(df_temp,aes(x = year, y = expected_rate, color = calibration_group))+
+    geom_ribbon(data=df1,aes(x = year, ymin = min_rate, ymax = max_rate), inherit.aes = FALSE,fill = "plum2")+
+    geom_ribbon(data=df2,aes(x = year, ymin = min_rate, ymax = max_rate), inherit.aes = FALSE,fill = "lightgreen")+
+    geom_line(aes(colour = calibration_group), size = 1)+
+    labs(title = paste0('Deaths, rate per 100K, ', g))+
+    #scale_y_continuous(name="rate", breaks=seq(from = 0, to = 300, by = 20))+
+    scale_x_continuous(name = 'time', breaks=seq(from = 1990, to = 2017, by = 5))+
+    scale_color_manual(values=c('purple', 'green'))
+  
+  png(file_name)
+  print(graph_temp)
+  dev.off()
+}
 
 setwd(outdir)
 write.csv(total_mort_calibration_params, 'calibration_rates_df.csv', row.names = FALSE)

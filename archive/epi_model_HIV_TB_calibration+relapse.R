@@ -1,4 +1,6 @@
-#model March 10th
+#model March 14th
+#testing relapse rate based same from remote
+
 #TB/HIV/DR/G + mort changing over time
 #+ HIV incidence and initiation changing overtime
 #calibration calcs to HIV/TB deaths and TB only deaths
@@ -11,8 +13,7 @@ gc()
 #load packages
 sapply(c('dplyr', 'deSolve', 
          'readxl', 'stringr', 
-         'reshape2', 'ggplot2', 'varhandle', 
-         'here', 'readr', 'normalr'), require, character.only=T)
+         'reshape2', 'ggplot2', 'varhandle', 'here', 'readr'), require, character.only=T)
 
 #set in directory and out directory
 #Make sure you have the epi_model_HIV_TB.Rproj open, otherwise 
@@ -152,7 +153,6 @@ varpi_g <- param_df%>%
   filter(P_compartment == 1, notation == 'varpi')%>%
   arrange(G_compartment)
 
-
 varpi_g <- varpi_g$Reference_expected_value
 
 ##### omega - Rate of moving off of IPT, per year ####
@@ -280,16 +280,15 @@ alpha_out <- alpha_out$Reference_expected_value
 ####total_out_t_r_h - total amount leaving from compartment######
 
 total_out_param_func<-function(mu_t_h_g){
-  
   total_out_t_r_h_g <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET))
   count_temp <- 1
   for (t in TB_SET){
     for (r in DR_SET){
       for (h in HIV_SET){
         for (g in G_SET){
-          total_out_t_r_h_g[count_temp] <- ((mu_t_h_g[t,h,g]*(1-alpha_out))+
+          total_out_t_r_h_g[count_temp] <- (mu_t_h_g[t,h,g]*(1-alpha_out))+
             ((1-mu_t_h_g[t,h,g])*alpha_out)+
-            (mu_t_h_g[t,h,g]*alpha_out))
+            (mu_t_h_g[t,h,g]*alpha_out)
           count_temp <- count_temp + 1
         }
       }
@@ -328,8 +327,6 @@ for (t in TB_SET){
 #where the equations are stored
 open_seir_model <- function(time, N_t_r_h_g, parms){
   
-  print(time)
-  
   dN_t_r_h_g <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET))
   names(dN_t_r_h_g) <- pop_init_df$dcompartment_id
   
@@ -352,6 +349,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   
   #write year parameter for parameters that change over time
   current_yr <-as.integer(start_yr+time)
+  
+  print(time)
   
   #HIV transitions
   eta_i_h_g<-HIV_transitions_param_func(current_yr)
@@ -459,10 +458,10 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
                                            ((1/varpi_g[g])*theta_h[h]*pi_i_t[5,6]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) + #from TB infection on IPT to active
                                            ((1/varpi_g[g])*theta_h[h]*pi_i_t[8,6]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) - #from TB after on IPT to active
                                            (total_out_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #total out
-                                           (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #from active to recovered
-                                             ((1/varpi_g[g])*theta_h[h]*pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #from recovered to active
+                                           (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) +#from active to recovered
                                            (sum(eta_i_h_g[HIV_SET, h, g]*N_t_r_h_g[N_t_r_h_g_ref[6,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) #exit from HIV compartment
+                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #exit from HIV compartment
+                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[3,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #testing reactivation (based on remote rates)
         )
       }
     }
@@ -474,10 +473,10 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
       for (g in G_SET){
         dN_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]] <- ((pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #from active to recovered
                                            (total_out_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #total out
-                                           (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #re-infection from compartment 7
-                                            ((1/varpi_g[g])*theta_h[h]*pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #relapse
+                                           (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) + #re-infection from compartment 7
                                            (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[7,r,HIV_SET,g]])) - #entries into HIV compartment
-                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #exit from HIV compartment
+                                           (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #exit from HIV compartment
+                                           ((1/varpi_g[g])*theta_h[h]*pi_i_t[3,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #testing reactivation (based on remote rates)
         )
       }
     }
@@ -546,13 +545,14 @@ for (beta_1 in beta_1_test){
   }
 }
 
-# 
-# #####Calibration Calculations######
+#out_df$total_pop<-rowSums(out_df[6:ncol(out_df)])
+
+#####Calibration Calculations######
 
 #melt out all df for easy manipulation
 out_df_melt <-melt(out_df, id.vars = c("time", "year", 'sim_id', "beta_1", "beta_2"))
-out_df_melt <- cbind(out_df_melt,
-                     data.frame(do.call('rbind',
+out_df_melt <- cbind(out_df_melt, 
+                     data.frame(do.call('rbind', 
                                         strsplit(as.character(out_df_melt$variable),
                                                  '_',fixed=TRUE))))
 names(out_df_melt)[names(out_df_melt) == "X2"] <- "TB_compartment"
@@ -563,20 +563,30 @@ out_df_melt<-out_df_melt%>%select(-c('X1'))
 out_df_melt$month <- round(((out_df_melt$time%%1)*(12)+1),0)
 
 
-# #########sanity checks#########
+#########santity checks#########
 outdir_sanity_check <- paste0(here(),'/model_outputs/sanity_check')
 setwd(outdir_sanity_check)
+
+TB_all_overtime<-out_df_melt%>%
+  group_by(TB_compartment, time)%>%
+  summarise(total_in_compartment = sum(value))%>%
+  filter(TB_compartment != 'pop')
+
+ggplot(data = TB_all_overtime, mapping = aes(x = time, 
+                                             y = total_in_compartment, 
+                                             color = TB_compartment))+
+  geom_line()
 
 TB_overtime<-out_df_melt%>%
   filter(TB_compartment == 6)%>%
   group_by(time)%>%
   summarise(TB_prev = sum(value)/100000)
 
-png("TB_overtime_current.png")
-tbplot <- ggplot(data = TB_overtime,
+png("TB_overtime_reactivation.png")
+tbplot <- ggplot(data = TB_overtime, 
                  mapping = aes(x = time, y = TB_prev))+
   geom_line()+
-  labs(title = 'CURRENT - Active TB Prev Over Time')
+  labs(title = 'REACTIVATION (based on remote rates)\n - Active TB Prev Over Time')
 print(tbplot)
 dev.off()
 
@@ -588,31 +598,31 @@ HIV_overtime<-out_df_melt%>%
   summarise(total_hiv_pos = sum(HIV_temp))%>%
   mutate(hiv_prev = total_hiv_pos/total_in_g_compartment)
 
-png("HIV_prev_overtime_current.png")
-hivplot1 <- ggplot(data = HIV_overtime,
-                 mapping = aes(x = time, y = hiv_prev, color = G_compartment))+
+png("HIV_prev_overtime_reactivation.png")
+hivplot1 <- ggplot(data = HIV_overtime, 
+                   mapping = aes(x = time, y = hiv_prev, color = G_compartment))+
   geom_line()+
-  labs(title = 'CURRENT - HIV Prev Over Time')+
-  scale_y_continuous(breaks=seq(from = 0, to = 1, by = .1))
+  lims(y = c(0,1), x = c(0,27))+
+  labs(title = 'REACTIVATION (based on remote rates) - HIV Prev Over Time')
 print(hivplot1)
 dev.off()
-# 
-# 
-# ART_coverage_overtime<-out_df_melt%>%
-#   group_by(time, HIV_compartment, G_compartment)%>%
-#   summarise(total = sum(value))%>%
-#   filter(HIV_compartment > 1)%>%
-#   group_by(time, G_compartment)%>%
-#   mutate(total_PLHIV = sum(total))%>%
-#   filter(HIV_compartment == 4)%>%
-#   mutate(ART_coverage = total/total_PLHIV)
-# 
-# png("ART_coverage_overtime_current.png")
-# artcov_plot <- ggplot(data = ART_coverage_overtime, 
-#                    mapping = aes(x = time, y = ART_coverage, color = G_compartment))+
-#   geom_line()
-# print(artcov_plot)
-# dev.off()
+
+
+ART_coverage_overtime<-out_df_melt%>%
+  group_by(time, HIV_compartment, G_compartment)%>%
+  summarise(total = sum(value))%>%
+  filter(HIV_compartment > 1)%>%
+  group_by(time, G_compartment)%>%
+  mutate(total_PLHIV = sum(total))%>%
+  filter(HIV_compartment == 4)%>%
+  mutate(ART_coverage = total/total_PLHIV)
+
+png("ART_coverage_overtime_reactivation.png")
+artcov_plot <- ggplot(data = ART_coverage_overtime, 
+                      mapping = aes(x = time, y = ART_coverage, color = G_compartment))+
+  geom_line()
+print(artcov_plot)
+dev.off()
 
 
 

@@ -19,12 +19,12 @@ data_gen_date<-Sys.Date()
 data_gen_date<-str_replace_all(data_gen_date, '-', '_')
 
 #TB factors (don't change overtime)
-prop_recent<-0.049  #proprotion of LTBI that is recent
-prop_remote<-0.951 #proportion remote
-LTBI_recent<-.49*0.049
-LTBI_remote<-.49*0.951
-TB_active_male<-.006
-TB_active_female<-.012
+prop_recent<-0.049  #proportion of LTBI that is recent
+prop_remote<-1-prop_recent #proportion remote
+LTBI_recent<-.49*prop_recent
+LTBI_remote<-.49*prop_remote
+TB_active_male<-.01#.006
+TB_active_female<-.01#.012
 TB_uninfected_male<-1-.49-TB_active_male
 TB_uninfected_female<-1-.49-TB_active_female
 
@@ -136,30 +136,30 @@ birth_rate_df<-birth_rate_df%>%
   group_by(year)%>%
   mutate(prop_of_pop = total_adj/sum(total_adj))
 
-#to make sure all proportions add to 1 (fixing rounding error)
-test<-birth_rate_df%>%
-  group_by(year)%>%
-  summarise(total_birth_perc = sum(prop_of_pop))
-
-birth_rate_df<-birth_rate_df%>%
-  left_join(test, by = c('year'))%>%
-  mutate(prop_of_pop = as.double(round(prop_of_pop*(1/total_birth_perc),2)))%>%
-  select(c('year', 'TB_compartment', 'DR_compartment',
-           'HIV_compartment', 'G_compartment', 'prop_of_pop'))%>%
-  mutate(prop_of_pop2 = if_else((TB_compartment == 1) & 
-                                 (HIV_compartment == 1) & 
-                                 (DR_compartment == 1) &
-                                 (G_compartment == 1), prop_of_pop + 1-(sum(prop_of_pop)), 
-                               prop_of_pop))%>%
-  mutate(prop_of_pop3 = as.double(if_else((TB_compartment == 1) & 
-                                  (HIV_compartment == 1) & 
-                                  (DR_compartment == 2) &
-                                  (G_compartment == 1), prop_of_pop2 + 1-(sum(prop_of_pop2)), 
-                                prop_of_pop2)))%>%
-  mutate(prop_of_pop4 = if_else(prop_of_pop3 < 0, 0, prop_of_pop3))%>%
-  select(c('year', 'TB_compartment', 'DR_compartment',
-           'HIV_compartment', 'G_compartment', 'prop_of_pop4'))%>%
-  rename(prop_of_pop = prop_of_pop4)
+# #to make sure all proportions add to 1 (fixing rounding error)
+# #test<-birth_rate_df%>%
+# ##  group_by(year)%>%
+# #  summarise(total_birth_perc = sum(prop_of_pop))
+# 
+# birth_rate_df<-birth_rate_df%>%
+#   left_join(test, by = c('year'))%>%
+#   mutate(prop_of_pop = as.double(round(prop_of_pop*(1/total_birth_perc),2)))%>%
+#   select(c('year', 'TB_compartment', 'DR_compartment',
+#            'HIV_compartment', 'G_compartment', 'prop_of_pop'))%>%
+#   mutate(prop_of_pop2 = if_else((TB_compartment == 1) & 
+#                                  (HIV_compartment == 1) & 
+#                                  (DR_compartment == 1) &
+#                                  (G_compartment == 1), prop_of_pop + 1-(sum(prop_of_pop)), 
+#                                prop_of_pop))%>%
+#   mutate(prop_of_pop3 = as.double(if_else((TB_compartment == 1) & 
+#                                   (HIV_compartment == 1) & 
+#                                   (DR_compartment == 2) &
+#                                   (G_compartment == 1), prop_of_pop2 + 1-(sum(prop_of_pop2)), 
+#                                 prop_of_pop2)))%>%
+#   mutate(prop_of_pop4 = if_else(prop_of_pop3 < 0, 0, prop_of_pop3))%>%
+#   select(c('year', 'TB_compartment', 'DR_compartment',
+#            'HIV_compartment', 'G_compartment', 'prop_of_pop4'))%>%
+#   rename(prop_of_pop = prop_of_pop4)
 
 
 

@@ -1,5 +1,5 @@
 #Pop init
-#20 year warm up TB and gender only
+#100 year warm up TB and gender only
 #then add in DR & MDR factors, and HIV to get pop init
 
 #clean workspace
@@ -32,7 +32,7 @@ prop_LTBI<-.49
 LTBI_recent<-(prop_LTBI*prop_recent)*(1-prop_IPT)
 LTBI_remote<-(prop_LTBI*prop_remote)*(1-prop_IPT)
 LTBI_on_IPT<-(prop_LTBI*prop_IPT)
-TB_active_male<-.0045
+TB_active_male<-.01
 TB_active_female<-.01
 TB_uninfected_male<-1-.49-TB_active_male
 TB_uninfected_female<-1-.49-TB_active_female
@@ -145,7 +145,7 @@ pop_init_df_TB_G_temp <- pop_init_df%>%
 beta_g <- param_df%>%
   filter(notation == 'beta')
 
-beta_g<-round(beta_g$Reference_expected_value+.002, digits = 3)
+beta_g<-beta_g$Reference_expected_value
 
 #iota (only considering DS)
 iota <- param_df%>%
@@ -205,28 +205,28 @@ lapply(TB_compartments, function(t_from){
   })
 })
 
-pi_t_t[3,6]<-sum(0.0866*.8,0.998*.2)
-pi_t_t[4,6]<-sum(0.0005*.8,0.100*.2)
-pi_t_t[3,4]<-.5
-pi_t_t[7,6]<-.05
+pi_t_t[3,6]<-(pi_t_t[3,6]*.95) + ((pi_t_t[3,6]*8)*.05)
+pi_t_t[4,6]<-(pi_t_t[4,6]*.95) + ((pi_t_t[4,6]*8)*.05)
+pi_t_t[7,6]<-(pi_t_t[7,6]*.95) + ((pi_t_t[7,6]*8)*.05)
 
 #mortality rates
 mu_t_g<-array(0, dim = c(length(TB_compartments), length(G_compartments)))
+mort_df <- read.csv('mort_df.csv')
+mort_df$TB_compartment<-as.integer(mort_df$TB_compartment)
+mort_df$HIV_compartment<-as.integer(mort_df$HIV_compartment)
+mort_df$G_compartment<-as.integer(mort_df$G_compartment)
+mort_df$year<-as.integer(mort_df$year)
 
-mu_t_g_temp <- param_df%>%
-  filter(notation == 'mu')%>%
-  group_by(TB_compartment, G_compartment)%>%
-  summarise(value = mean(Reference_expected_value))
-
-lapply(TB_compartments, function(t){
-  lapply(G_compartments, function(g){
-    temp<-mu_t_g_temp%>%
-      filter(TB_compartment == t)%>%
-      filter(G_compartment == g)
-    
-    mu_t_g[t,g] <<- temp$value
-  })
-})
+for (t in TB_compartments){
+  for (g in G_compartments){
+    temp <- mort_df%>%
+      filter(year == 1990,
+             TB_compartment == t,
+             G_compartment == g)
+      
+      mu_t_g[t,g] <- (min(temp$mort_rate)*.95)+(median(temp$mort_rate)*.05)
+    }
+}
 
 #aging in
 alpha_in_t_g <- array(data = 0, c(length(TB_compartments), length(G_compartments)))
@@ -264,6 +264,21 @@ lapply(TB_compartments, function(t){
 pop_init_df_TB_G_temp<-pop_init_df_TB_G_temp%>%
   arrange(TB_compartment)%>%
   arrange(G_compartment)
+
+setwd(paste0(outdir, '/pop_init_gen/graphs'))
+##
+for (g in 1:2){
+  plot_file_name<-paste0('g_compartment_', g, 'pop_before_warmup')
+  png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+  print(ggplot(pop_init_df_TB_G_temp%>%filter(G_compartment == g), 
+               aes(x=as.factor(TB_compartment), y=value, fill=as.factor(TB_compartment))) +
+          geom_bar(stat="identity")+theme_minimal()+
+    labs(title = paste0("Initial population before warmup\n for gender compartment ", g),
+         x = 'TB compartment',
+         fill = 'TB compartment')+
+      ylim(0, 26500))
+  dev.off()
+}
 
 N_t_g_ref<-array(0, dim = c(length(TB_compartments), length(G_compartments)))
 
@@ -306,6 +321,11 @@ open_seir_model <- function(t, N_t_g, parms){
   
   #LTBI, recent
   for (g in G_compartments){
+    if(g == 2){
+      pi_t_t[3,6]<-pi_t_t[3,6]*1.1
+    } else{
+      pi_t_t[3,6]<-sum(0.0866*.95,0.998*.05)
+    }
     dN_t_g[N_t_g_ref[3,g]]<-((alpha_in_t_g[3,g]*B) + #entries from births
                 (FOI*N_t_g[N_t_g_ref[1,g]])+ #infection from compartment 1 
                 (iota*FOI*N_t_g[N_t_g_ref[2,g]])+ #infections from compartment 2 
@@ -343,6 +363,11 @@ open_seir_model <- function(t, N_t_g, parms){
   
   #active
   for (g in G_compartments){
+    if(g == 2){
+      pi_t_t[3,6]<-pi_t_t[3,6]*1.1
+    } else{
+      pi_t_t[3,6]<-sum(0.0866*.95,0.998*.05)
+    }
     dN_t_g[N_t_g_ref[6,g]] <- ((alpha_in_t_g[6,g]*B) + #entries from births
                   (pi_t_t[3,6]*N_t_g[N_t_g_ref[3,g]]) + #from recent TB infection to active 
                   (pi_t_t[4,6]*N_t_g[N_t_g_ref[4,g]]) + #from remote TB infection to active 
@@ -377,7 +402,7 @@ open_seir_model <- function(t, N_t_g, parms){
 }
 
 #Time Horizon 
-TT<-20 #warm up for 20 years
+TT<-100 #warm up for 100 years
 time_interval <- 1/12
 TT_SET <- seq(from = 0, to = TT, by = time_interval)
 
@@ -402,9 +427,110 @@ out_melt<-out_melt%>%
                                if_else(TB_compartment %in% c(1,2), 'Uninfected',
                                        'LTBI')))
 
-#start from end of 20 year warm up period
+
+#melt out all df for easy manipulation
+
+TB_all_overtime<-out_melt%>%
+  group_by(TB_compartment, time)%>%
+  summarise(total_in_compartment = sum(value))%>%
+  filter(TB_compartment != 'pop')
+
+setwd(paste0(outdir, '/pop_init_gen/graphs'))
+plot_file_name<-paste0('TB_all_overtime')
+png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+tb_all_graph<-ggplot(data = TB_all_overtime%>%filter(TB_compartment %in% c(1,3,4,6,7)),
+                     mapping = aes(x = time, y = total_in_compartment, 
+                                   color = TB_compartment))+
+  geom_line()+
+  labs(title = 'Pop init: TB compartments')
+print(tb_all_graph)
+dev.off()
+
+plot_file_name<-paste0('TB_active_warmup_period')
+png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+tb_active_graph<-ggplot(data = TB_all_overtime%>%filter(TB_compartment == 6), mapping = aes(x = time, y = total_in_compartment, 
+                                                              color = TB_compartment))+
+  geom_line()+
+  labs(title = 'Pop init: active TB')
+print(tb_active_graph)
+dev.off()
+
+plot_file_name<-paste0('TB_recent_warmup_period')
+png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+tb_recent_graph<-ggplot(data = TB_all_overtime%>%filter(TB_compartment == 3), mapping = aes(x = time, y = total_in_compartment, 
+                                                                                            color = TB_compartment))+
+  geom_line()+
+  labs(title = 'TB recently infected pop init')
+print(tb_recent_graph)
+dev.off()
+
+TB_recent_recovered_overtime<-TB_all_overtime%>%
+  filter(TB_compartment == 4|TB_compartment == 7)%>%
+  group_by(time)%>%
+  summarise(total_in_compartment = sum(total_in_compartment))%>%
+  mutate(TB_compartment = '4 and 7')%>%
+  select(c('TB_compartment', 'time', 'total_in_compartment'))
+
+TB_recent_recovered_overtime<-rbind(TB_recent_recovered_overtime,
+                                    TB_all_overtime%>%
+                                      filter(TB_compartment == 4|TB_compartment == 7))
+
+TB_recent_recovered_beg_end<-TB_recent_recovered_overtime%>%
+  filter(time == 0 | time == 100)
+TB_recent_recovered_beg_end<-dcast(TB_recent_recovered_beg_end, 
+                                   TB_compartment~time)
+colnames(TB_recent_recovered_beg_end)<-c('TB_compartment(s)', 't=0', 't=100')
+TB_recent_recovered_beg_end$difference<-TB_recent_recovered_beg_end$`t=100`-TB_recent_recovered_beg_end$`t=0`
+
+write.csv(TB_recent_recovered_beg_end, 'TB_recent_recovered_beg_end.csv',
+          row.names = FALSE)
+  
+plot_file_name<-paste0('TB_remote_recovered_period')
+png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+TB_recent_recovered_beg_end<-ggplot(data = TB_recent_recovered_overtime, 
+                        mapping = aes(x = time, y = total_in_compartment,
+                                      color = TB_compartment))+
+  geom_line()+
+  labs(title = 'TB remote infected and recovered pop init')
+print(TB_recent_recovered_beg_end)
+dev.off()
+
+plot_file_name<-paste0('TB_unifected_warmup_period')
+png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+tb_unifected_graph<-ggplot(data = TB_all_overtime%>%filter(TB_compartment == 1), mapping = aes(x = time, y = total_in_compartment, 
+                                                                                            color = TB_compartment))+
+  geom_line()+
+  labs(title = 'TB uninfected pop init')
+print(tb_unifected_graph)
+dev.off()
+
+#testing increasing recent and recovered pops
+#out_melt<-out_melt%>%
+#  mutate(value = if_else(TB_compartment == 1, value - 2000,
+#                         if_else(TB_compartment == 7, value + 2000,
+#                                 value)))%>%
+#  mutate(value = if_else(TB_compartment == 4, value - 1500,
+#                         if_else(TB_compartment == 3, value + 1500,
+#                                 value)))
+
+#start from end of 100 year warm up period
 out_melt_warmed_up<-out_melt%>%
-  filter(time == 20)
+  filter(time ==100)
+
+setwd(paste0(outdir, '/pop_init_gen/graphs'))
+##
+for (g in 1:2){
+  plot_file_name<-paste0('g_compartment_', g, 'pop_after_warmup')
+  png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+  print(ggplot(out_melt_warmed_up%>%filter(G_compartment == g), 
+               aes(x=as.factor(TB_compartment), y=value, fill=as.factor(TB_compartment))) +
+          geom_bar(stat="identity")+theme_minimal()+
+          labs(title = paste0("Initial population after warmup\n for gender compartment ", g),
+               x = 'TB compartment',
+               fill = 'TB compartment')+
+          ylim(0, 26500))
+  dev.off()
+}
 
 out_melt_warmed_up_grouped_gender<-out_melt_warmed_up%>%
   group_by(TB_compartment)%>%
@@ -416,10 +542,6 @@ out_melt_grouped<-out_melt%>%
 
 ggplot(out_melt_grouped%>%filter(TB_grouping!='Active'), aes(x = time, y = value))+
   geom_line(aes(colour = TB_grouping))
-
-ggplot(out_melt%>%filter(TB_compartment == 6), 
-       aes(x = time, y = value))+
-  geom_line(aes(colour = G_compartment))
 
 
 rm(list=setdiff(ls(), "out_melt_warmed_up"))
@@ -509,3 +631,11 @@ outdir <- paste0(here(),'/param_files')
 setwd(outdir)
 
 write.csv(pop_init_df, 'pop_init_df.csv', row.names = FALSE)
+
+#test<-pop_init_df%>%
+ # group_by(TB_compartment, G_compartment)%>%
+#summarise(total = sum(pop_in_compartment))%>%
+ # ungroup()%>%
+  #group_by(G_compartment)%>%
+  #mutate(perc = total/sum(total))
+

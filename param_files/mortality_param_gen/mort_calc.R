@@ -90,10 +90,10 @@ non_disease_mort_graph<-ggplot(non_disease_mort_df, aes(x = year,
                                 group = sex_name)) + 
   geom_point() + 
   geom_line(aes(color = sex_name))+
-  labs(title = "Non-disease specific mortality\novertime",
+  labs(title = "Non-disease specific mortality",
        y = 'Non-disease specific mortality rate',
        colour = "Gender")+
-  ylim(0,.06)
+  ylim(0,.02)
 
 png(paste0('non_disease_mort_graph_',data_gen_date,'.png'), width=450,height=350,res=100)
 print(non_disease_mort_graph)
@@ -157,36 +157,37 @@ df_input_data<-df_input_data%>%
                                                     TB_Active_HIV_4)))))%>%
     mutate(mort_rate = expected_non_disease_mort_rate*hiv_adj*tb_adj)
 
+
 mort_rate_plots_df<-df_input_data%>%
-  mutate(cause = if_else((HIV_compartment==1 & TB_compartment!=6), 
-                         'TB/HIV Negative',
-                         if_else((HIV_compartment==1 & TB_compartment==6),
-                                 'Active TB, HIV Negative',
-                         if_else((HIV_compartment!=1 & TB_compartment!=6),
-                         'No TB, HIV Positive',
-                         'Active TB, HIV Positive'))))%>%
-  group_by(year, cause, sex_name)%>%
-  summarise(mort_rate = mean(mort_rate))%>%
-  rename(Gender = sex_name)
+  filter(TB_compartment == 6|HIV_compartment>1)%>%
+  mutate(TB_status = if_else(TB_compartment == 6, 'active TB', 'no active TB'))%>%
+  mutate(cause = paste0(TB_status, ', HIV compartment: ', HIV_compartment))
 
-
+setwd(paste0(outdir, '/mortality_param_gen/graphs'))
 for (cause1 in unique(mort_rate_plots_df$cause)){
+  
+  if(grepl('no active TB', cause1)){
+    max_lim <- .2
+  } else{
+    max_lim <- 1
+  }
+  
   plot_file_name<-str_replace_all(string=cause1, pattern=" ", repl="_")
   plot_file_name<-str_replace_all(string=plot_file_name, pattern=",", repl="")
   plot_file_name<-str_replace_all(string=plot_file_name, pattern="/", repl="_")
   png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
   print(ggplot(mort_rate_plots_df%>%filter(cause == cause1), aes(x = year, 
                                  y = mort_rate,
-                                 group = Gender)) + 
+                                 group = sex_name)) + 
     geom_point() + 
-    geom_line(aes(color = Gender))+
-    labs(title = paste0("Mortality overtime for ", cause1),
+    geom_line(aes(color = sex_name))+
+    labs(title = paste0("Mortality overtime for\n ", cause1),
          y = 'Mortality rate')+
-    ylim(0,.6))
+    ylim(0,max_lim))
   dev.off()
 }
 
 
 setwd(outdir)
-write.csv(df_input_data, paste0('mort_df.csv'), row.names = FALSE)
+write.csv(df_input_data, 'mort_df.csv', row.names = FALSE)
 
