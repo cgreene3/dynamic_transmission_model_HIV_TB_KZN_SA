@@ -10,8 +10,10 @@ sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr', 'normalr')
 #Need to set project (upper R corner of screen) 
 #to epi_model_HIV_TB for here to work
 #note: only hiv prev changing over time according to caras model
+#percent in each gender based on GBD pop estimates
 
 hiv_indir<-paste0(here(),'/param_files/hiv_param_gen')
+pop_estimates_indir<-paste0(here(), '/param_files/GBD_pop_estimates')
 outdir <- paste0(here(),'/param_files')
 
 #to name plots according to date generated
@@ -32,6 +34,21 @@ TB_uninfected_female<-1-.49-TB_active_female
 prop_DS<-.963
 prop_MDR<-.037
 
+setwd(pop_estimates_indir)
+#gender births overtime
+pop_df<-read.csv('pop_df.csv')
+
+pop_df<-pop_df%>%
+  group_by(year)%>%
+  mutate(total_pop = sum(expected_total_pop))%>%
+  ungroup()%>%
+  mutate(percent_gender_pop = expected_total_pop/total_pop)%>%
+  group_by(sex_id)%>%
+  summarise(gender_percent_births = mean(percent_gender_pop))%>%
+  arrange(sex_id)
+
+gender_adjustments <- pop_df$gender_percent_births
+
 setwd(hiv_indir)
 #hiv adjustments overtime
 hiv_prop_df<-read_excel('hiv_input_gen_data.xlsx')
@@ -48,6 +65,7 @@ G_compartment<-c()
 
 tb_adj<-c()
 dr_adj<-c()
+g_adj<-c()
 
 for (tb in TB_compartments){
   for (dr in DR_compartments){
@@ -94,6 +112,9 @@ for (tb in TB_compartments){
           }
         }
         
+        #gender adjustments
+        g_adj<-c(g_adj, gender_adjustments[g])
+        
       }
     }
   }
@@ -101,7 +122,7 @@ for (tb in TB_compartments){
 
 birth_rate_df<-data.frame(TB_compartment, DR_compartment,
                           HIV_compartment, G_compartment, 
-                          tb_adj, dr_adj)
+                          tb_adj, dr_adj, g_adj)
 
 birth_rate_df<-do.call('rbind', 
                        replicate(2017-1990+1, 
@@ -129,17 +150,17 @@ for (row in 1:nrow(birth_rate_df)){
 
 birth_rate_df$hiv_adj <- hiv_adj
 
-rm(tb_adj, hiv_adj, dr_adj)
+rm(tb_adj, hiv_adj, dr_adj, gender_adjustments, g_adj)
 
 birth_rate_df<-birth_rate_df%>%
-  mutate(total_adj = tb_adj*dr_adj*hiv_adj)%>%
+  mutate(total_adj = tb_adj*dr_adj*hiv_adj*g_adj)%>%
   group_by(year)%>%
   mutate(prop_of_pop = total_adj/sum(total_adj))
 
 # #to make sure all proportions add to 1 (fixing rounding error)
-# #test<-birth_rate_df%>%
-# ##  group_by(year)%>%
-# #  summarise(total_birth_perc = sum(prop_of_pop))
+# test<-birth_rate_df%>%
+#   group_by(year, G_compartment)%>%
+#   summarise(total_birth_perc = sum(prop_of_pop))
 # 
 # birth_rate_df<-birth_rate_df%>%
 #   left_join(test, by = c('year'))%>%

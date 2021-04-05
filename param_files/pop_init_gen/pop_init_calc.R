@@ -1,10 +1,12 @@
-#model March 19th
-#testing relapse rate based same from remote
+#pop init warmup period 1900-1990
+#1900-1980 (Gender, TB, and DR only)
+#1980 introduce HIV
 
-#TB/HIV/DR/G + mort changing over time
-#+ HIV incidence and initiation changing overtime
-#calibration calcs to HIV/TB deaths and TB only deaths
-#changing birthrates overtime
+#mort params set to 1990 estimated values
+#birth rate params set to 1990 values 
+#estimated pop init (before warm up period) set at 1990 values
+#birth rate params and estimated pop init are...
+#summed over HIV compartments and assigned to HIV-, before 1980
 
 #clean workspace
 rm(list = ls())
@@ -13,7 +15,8 @@ gc()
 #load packages
 sapply(c('dplyr', 'deSolve', 
          'readxl', 'stringr', 
-         'reshape2', 'ggplot2', 'varhandle', 'here', 'readr'), require, character.only=T)
+         'reshape2', 'ggplot2', 
+         'varhandle', 'here', 'readr'), require, character.only=T)
 
 #set in directory and out directory
 #Make sure you have the epi_model_HIV_TB.Rproj open, otherwise 
@@ -24,14 +27,13 @@ outdir <- paste0(here(),'/model_outputs')
 #read in data
 setwd(indir)
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
-pop_init_df <- read.csv('pop_init_df.csv')
 mort_df <- read.csv('mort_df.csv')
-hiv_transition_df<-read.csv('hiv_transmission_df.csv')
+#hiv_transition_df is different from calib code
+hiv_transition_df<-read_excel("hiv_param_gen/hiv_input_gen_data.xlsx") 
 birth_rate_df<-read.csv('birth_rate_df.csv')
 
 #clean dataframe column names for consistency
 names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
-names(pop_init_df)<-str_replace_all(names(pop_init_df), c(" " = "_" , "-" = "_" ))
 
 #make sure all compartments are integer type for proper indexing#
 param_df$TB_compartment<-as.integer(param_df$TB_compartment)
@@ -42,13 +44,7 @@ param_df$P_compartment<-as.integer(param_df$P_compartment)
 mort_df$TB_compartment<-as.integer(mort_df$TB_compartment)
 mort_df$HIV_compartment<-as.integer(mort_df$HIV_compartment)
 mort_df$G_compartment<-as.integer(mort_df$G_compartment)
-
 mort_df$year<-as.integer(mort_df$year)
-
-#establish compartment and dcompartment ids
-pop_init_df<- pop_init_df%>%
-  mutate(compartment_id = paste0("N_", TB_compartment, "_", DR_compartment ,"_", HIV_compartment, "_", G_compartment),
-         dcompartment_id = paste0("dN_", TB_compartment, "_", DR_compartment ,"_", HIV_compartment, "_", G_compartment))
 
 ################ DEFINE SETS ###############################
 
@@ -86,14 +82,151 @@ G_SET<-1:2
 
 #######Parameter extraction########
 
+#pop init 1990
+#establish compartment and dcompartment ids
+#TB factors 
+prop_recent<-0.049  #proprotion of LTBI that is recent
+prop_remote<-0.951 #proportion remote
+prop_IPT<-0#.01
+prop_LTBI<-.49
+LTBI_recent<-(prop_LTBI*prop_recent)*(1-prop_IPT)
+LTBI_remote<-(prop_LTBI*prop_remote)*(1-prop_IPT)
+LTBI_on_IPT<-(prop_LTBI*prop_IPT)
+TB_active_male<-.01
+TB_active_female<-.01
+TB_uninfected_male<-1-.49-TB_active_male
+TB_uninfected_female<-1-.49-TB_active_female
+prop_DS<-1-0.037
+prop_MDR<-0.037
+
+TB_compartment<-c()
+DR_compartment<-c()
+G_compartment<-c()
+
+tb_adj<-c()
+dr_adj<-c()
+hiv_adj<-c()
+g_adj<-c()
+
+
+setwd(paste0(here(), '/param_files/GBD_pop_estimates'))
+pop_df<-read.csv('pop_df.csv')
+
+#calculate gender init adjustments from GBD data
+pop_df<-pop_df%>%
+  group_by(year)%>%
+  mutate(total_pop = sum(expected_total_pop))%>%
+  ungroup()%>%
+  mutate(percent_gender_pop = expected_total_pop/total_pop)%>%
+  group_by(sex_id)%>%
+  summarise(gender_percent = mean(percent_gender_pop))%>%
+  arrange(sex_id)
+
+gender_adjustments <- pop_df$gender_percent
+
+for (tb in TB_SET){
+  for (dr in DR_SET){
+    for (g in G_SET){
+      TB_compartment<-c(TB_compartment, tb)
+      DR_compartment<-c(DR_compartment, dr)
+      G_compartment<-c(G_compartment, g)
+      
+      #tb adjustments
+      if (tb == 1){
+        if (g == 1){
+          tb_adj <- c(tb_adj, TB_uninfected_male*(1-prop_IPT))
+        } else {
+          tb_adj<- c(tb_adj, TB_uninfected_female*(1-prop_IPT))
+        }
+      } else if(tb == 2){
+        if (g == 1){
+          tb_adj <- c(tb_adj, TB_uninfected_male*(prop_IPT))
+        } else {
+          tb_adj<- c(tb_adj, TB_uninfected_female*(prop_IPT))
+        }
+      }
+      else if (tb == 3) {
+        tb_adj <- c(tb_adj, LTBI_recent)
+      } else if (tb == 4){
+        tb_adj <- c(tb_adj, LTBI_remote)
+      } else if (tb == 5){
+        tb_adj <-c(tb_adj, LTBI_on_IPT)
+      } else if (tb == 6){
+        if (g == 1){
+          tb_adj <- c(tb_adj, TB_active_male)
+        } else {
+          tb_adj<- c(tb_adj, TB_active_female)
+        }
+      } else {
+        tb_adj<-c(tb_adj, 0) #no one is birthed to tb compartments 2, 5, 7, or 8
+      }
+      
+      #dr adjustments
+      if (tb == 1){ #all tb unifected is assigned to dr compartment 1
+        if (dr == 1){
+          dr_adj<-c(dr_adj, 1)
+        } else {
+          dr_adj<-c(dr_adj, 0)
+        }
+      } else {
+        if (dr == 1){
+          dr_adj<-c(dr_adj, prop_DS)
+        } else{
+          dr_adj<-c(dr_adj, prop_MDR)
+        }
+      }
+      
+      #gender adjustments
+      g_adj<-c(g_adj, gender_adjustments[g])
+    }
+  }
+}
+
+
+pop_init_df<-data.frame(TB_compartment, DR_compartment, G_compartment, 
+                        tb_adj, dr_adj, g_adj)
+
+rm(tb_adj, dr_adj, g_adj, TB_compartment, DR_compartment, G_compartment)
+
+pop_init_df<-pop_init_df%>%
+  mutate(total_adj = round(tb_adj*dr_adj*g_adj,4),
+         prop_of_pop = round(total_adj/sum(total_adj),5))%>%
+  mutate(prop_of_pop = prop_of_pop*(1/sum(prop_of_pop)))%>% #fix rounding errors make sure add to 1
+  mutate(total_pop = prop_of_pop*100000)%>%
+  select(c('TB_compartment', 'DR_compartment', 'G_compartment', 'total_pop'))
+
+#set the other HIV compartments to 0
+pop_init_df_tempHIV<-rbind(pop_init_df, pop_init_df, pop_init_df)
+pop_init_df_tempHIV$HIV_compartment <- rep(2:4, each = nrow(pop_init_df))
+pop_init_df_tempHIV$total_pop<-rep(0, times = nrow(pop_init_df_tempHIV)) 
+
+#combine dfs
+pop_init_df$HIV_compartment<-rep(1, times = nrow(pop_init_df))
+pop_init_df<-rbind(pop_init_df, pop_init_df_tempHIV)
+
+pop_init_df<- pop_init_df%>%
+  mutate(compartment_id = paste0("N_", TB_compartment, 
+                                 "_", DR_compartment ,
+                                 "_", HIV_compartment, 
+                                 "_", G_compartment),
+         dcompartment_id = paste0("dN_", TB_compartment,
+                                  "_", DR_compartment ,"_",
+                                  HIV_compartment, "_",
+                                  G_compartment))
+
+pop_init_df<-pop_init_df%>%
+  arrange(G_compartment)%>%
+  arrange(HIV_compartment)%>%
+  arrange(DR_compartment)%>%
+  arrange(TB_compartment)
+
+N_init <- pop_init_df$total_pop
+names(N_init)<-pop_init_df$compartment_id
+
 ######## PARAMETERS THAT IMPACT FORCE OF INFECTION #######
 
 ######### beta_g - Number of effective contacts for TB transmission per infectious year######
-beta_g <- param_df%>%
-  filter(notation == 'beta')%>%
-  arrange(G_compartment)
-
-beta_g <- beta_g$Reference_expected_value
+beta_g <- array(0, dim = 2)
 
 ###### phi_h - Relative transmissibility of TB in HIV pops#########
 phi_h <- array(0, dim = length(HIV_SET))
@@ -104,6 +237,21 @@ for (h in HIV_SET){
            HIV_compartment == h)
   phi_h[h] <- temp$Reference_expected_value
 }
+
+### upsilon_h - increased time infectious due to delayed treatment###
+upsilon_h <- array(0, dim = length(HIV_SET))
+
+for (h in HIV_SET){
+  temp <- param_df%>%
+    filter(notation == 'upsilon',
+           HIV_compartment == h)
+  upsilon_h[h] <- temp$Reference_expected_value
+}
+
+####increased risk of re-infection for recovered populations
+xi<-param_df%>%
+  filter(notation == 'xi')
+xi <-xi$Reference_expected_value
 
 #### varepsilon_g - Fraction of new TB infections that are MDR-TB ####
 varepsilon_g <- param_df%>%
@@ -199,116 +347,99 @@ HIV_transitions_param_func<-function(yr){
     
     gender_name <-if_else(g == 1, 'Males', 'Females')
     
-    if(yr == 2018){
-      yr = yr -1
+    if(yr < 1980){
+      eta_i_h_g[1,2,g]<-0
+    } else {
+      temp2<-hiv_transition_df%>%
+        filter(gender == gender_name,
+               year == yr)
+      eta_i_h_g[1,2,g]<-temp2$hiv_incidence #NO ART in warmup period
     }
-    
-    temp2<-hiv_transition_df%>%
-      filter(gender == gender_name,
-             year == yr)
-    
-    eta_i_h_g[1,2,g]<-temp2$hiv_incidence
-    eta_i_h_g[2,4,g]<-temp2$eta_24
-    eta_i_h_g[3,4,g]<-temp2$eta_34
   }
   return(eta_i_h_g)
 }
-      
+
 #########parameters for death and aging rates ###########
 
 ######mu_t_h_g - mortality rates ########
+#set at 1990 mortality rates#
 
-mort_param_func <-function(yr){
-  mu_t_h_g <- array(0, dim = c(length(TB_SET), length(HIV_SET), length(G_SET)))
+mu_t_h_g <- array(0, dim = c(length(TB_SET), length(HIV_SET), length(G_SET)))
   
-  if(yr == 2018){
-    yr = yr -1
-  }
-  
-  for (t in TB_SET){
-    for (h in HIV_SET){
-      for (g in G_SET){
-        temp <- mort_df%>%
-          filter(year == yr,
-                 TB_compartment == t,
-                 HIV_compartment == h,
-                 G_compartment == g)
-        
-        mu_t_h_g[t,h,g] <- temp$mort_rate
-      }
+for (t in TB_SET){
+  for (h in HIV_SET){
+    for (g in G_SET){
+      temp <- mort_df%>%
+        filter(year == 1990,
+               TB_compartment == t,
+               HIV_compartment == h,
+               G_compartment == g)
+      
+      mu_t_h_g[t,h,g] <- temp$mort_rate
     }
   }
-  return(mu_t_h_g)
 }
 
 ########alpha_in_t_h_g - Proportion of population that enters each compartment#####
 birth_rate_param_func<-function(yr){
-alpha_in_t_r_h_g <- array(data = 0, c(length(TB_SET), 
-                                      length(DR_SET), 
-                                      length(HIV_SET), 
-                                      length(G_SET)))
-if(yr == 2018){
-  yr = yr -1
-}
-
-for (t in TB_SET){
-  for (r in DR_SET){
-    for (h in HIV_SET){
-      for (g in G_SET){
-        temp <- (unique(birth_rate_df$prop_of_pop[(birth_rate_df$year == yr) &
-                                                         (birth_rate_df$TB_compartment == t)&
-                                                         (birth_rate_df$DR_compartment == r)&
-                                                         (birth_rate_df$HIV_compartment == h)&
-                                                         (birth_rate_df$G_compartment == g)]))
-                                              
-        
-        alpha_in_t_r_h_g[t,r,h,g] <- temp
-        
+  alpha_in_t_r_h_g <- array(data = 0, c(length(TB_SET), 
+                                        length(DR_SET), 
+                                        length(HIV_SET), 
+                                        length(G_SET)))
+    
+    for (t in TB_SET){
+      for (r in DR_SET){
+        for (h in HIV_SET){
+          for (g in G_SET){
+            if (yr > 1980){
+            temp <- (unique(birth_rate_df$prop_of_pop[(birth_rate_df$year == 1990) &
+                                                        (birth_rate_df$TB_compartment == t)&
+                                                        (birth_rate_df$DR_compartment == r)&
+                                                        (birth_rate_df$HIV_compartment == h)&
+                                                        (birth_rate_df$G_compartment == g)]))
+            
+            
+            alpha_in_t_r_h_g[t,r,h,g] <- temp
+            
+            } else {
+            temp <- birth_rate_df%>%
+              filter(year == 1990,
+                     TB_compartment == t,
+                     DR_compartment == r,
+                     G_compartment == g)
+            alpha_in_t_r_h_g[t,r,1,g]<-sum(temp$prop_of_pop) #sum over HIV compartments
+          }
+        }
       }
     }
   }
-}
-return(alpha_in_t_r_h_g)
+  return(alpha_in_t_r_h_g)
 }
 
 ####### alpha_out - Rate of exit from the population ######
 alpha_out <- param_df%>%filter(notation == 'alpha^out')
 alpha_out <- alpha_out$Reference_expected_value
 
-
-
 #############Pre-processing parameter equations, for ease of use in ode solver#######
 
 ####total_out_t_r_h - total amount leaving from compartment######
 
-total_out_param_func<-function(mu_t_h_g){
-  total_out_t_r_h_g <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET))
-  count_temp <- 1
-  for (t in TB_SET){
-    for (r in DR_SET){
-      for (h in HIV_SET){
-        for (g in G_SET){
-          total_out_t_r_h_g[count_temp] <- (mu_t_h_g[t,h,g]*(1-alpha_out))+
-            ((1-mu_t_h_g[t,h,g])*alpha_out)+
-            (mu_t_h_g[t,h,g]*alpha_out)
-          count_temp <- count_temp + 1
-        }
+total_out_t_r_h_g <- array(0, dim = length(TB_SET)*length(DR_SET)*length(HIV_SET)*length(G_SET))
+count_temp <- 1
+for (t in TB_SET){
+  for (r in DR_SET){
+    for (h in HIV_SET){
+      for (g in G_SET){
+        total_out_t_r_h_g[count_temp] <- (mu_t_h_g[t,h,g]*(1-alpha_out))+
+          ((1-mu_t_h_g[t,h,g])*alpha_out)+
+          (mu_t_h_g[t,h,g]*alpha_out)
+        count_temp <- count_temp + 1
       }
     }
   }
-  return(total_out_t_r_h_g)
 }
 
-#####N_init - total initial population in each compartment flattened in 1D array for ODE solver #####
-#arrange pop init df, TB-->DR-->HIV-->G
-pop_init_df<-pop_init_df%>%
-  arrange(G_compartment)%>%
-  arrange(HIV_compartment)%>%
-  arrange(DR_compartment)%>%
-  arrange(TB_compartment)
 
-
-N_init <- pop_init_df$pop_in_compartment
 
 #add in mort calc placeholders
 calibration_mort_states<-c('HIV_neg_male', 'HIV_neg_female', 'HIV_pos_male', 'HIV_pos_female')
@@ -350,7 +481,7 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   for (g in G_SET){
     FOI_2_g[g] <-(varepsilon_g[g]*FOI_1_g[g])/(1-varepsilon_g[g])
   }
-
+  
   FOI_r <- c(sum(FOI_1_g), sum(FOI_2_g))
   FOI <- sum(FOI_r)
   
@@ -366,8 +497,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   alpha_in_t_r_h_g<-birth_rate_param_func(current_yr)
   
   #deaths
-  mu_t_h_g<-mort_param_func(current_yr)
-  total_out_t_r_h_g<-total_out_param_func(mu_t_h_g)
+  #mu_t_h_g<-mort_param_func(current_yr)
+  #total_out_t_r_h_g<-total_out_param_func(mu_t_h_g)
   
   #track mort
   dN_t_r_h_g[129]<-mu_t_h_g[6,1,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1,1,1]]) #tb active, hiv -, males
@@ -419,7 +550,7 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
           (FOI_r[r]*N_t_r_h_g[N_t_r_h_g_ref[1,1,h,g]])+ #infection from compartment 1
             (iota_r[r]*FOI_r[r]*N_t_r_h_g[N_t_r_h_g_ref[2,1,h,g]])+ #infections from compartment 2
             (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,DR_SET,h,g]]))+ #re-infection from compartment 4
-            (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[7,DR_SET,h,g]]))+ #re-infection from compartment 7
+            (xi*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[7,DR_SET,h,g]]))+ #re-infection from compartment 7
             (zeta*FOI_r[r]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,DR_SET,h,g]]))- #re-infection from compartment 8
             (pi_i_t[3,4]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #from recent to remote infection
             (gamma_r[r]*kappa_t_h_g[3,h,g]*N_t_r_h_g[N_t_r_h_g_ref[3,r,h,g]]) - #from recent to on IPT (and adherence)
@@ -477,8 +608,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
             (theta_h[h]*pi_i_t[4,6]*N_t_r_h_g[N_t_r_h_g_ref[4,r,h,g]]) + #from remote TB infection to active 
             (theta_h[h]*pi_i_t[5,6]*N_t_r_h_g[N_t_r_h_g_ref[5,r,h,g]]) + #from TB infection on IPT to active
             (theta_h[h]*pi_i_t[8,6]*N_t_r_h_g[N_t_r_h_g_ref[8,r,h,g]]) + #from TB after on IPT to active
-            (theta_h[h]*pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #TB relapse rate
-            (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #from active to recovered
+            (pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #TB relapse rate
+            (upsilon_h[h]*pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #from active to recovered
             (alpha_in_t_r_h_g[6,r,h,g]*B) - #entries from births
             (total_out_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) + #total out
             (sum(eta_i_h_g[HIV_SET, h, g]*N_t_r_h_g[N_t_r_h_g_ref[6,r,HIV_SET,g]])) - #entries into HIV compartment
@@ -493,9 +624,9 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
     for (h in HIV_SET){
       for (g in G_SET){
         dN_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]] <- (
-          (pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #from active to recovered
-            (theta_h[h]*pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #relapse rate
-            (zeta*FOI*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #re-infection from compartment 7
+          (upsilon_h[h]*pi_i_t[6,7]*N_t_r_h_g[N_t_r_h_g_ref[6,r,h,g]]) - #from active to recovered
+            (pi_i_t[7,6]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #relapse rate
+            (xi*FOI*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) - #re-infection from compartment 7
             (total_out_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) + #total out
             (sum(eta_i_h_g[HIV_SET, h,g]*N_t_r_h_g[N_t_r_h_g_ref[7,r,HIV_SET,g]])) - #entries into HIV compartment
             (sum(eta_i_h_g[h,HIV_SET,g])*N_t_r_h_g[N_t_r_h_g_ref[7,r,h,g]]) #exit from HIV compartment
@@ -524,8 +655,8 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
 }
 
 #Time Horizon and Evaluation intervals (1 month)
-start_yr = 1990
-end_yr = 2018
+start_yr = 1900
+end_yr = 1990
 TT<-end_yr-start_yr
 time_interval <- 1/12
 TT_SET <- seq(from = 0, to = TT, by = time_interval)
@@ -539,8 +670,11 @@ TT_SET <- seq(from = 0, to = TT, by = time_interval)
 out_df_all<-data.frame()
 sim_id <-1
 
-beta_1_test<-c(.0055)
-beta_2_test<-c(.0065)
+#beta_1_test<-seq(.35, .65, by = 0.05)
+#beta_2_test<-seq(.35, .65, by = 0.05)
+
+beta_1_test<-c(5)
+beta_2_test<-c(5.4)
 
 for (beta_1 in beta_1_test){
   for (beta_2 in beta_2_test){
@@ -567,269 +701,161 @@ for (beta_1 in beta_1_test){
     
   }
 }
-
-#####Graphs that describe model states overtime####
-state_prog_df<-out_df%>%
-  select(-c(calibration_mort_states))
-
-#melt out all df for easy manipulation
-state_prog_df <-melt(state_prog_df, id.vars = c("time", "year",
-                                                               'sim_id', "beta_1", "beta_2"))
-state_prog_df <- cbind(state_prog_df, 
-                     data.frame(do.call('rbind', 
-                                        strsplit(as.character(state_prog_df$variable),
-                                                 '_',fixed=TRUE))))
-names(state_prog_df)[names(state_prog_df) == "X2"] <- "TB_compartment"
-names(state_prog_df)[names(state_prog_df) == "X3"] <- "DR_compartment"
-names(state_prog_df)[names(state_prog_df) == "X4"] <- "HIV_compartment"
-names(state_prog_df)[names(state_prog_df) == "X5"] <- "G_compartment"
-state_prog_df<-state_prog_df%>%select(-c('X1'))
-state_prog_df$month <- round(((state_prog_df$time%%1)*(12)+1),0)
-
-outdir_state_prog <- paste0(here(),'/model_outputs/state_prog/Mar25')
-setwd(outdir_state_prog)
-
-######TB states########
-TB_all_overtime<-state_prog_df%>%
-  group_by(TB_compartment, time)%>%
-  summarise(total_in_compartment = sum(value))%>%
-  filter(TB_compartment != 'pop')%>%
-  mutate(time = time+start_yr)
-
-tb_all_graph<-ggplot(data = TB_all_overtime%>%filter(TB_compartment == 7|TB_compartment == 4), 
-                     mapping = aes(x = time, 
-                                   y = total_in_compartment, 
-                                   color = TB_compartment))+
-  geom_line()+
-  labs(title = 'All TB compartments overtime')
-
-png("tb_all_overtime_after_warmup.png")
-print(tb_all_graph)
-dev.off()
-
-tb_active_graph_summarised<-ggplot(data = TB_all_overtime%>%
-                                     filter(TB_compartment == 6), 
-                     mapping = aes(x = time, 
-                                   y = total_in_compartment))+
-  geom_line()+
-  labs(title = 'Active TB overtime')
-
-png("tb_active_overtime_after_warmup.png")
-print(tb_active_graph_summarised)
-dev.off()
-
-TB_prev_overtime_gender_HIV<-state_prog_df%>%
-  filter(TB_compartment == 6)%>%
-  group_by(time, HIV_compartment, G_compartment)%>%
-  mutate(total_pop_in_compartment = sum(value),
-         time = time)
-
-for (g in G_SET){
-  
-  file_name <- paste0('ActiveTB_g_compartment_', g, '.png')
-  
-  graph_temp <- ggplot(data = TB_prev_overtime_gender_HIV%>%filter(G_compartment == g), 
-                       mapping = aes(x = time, y = total_pop_in_compartment))+
-    geom_line(aes(colour = HIV_compartment), size = 1)+
-    labs(title = paste0('Active TB total Population for Gender Compartment',g))+
-    scale_y_continuous(name="rate", limits=c(0, 300))+
-    scale_x_continuous(name = 'time', breaks=seq(from = 1990, to = 2017, by = 5))+
-    scale_color_manual(values=c("red", "#56B4E9", "purple", "green"))
-  
-  png(file_name)
-  print(graph_temp)
-  dev.off()
-}
-
-
-#####Calibration Calculations######
-total_pop_in_gender_df<-state_prog_df%>%
-  group_by(time, year, G_compartment)%>%
-  summarise(total_gender_pop = sum(value))%>%
-  ungroup()%>%
-  group_by(year, G_compartment)%>%
-  summarise(total_gender_pop = median(total_gender_pop))
-
-
-mort_calibration_df<-out_df%>%
-  select(c('year', 'time', 'HIV_neg_male', 'HIV_neg_female', 'HIV_pos_male', 'HIV_pos_female'))%>%
-  group_by(year)%>%
-  summarise(cum_mort_hiv_neg_male = max(HIV_neg_male),
-         cum_mort_hiv_neg_female= max(HIV_neg_female),
-         cum_mort_hiv_pos_male= max(HIV_pos_male),
-         cum_mort_hiv_pos_female= max(HIV_pos_female))
-
-mort_calibration_df<-melt(mort_calibration_df, id = c('year'))
-mort_calibration_df<-mort_calibration_df%>%
-  group_by(variable)%>%
-  mutate(mort_in_year = value - lag(value))%>%
-  ungroup()%>%
-  mutate(mort_in_year = if_else(year == 1990, value, mort_in_year))%>%
-  filter(year < 2018)%>%
-  mutate(G_compartment = if_else(grepl('female', variable), '2', '1'))%>%
-  left_join(total_pop_in_gender_df, by = c('G_compartment', 'year'))%>%
-  mutate(mort_rate_per_100K = ((mort_in_year*100000)/total_gender_pop))
-
-for (g in G_SET){
-  
-  file_name <- paste0('TB_moratlity_g_compartment_', g, '.png')
-  
-  gender = if_else(g == 1, 'Males', 'Females')
-  
-  graph_temp <- ggplot(data = mort_calibration_df%>%filter(G_compartment == g), 
-                       mapping = aes(x = year, y = mort_rate_per_100K))+
-    geom_line(aes(colour = variable), size = 1)+
-    labs(title = paste0('Deaths, rate per 100K, ', gender))+
-    #scale_y_continuous(name="rate", breaks=seq(from = 0, to = 300, by = 20))+
-    scale_x_continuous(name = 'time', breaks=seq(from = 1990, to = 2017, by = 5))+
-    scale_color_manual(values=c("green", 'purple'))+
-    ylim(0, 300)
-  
-  png(file_name)
-  print(graph_temp)
-  dev.off()
-}
-
-
-
-
-
-
-  
-  
-  #data.frame(diff(as.matrix(mort_df$cum_mort_hiv_pos_female)))
 # 
-# HIV_overtime<-out_df_melt%>%
-#   mutate(HIV_temp = if_else(HIV_compartment > 1, value, 0))%>%
-#   group_by(time, G_compartment)%>%
-#   mutate(total_in_g_compartment = sum(value))%>%
-#   group_by(time, G_compartment, total_in_g_compartment)%>%
-#   summarise(total_hiv_pos = sum(HIV_temp))%>%
-#   mutate(hiv_prev = total_hiv_pos/total_in_g_compartment)
+# #####Graphs that describe model states overtime####
+#  state_prog_df<-out_df%>%
+#    select(-c(calibration_mort_states))
 # 
-# #png("HIV_prev_overtime_reactivation.png")
-# #hivplot1 <- ggplot(data = HIV_overtime, 
-#                    mapping = aes(x = time, y = hiv_prev, color = G_compartment))+
+# #melt out all df for easy manipulation
+# state_prog_df <-melt(state_prog_df, id.vars = c("time", "year",
+#                                                 'sim_id', "beta_1", "beta_2"))
+# state_prog_df <- cbind(state_prog_df,
+#                        data.frame(do.call('rbind',
+#                                           strsplit(as.character(state_prog_df$variable),
+#                                                    '_',fixed=TRUE))))
+# names(state_prog_df)[names(state_prog_df) == "X2"] <- "TB_compartment"
+# names(state_prog_df)[names(state_prog_df) == "X3"] <- "DR_compartment"
+# names(state_prog_df)[names(state_prog_df) == "X4"] <- "HIV_compartment"
+# names(state_prog_df)[names(state_prog_df) == "X5"] <- "G_compartment"
+# state_prog_df<-state_prog_df%>%select(-c('X1'))
+# state_prog_df$month <- round(((state_prog_df$time%%1)*(12)+1),0)
+# 
+# setwd("/Users/chelseagreene/github/epi_model_HIV_TB/param_files/pop_init_gen")
+# 
+# ######TB states########
+# TB_all_overtime<-state_prog_df%>%
+#   group_by(TB_compartment, time)%>%
+#   summarise(total_in_compartment = sum(value))%>%
+#   filter(TB_compartment != 'pop')%>%
+#   mutate(time = time+start_yr)
+# 
+# total_pop_overtime<-state_prog_df%>%
+#   filter(TB_compartment != 'pop')%>%
+#   group_by(time)%>%
+#   summarise(total= sum(value))%>%
+#   mutate(time = time+start_yr)
+# 
+# tb_all_graph<-ggplot(data = TB_all_overtime,
+#                      mapping = aes(x = time,
+#                                    y = total_in_compartment,
+#                                    color = TB_compartment))+
 #   geom_line()+
-#   lims(y = c(0,1), x = c(0,27))+
-#   labs(title = 'REACTIVATION (based on remote rates) - HIV Prev Over Time')
-# print(hivplot1)
+#   labs(title = 'All TB compartments overtime')
+#  
+# tb_active_graph_summarised<-ggplot(data = TB_all_overtime%>%
+#                                      filter(TB_compartment == 6),
+#                                    mapping = aes(x = time,
+#                                                  y = total_in_compartment))+
+#   geom_line()+
+#   labs(title = 'Active TB overtime')
+# 
+# png("tb_active_overtime_after_warmup.png")
+# print(tb_active_graph_summarised)
 # dev.off()
 # 
-# 
-# ART_coverage_overtime<-out_df_melt%>%
+#  
+# TB_prev_overtime_gender_HIV<-state_prog_df%>%
+#   filter(TB_compartment == 6)%>%
 #   group_by(time, HIV_compartment, G_compartment)%>%
-#   summarise(total = sum(value))%>%
-#   filter(HIV_compartment > 1)%>%
-#   group_by(time, G_compartment)%>%
-#   mutate(total_PLHIV = sum(total))%>%
-#   filter(HIV_compartment == 4)%>%
-#   mutate(ART_coverage = total/total_PLHIV)
+#   mutate(total_pop_in_compartment = sum(value),
+#          time = time)
 # 
-# png("ART_coverage_overtime_reactivation.png")
-# artcov_plot <- ggplot(data = ART_coverage_overtime, 
-#                       mapping = aes(x = time, y = ART_coverage, color = G_compartment))+
-#   geom_line()
-# print(artcov_plot)
-# dev.off()
+# for (g in G_SET){
+# 
+#   file_name <- paste0('ActiveTB_g_compartment_', g, '.png')
+# 
+#   graph_temp <- ggplot(data = TB_prev_overtime_gender_HIV%>%filter(G_compartment == g),
+#                        mapping = aes(x = time, y = total_pop_in_compartment))+
+#     geom_line(aes(colour = HIV_compartment), size = 1)+
+#     labs(title = paste0('Active TB total Population for Gender Compartment',g))+
+#     scale_y_continuous(name="rate", limits=c(0, 500))+
+#     scale_x_continuous(name = 'time', breaks=seq(from = 1990, to = 2017, by = 5))+
+#     scale_color_manual(values=c("red", "#56B4E9", "purple", "green"))
+# 
+#   png(file_name)
+#   print(graph_temp)
+#   dev.off()
+# }
+# # 
+# # 
+# # #####Calibration Calculations######
+# total_pop_in_gender_df<-state_prog_df%>%
+#   group_by(time, year, G_compartment)%>%
+#   summarise(total_gender_pop = sum(value))%>%
+#   ungroup()%>%
+#   group_by(year, G_compartment)%>%
+#   summarise(total_gender_pop = median(total_gender_pop))
 # 
 # 
+# mort_calibration_df<-out_df%>%
+#   select(c('year', 'time', 'HIV_neg_male', 'HIV_neg_female', 'HIV_pos_male', 'HIV_pos_female'))%>%
+#   group_by(year)%>%
+#   summarise(cum_mort_hiv_neg_male = max(HIV_neg_male),
+#             cum_mort_hiv_neg_female= max(HIV_neg_female),
+#             cum_mort_hiv_pos_male= max(HIV_pos_male),
+#             cum_mort_hiv_pos_female= max(HIV_pos_female))
 # 
+# mort_calibration_df<-melt(mort_calibration_df, id = c('year'))
+# mort_calibration_df<-mort_calibration_df%>%
+#   group_by(variable)%>%
+#   mutate(mort_in_year = value - lag(value))%>%
+#   ungroup()%>%
+#   mutate(mort_in_year = if_else(year == 1900, value, mort_in_year))%>%
+#   filter(year < 1991)%>%
+#   mutate(G_compartment = if_else(grepl('female', variable), '2', '1'))%>%
+#   left_join(total_pop_in_gender_df, by = c('G_compartment', 'year'))%>%
+#   mutate(mort_rate_per_100K = ((mort_in_year*100000)/total_gender_pop))
 # 
-# # 
-# #   
-# # 
-# # 
-# # 
-# # 
-# # #hiv compartments overtime test to compare with caras coverages
-# # out_df_by_HIV<-out_df_melt%>%
-# #   group_by(HIV_compartment, G_compartment, time)%>%
-# #   summarise(total_hiv_pop = sum(value))
-# # 
-# # #testing hiv prevalence
-# # ggplot(data = out_df_by_HIV, 
-# #        mapping = aes(x = time, y = total_pop, fill = HIV_compartment))+
-# #   geom_area()
-# # 
-# # 
-# # #filter only active TB compartments, since that is what we are calibrating to
-# # out_df_TB_active<-out_df_melt%>%
-# #   filter(TB_compartment == 6)%>%
-# #   mutate(calibration_group_name = if_else((HIV_compartment == 1 & G_compartment == 1),
-# #                                      'TB_only_Male',
-# #                                      if_else((HIV_compartment != 1 & G_compartment == 1),
-# #                                              'HIV/TB_coinfection_Male',
-# #                                              if_else((HIV_compartment == 1 & G_compartment == 2),
-# #                                              'TB_only_Female',
-# #                                              'HIV/TB_coinfection_Female'))),
-# #          calibration_group_id = if_else((HIV_compartment == 1 & G_compartment == 1),
-# #                                      1,
-# #                                      if_else((HIV_compartment != 1 & G_compartment == 1),
-# #                                              2,
-# #                                              if_else((HIV_compartment == 1 & G_compartment == 2),
-# #                                                      3,
-# #                                                      4))))
-# # 
-# # #so I do not need to call on mort_param_func too many times
-# # out_df_TB_active<-out_df_TB_active%>%
-# #   arrange(year)
-# # 
-# # #testing TB prev overtime
-# # test<-out_df_TB_active%>%
-# #   group_by(G_compartment, HIV_compartment, time)%>%
-# #   summarise(value = sum(value))%>%
-# #   mutate(ID = paste0('HIV_', HIV_compartment, '_G_', G_compartment))
-# # 
-# # ggplot(data = test, mapping = aes(x = time, y = value, fill = ID))+
-# #   geom_area()
-# # 
-# # 
-# # TB_grouping_test_df<-out_df_melt%>%
-# #   group_by(TB_compartment, time)%>%
-# #   summarise(total_pop = sum(value))
-# # 
-# # 
-# # ggplot(data = TB_grouping_test_df%>%filter(TB_compartment == 6), mapping = aes(x = time, y = total_pop,
-# #                                                  fill = TB_compartment))+
-# #   geom_area()
-# # 
-# # counter <-1
-# # mort_est <- rep(0, times = nrow(out_df_TB_active))
-# # 
-# # for (yr in start_yr:end_yr){
-# #   temp<-out_df_TB_active%>%
-# #     filter(year == yr)
-# #   mu_t_h_g<-mort_param_func(yr)
-# #   for (row in 1:nrow(temp)){
-# #     hiv <- as.integer(temp[row, 'HIV_compartment'])
-# #     gender <-as.integer(temp[row, 'G_compartment'])
-# #     pop<-as.double(temp[row, 'value'])
-# #     mort_rate<-(mu_t_h_g[6,hiv,gender]*(1/12))
-# #     
-# #     mort_est[counter]<-(mort_rate*pop)
-# #     counter <- counter + 1
-# #   }
-# # }
-# # 
-# # out_df_TB_active$mort_est <- mort_est
-# # 
-# # #group and combine data for calibration
-# # setwd(indir)
-# # calibration_rates_df<-read.csv('calibration_rates_df.csv')
-# # 
-# # calibration_df<-out_df_TB_active%>%
-# #   group_by(calibration_group_id, calibration_group_name, 
-# #            year)%>%
-# #   summarise(model_rate = sum(mort_est))%>%
-# #   left_join(calibration_rates_df, by = c('calibration_group_name', 'year'))%>%
-# #   filter(year < 2017)
-# #   #mutate(time = time+1990) #so that time graphs go from 1990 - 2017
-# # 
-# # calibration_df$within<-if_else((calibration_df$model_rate<=calibration_df$max_rate)&(calibration_df$model_rate>=calibration_df$min_rate),
-# #                                1, 0)
-# # calibration_df$diff <-calibration_df$model_rate-calibration_df$expected_rate
-# # calibration_df$mse <-(calibration_df$diff)^2
-# # 
-# # 
-# # 
+# for (g in G_SET){
+# 
+#   file_name <- paste0('TB_moratlity_g_compartment_', g, '.png')
+# 
+#   gender = if_else(g == 1, 'Males', 'Females')
+# 
+#   graph_temp <- ggplot(data = mort_calibration_df%>%filter(G_compartment == g),
+#                        mapping = aes(x = year, y = mort_rate_per_100K))+
+#     geom_line(aes(colour = variable), size = 1)+
+#     labs(title = paste0('Deaths, rate per 100K, ', gender))+
+#     #scale_y_continuous(name="rate", breaks=seq(from = 0, to = 300, by = 20))+
+#     #scale_x_continuous(name = 'time', breaks=seq(from = 1900, to = 1990, by = 5))+
+#     scale_color_manual(values=c("green", 'purple'))#+
+#     #ylim(0, 550)
+# 
+#   png(file_name)
+#   print(graph_temp)
+#   dev.off()
+# }
+
+# test<-pop_init_df_out%>%
+#   group_by(G_compartment)%>%
+#   mutate(total_in_gender = sum(value))%>%
+#   ungroup()%>%
+#   mutate(percent = value/total_in_gender)%>%
+#   group_by(HIV_compartment, G_compartment)%>%
+#   summarise(percent_in_HIV = sum(percent))
+
+
+pop_init_df_out<-out_df_all%>%
+  filter(time == 90)%>%
+  select(-c('HIV_neg_male', 'HIV_neg_female', 'HIV_pos_male', 'HIV_pos_female', 'time', 'year'))
+
+pop_init_df_out <-melt(pop_init_df_out, id.vars = c('sim_id', "beta_1", 'beta_2'))
+
+pop_init_df_out <- cbind(pop_init_df_out,
+                       data.frame(do.call('rbind',
+                                          strsplit(as.character(pop_init_df_out$variable),
+                                                   '_',fixed=TRUE))))
+names(pop_init_df_out)[names(pop_init_df_out) == "X2"] <- "TB_compartment"
+names(pop_init_df_out)[names(pop_init_df_out) == "X3"] <- "DR_compartment"
+names(pop_init_df_out)[names(pop_init_df_out) == "X4"] <- "HIV_compartment"
+names(pop_init_df_out)[names(pop_init_df_out) == "X5"] <- "G_compartment"
+pop_init_df_out<-pop_init_df_out%>%select(-c('X1'))
+
+test<-pop_init_df_out%>%
+  group_by(HIV_compartment, G_compartment)%>%
+  summarise(total = sum(value))
+
+outdir <- paste0(here(),'/param_files')
+setwd(outdir)
+
+write.csv(pop_init_df_out, 'pop_init_df.csv', row.names = FALSE)
