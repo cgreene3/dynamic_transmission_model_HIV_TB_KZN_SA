@@ -140,10 +140,10 @@ HIV_2_increase <- 5
 HIV_3_increase <- 10
 HIV_4_increase <- 1.2
 
-TB_Active_HIV_1<-20*1.3 #26x total increase in mort rate from non-disease mort
+TB_Active_HIV_1<-20 #20x total increase in mort rate from non-disease mort
 TB_Active_HIV_2<-10 #50x total increase in mort rate from non-disease mort
 TB_Active_HIV_3<-10 #100x total increase in mort rate from non-disease mort
-TB_Active_HIV_4<-25*1.2 #36x total increase in mort rate from non-disease mort
+TB_Active_HIV_4<-25 #30x total increase in mort rate from non-disease mort
 
 df_input_data<-df_input_data%>%
     mutate(hiv_adj = if_else(HIV_compartment == 1, 1,
