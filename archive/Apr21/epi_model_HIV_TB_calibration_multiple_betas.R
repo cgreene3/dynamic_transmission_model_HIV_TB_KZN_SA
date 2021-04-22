@@ -13,13 +13,26 @@ gc()
 sapply(c('dplyr', 'deSolve', 
          'readxl', 'stringr', 
          'reshape2', 'ggplot2', 
-         'varhandle', 'here', 'readr'), require, character.only=T)
+         'varhandle', 'here', 'readr',
+         'bitops'), require, character.only=T)
+
+#mort calibration test
+#(1 = low, 2 = medium, 3 = high)
+#TB_only, TB_HIV_CD4More, TB_HIV_CD4Less, TB_HIV_ART
+mort_calib_TB_only_test <- 1:3
+mort_calib_TB_HIV_CD4More_test <- 1:3
+mort_calib_TB_HIV_CD4Less_test <- 1:3
+mort_calib_TB_HIV_ART_test <- 1:3
+  
+#betas to test
+beta_1_test<-c(5)
+beta_2_test<-c(5.4)
 
 #set in directory and out directory
 #Make sure you have the epi_model_HIV_TB.Rproj open, otherwise 
 #you will need to change the working directory manually.
 indir <- paste0(here(),'/param_files')
-outdir <- paste0(here(),'/model_outputs')
+outdir <- paste0(here(),'/model_outputs/')
 
 #read in data
 setwd(indir)
@@ -537,9 +550,6 @@ TT_SET <- seq(from = 0, to = TT, by = time_interval)
 out_df_all<-data.frame()
 sim_id <-1
 
-beta_1_test<-c(5)
-beta_2_test<-c(5.4)
-
 for (b1 in beta_1_test){
   for (b2 in beta_2_test){
     
@@ -585,6 +595,9 @@ for (b1 in beta_1_test){
 
   }
 }
+
+
+
 
 #####Graphs that describe model states overtime####
 state_prog_df<-out_df%>%
