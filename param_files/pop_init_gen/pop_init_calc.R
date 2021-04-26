@@ -488,8 +488,6 @@ open_seir_model <- function(time, N_t_r_h_g, parms){
   #write year parameter for parameters that change over time
   current_yr <-as.integer(start_yr+time)
   
-  print(time)
-  
   #HIV transitions
   eta_i_h_g<-HIV_transitions_param_func(current_yr)
   
@@ -670,15 +668,13 @@ TT_SET <- seq(from = 0, to = TT, by = time_interval)
 out_df_all<-data.frame()
 sim_id <-1
 
-#beta_1_test<-seq(.35, .65, by = 0.05)
-#beta_2_test<-seq(.35, .65, by = 0.05)
-
-beta_1_test<-c(5)
-beta_2_test<-c(5.4)
+beta_1_test<-seq(16, 18, by = 0.4)
+beta_2_test<-seq(16, 18, by = 0.4)
 
 for (beta_1 in beta_1_test){
   for (beta_2 in beta_2_test){
     
+    print(sim_id)
     #to track how long it takes to solve
     start<-Sys.time()
     
@@ -701,6 +697,32 @@ for (beta_1 in beta_1_test){
     
   }
 }
+
+pop_init_df_out<-out_df_all%>%
+  filter(time == 90)%>%
+  select(-c('HIV_neg_male', 'HIV_neg_female', 'HIV_pos_male', 'HIV_pos_female', 'time', 'year'))
+
+pop_init_df_out <-melt(pop_init_df_out, id.vars = c('sim_id', "beta_1", 'beta_2'))
+
+pop_init_df_out <- cbind(pop_init_df_out,
+                       data.frame(do.call('rbind',
+                                          strsplit(as.character(pop_init_df_out$variable),
+                                                   '_',fixed=TRUE))))
+names(pop_init_df_out)[names(pop_init_df_out) == "X2"] <- "TB_compartment"
+names(pop_init_df_out)[names(pop_init_df_out) == "X3"] <- "DR_compartment"
+names(pop_init_df_out)[names(pop_init_df_out) == "X4"] <- "HIV_compartment"
+names(pop_init_df_out)[names(pop_init_df_out) == "X5"] <- "G_compartment"
+pop_init_df_out<-pop_init_df_out%>%select(-c('X1'))
+
+test<-pop_init_df_out%>%
+  group_by(HIV_compartment, G_compartment)%>%
+  summarise(total = sum(value))
+
+outdir <- paste0(here(),'/param_files')
+setwd(outdir)
+
+write.csv(pop_init_df_out, 'pop_init_df.csv', row.names = FALSE)
+
 # 
 # #####Graphs that describe model states overtime####
 #  state_prog_df<-out_df%>%
@@ -833,29 +855,3 @@ for (beta_1 in beta_1_test){
 #   mutate(percent = value/total_in_gender)%>%
 #   group_by(HIV_compartment, G_compartment)%>%
 #   summarise(percent_in_HIV = sum(percent))
-
-
-pop_init_df_out<-out_df_all%>%
-  filter(time == 90)%>%
-  select(-c('HIV_neg_male', 'HIV_neg_female', 'HIV_pos_male', 'HIV_pos_female', 'time', 'year'))
-
-pop_init_df_out <-melt(pop_init_df_out, id.vars = c('sim_id', "beta_1", 'beta_2'))
-
-pop_init_df_out <- cbind(pop_init_df_out,
-                       data.frame(do.call('rbind',
-                                          strsplit(as.character(pop_init_df_out$variable),
-                                                   '_',fixed=TRUE))))
-names(pop_init_df_out)[names(pop_init_df_out) == "X2"] <- "TB_compartment"
-names(pop_init_df_out)[names(pop_init_df_out) == "X3"] <- "DR_compartment"
-names(pop_init_df_out)[names(pop_init_df_out) == "X4"] <- "HIV_compartment"
-names(pop_init_df_out)[names(pop_init_df_out) == "X5"] <- "G_compartment"
-pop_init_df_out<-pop_init_df_out%>%select(-c('X1'))
-
-test<-pop_init_df_out%>%
-  group_by(HIV_compartment, G_compartment)%>%
-  summarise(total = sum(value))
-
-outdir <- paste0(here(),'/param_files')
-setwd(outdir)
-
-write.csv(pop_init_df_out, 'pop_init_df.csv', row.names = FALSE)

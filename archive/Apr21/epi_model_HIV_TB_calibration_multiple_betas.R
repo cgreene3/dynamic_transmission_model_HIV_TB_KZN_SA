@@ -25,8 +25,8 @@ mort_calib_TB_HIV_CD4Less_test <- 1:3
 mort_calib_TB_HIV_ART_test <- 1:3
   
 #betas to test
-beta_1_test<-c(5)
-beta_2_test<-c(5.4)
+beta_1_test<-c(14)
+beta_2_test<-c(14)
 
 #set in directory and out directory
 #Make sure you have the epi_model_HIV_TB.Rproj open, otherwise 
@@ -617,7 +617,7 @@ names(state_prog_df)[names(state_prog_df) == "X5"] <- "G_compartment"
 state_prog_df<-state_prog_df%>%select(-c('X1'))
 state_prog_df$month <- round(((state_prog_df$time%%1)*(12)+1),0)
 
-outdir_state_prog <- paste0(here(),'/model_outputs/state_prog/Apr4')
+outdir_state_prog <- paste0(here(),'/model_outputs/pre_calibration_tests/Apr23/beta14_lowmort')
 setwd(outdir_state_prog)
 
 ######TB states########

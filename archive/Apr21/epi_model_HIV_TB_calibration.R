@@ -537,8 +537,8 @@ TT_SET <- seq(from = 0, to = TT, by = time_interval)
 out_df_all<-data.frame()
 sim_id <-1
 
-beta_1_test<-c(.0055)
-beta_2_test<-c(.0065)
+beta_1_test<-c(6)
+beta_2_test<-c(6)
 
 for (beta_1 in beta_1_test){
   for (beta_2 in beta_2_test){

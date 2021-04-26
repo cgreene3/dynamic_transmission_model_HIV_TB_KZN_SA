@@ -3,7 +3,7 @@
 #SA population estimates
 
 #clean workspace
-rm(list = ls())
+rm(list = setdiff(ls(), 'df_input_data_all'))
 gc()
 
 #load packages
@@ -140,10 +140,10 @@ HIV_2_increase <- 5
 HIV_3_increase <- 10
 HIV_4_increase <- 1.2
 
-TB_Active_HIV_1<-20 #20x total increase in mort rate from non-disease mort
-TB_Active_HIV_2<-10 #50x total increase in mort rate from non-disease mort
-TB_Active_HIV_3<-10 #100x total increase in mort rate from non-disease mort
-TB_Active_HIV_4<-25 #30x total increase in mort rate from non-disease mort
+TB_Active_HIV_1<-14 #14x total increase in mort rate from non-disease mort
+TB_Active_HIV_2<-20/HIV_2_increase #25x total increase in mort rate from non-disease mort
+TB_Active_HIV_3<-30/HIV_3_increase #40x total increase in mort rate from non-disease mort
+TB_Active_HIV_4<-17/HIV_4_increase #22x total increase in mort rate from non-disease mort
 
 df_input_data<-df_input_data%>%
     mutate(hiv_adj = if_else(HIV_compartment == 1, 1,
@@ -157,37 +157,43 @@ df_input_data<-df_input_data%>%
                                                     TB_Active_HIV_4)))))%>%
     mutate(mort_rate = expected_non_disease_mort_rate*hiv_adj*tb_adj)
 
+#testing multiple mortality levels
+#df_input_data$level<-rep('H', times = nrow(df_input_data))
+df_input_data$level<-rep('L', times = nrow(df_input_data))
 
-mort_rate_plots_df<-df_input_data%>%
-  filter(TB_compartment == 6|HIV_compartment>1)%>%
-  mutate(TB_status = if_else(TB_compartment == 6, 'active TB', 'no active TB'))%>%
-  mutate(cause = paste0(TB_status, ', HIV compartment: ', HIV_compartment))
+#df_input_data_all<-df_input_data
+df_input_data_all<-rbind(df_input_data, df_input_data_all)
 
-setwd(paste0(outdir, '/mortality_param_gen/graphs'))
-for (cause1 in unique(mort_rate_plots_df$cause)){
-  
-  if(grepl('no active TB', cause1)){
-    max_lim <- .2
-  } else{
-    max_lim <- 1.5
-  }
-  
-  plot_file_name<-str_replace_all(string=cause1, pattern=" ", repl="_")
-  plot_file_name<-str_replace_all(string=plot_file_name, pattern=",", repl="")
-  plot_file_name<-str_replace_all(string=plot_file_name, pattern="/", repl="_")
-  png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
-  print(ggplot(mort_rate_plots_df%>%filter(cause == cause1), aes(x = year, 
-                                 y = mort_rate,
-                                 group = sex_name)) + 
-    geom_point() + 
-    geom_line(aes(color = sex_name))+
-    labs(title = paste0("Mortality overtime for\n ", cause1),
-         y = 'Mortality rate')+
-    ylim(0,max_lim))
-  dev.off()
-}
+# mort_rate_plots_df<-df_input_data%>%
+#   filter(TB_compartment == 6|HIV_compartment>1)%>%
+#   mutate(TB_status = if_else(TB_compartment == 6, 'active TB', 'no active TB'))%>%
+#   mutate(cause = paste0(TB_status, ', HIV compartment: ', HIV_compartment))
+
+#setwd(paste0(outdir, '/mortality_param_gen/graphs'))
+#for (cause1 in unique(mort_rate_plots_df$cause)){
+#   
+#   if(grepl('no active TB', cause1)){
+#     max_lim <- .2
+#   } else{
+#     max_lim <- 1.5
+#   }
+#   
+#   plot_file_name<-str_replace_all(string=cause1, pattern=" ", repl="_")
+#   plot_file_name<-str_replace_all(string=plot_file_name, pattern=",", repl="")
+#   plot_file_name<-str_replace_all(string=plot_file_name, pattern="/", repl="_")
+#   png(paste0(plot_file_name,'_',data_gen_date,'.png'), width=450,height=350,res=100)
+#   print(ggplot(mort_rate_plots_df%>%filter(cause == cause1), aes(x = year, 
+#                                  y = mort_rate,
+#                                  group = sex_name)) + 
+#     geom_point() + 
+#     geom_line(aes(color = sex_name))+
+#     labs(title = paste0("Mortality overtime for\n ", cause1),
+#          y = 'Mortality rate')+
+#     ylim(0,max_lim))
+#   dev.off()
+# }
 
 
 setwd(outdir)
-write.csv(df_input_data, 'mort_df.csv', row.names = FALSE)
+write.csv(df_input_data_all, 'mort_df.csv', row.names = FALSE)
 
