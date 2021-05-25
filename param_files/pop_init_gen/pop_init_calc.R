@@ -18,22 +18,37 @@ sapply(c('dplyr', 'deSolve',
          'reshape2', 'ggplot2', 
          'varhandle', 'here', 'readr'), require, character.only=T)
 
+current_date <- gsub('-', '_', Sys.Date())
+outdir <- paste0(here(),'/model_outputs/calibration_data_sets/', current_date)
+indir <- paste0(here(),'/param_files')
+dir.create(file.path(outdir))
+
 #######Create calibration ref df#########
 #mort calibration test
 #(1 = low, 2 = high)
 #TB_only, TB_HIV_CD4More, TB_HIV_CD4Less, TB_HIV_ART
-#mort_calib_TB_only_test <- c('L', 'H')
-#mort_calib_TB_HIV_CD4More_test <- c('L', 'H')
-#mort_calib_TB_HIV_CD4Less_test <- c('L', 'H')
-#mort_calib_TB_HIV_ART_test <- c('L', 'H')
+
+#Test low/High
+# mort_calib_TB_only_test <- c('L', 'H')
+# mort_calib_TB_HIV_CD4More_test <- c('L', 'H')
+# mort_calib_TB_HIV_CD4Less_test <- c('L', 'H')
+# mort_calib_TB_HIV_ART_test <- c('L', 'H')
+
+#Test Low/Medium/High
 mort_calib_TB_only_test <- c('L', 'M', 'H')
 mort_calib_TB_HIV_CD4More_test <- c('L', 'M', 'H')
 mort_calib_TB_HIV_CD4Less_test <- c('L', 'M', 'H')
 mort_calib_TB_HIV_ART_test <- c('L', 'M', 'H')
 
+#Test High
+# mort_calib_TB_only_test <- c('H')
+# mort_calib_TB_HIV_CD4More_test <- c('H')
+# mort_calib_TB_HIV_CD4Less_test <- c('H')
+# mort_calib_TB_HIV_ART_test <- c('H')
+
 #betas to test
-beta_1_test<-seq(from = 10, to = 12, by = .4)
-beta_2_test<-seq(from = 10, to = 12, by = .4)
+beta_1_test<-seq(from = 6, to = 10, by = 0.4)
+beta_2_test<-seq(from = 6, to = 10, by = 0.4)
 
 #create a sim id for each combination
 sim_calib_id<-c()
@@ -69,6 +84,9 @@ for (b1 in beta_1_test){
 
 sim_calibration_ref_df<-data.frame(sim_calib_id, b1_calib_id, b2_calib_id,
                                    m1_calib_id, m2_calib_id, m3_calib_id, m4_calib_id)
+
+setwd(outdir)
+write.csv(sim_calibration_ref_df, 'sim_calibration_ref_df.csv', row.names = FALSE)
 
 #remove everything but df
 rm(list=setdiff(ls(), "sim_calibration_ref_df"))
@@ -426,8 +444,8 @@ HIV_transitions_param_func<-function(yr){
 ######mu_t_h_g - mortality rates ########
 #set at 1990 mortality rates#
 #testing two levels
-#N_MORT_LEVELS = 3
-#MORT_LEVELS<-c('L', 'M', 'H')
+#N_MORT_LEVELS = 2
+#MORT_LEVELS<-c('L', 'H')
 N_MORT_LEVELS = 3
 MORT_LEVELS<-c('L', 'M', 'H')
 
@@ -773,7 +791,7 @@ for(n in 1:nrow(sim_calibration_ref_df)){
       filter(time == 90)%>%
       select(-c('time'))
     
-    pop_init_df_out <-melt(pop_init_df, id.vars = c('sim_id'))
+    pop_init_df_out <-reshape2::melt(pop_init_df, id.vars = c('sim_id'))
     pop_init_df_out <- cbind(pop_init_df_out,
                              data.frame(do.call('rbind',
                                                 strsplit(as.character(pop_init_df_out$variable),
@@ -790,8 +808,10 @@ for(n in 1:nrow(sim_calibration_ref_df)){
     
 }
 
-outdir <- paste0(here(),'/param_files')
+#outdir <- paste0(here(),'/param_files')
+#setwd(outdir)
+current_date <- '2021_05_24'
+outdir <- paste0(here(),'/model_outputs/calibration_data_sets/', current_date)
 setwd(outdir)
-setwd("~/github/epi_model_HIV_TB/model_outputs/calibration_data_sets/May12")
 write.csv(pop_init_df_out_all, 'pop_init_df.csv', row.names = FALSE)
 
