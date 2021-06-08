@@ -18,8 +18,9 @@ sapply(c('dplyr', 'deSolve',
          'reshape2', 'ggplot2', 
          'varhandle', 'here', 'readr'), require, character.only=T)
 
+#Make sure you have the epi_model_HIV_TB.Rproj open (top right)
 current_date <- gsub('-', '_', Sys.Date())
-outdir <- paste0(here(),'/model_outputs/calibration_data_sets/', current_date)
+outdir <- paste0(here(),'/model_outputs/calibration/', current_date, '/ref_data')
 indir <- paste0(here(),'/param_files')
 dir.create(file.path(outdir))
 
@@ -47,8 +48,8 @@ mort_calib_TB_HIV_ART_test <- c('L', 'M', 'H')
 # mort_calib_TB_HIV_ART_test <- c('H')
 
 #betas to test
-beta_1_test<-seq(from = 6, to = 10, by = 0.4)
-beta_2_test<-seq(from = 6, to = 10, by = 0.4)
+beta_1_test<-seq(from = 6, to = 10, by = 0.5)
+beta_2_test<-seq(from = 6, to = 10, by = 0.5)
 
 #create a sim id for each combination
 sim_calib_id<-c()
@@ -89,13 +90,9 @@ setwd(outdir)
 write.csv(sim_calibration_ref_df, 'sim_calibration_ref_df.csv', row.names = FALSE)
 
 #remove everything but df
-rm(list=setdiff(ls(), "sim_calibration_ref_df"))
-
-#set in directory and out directory
-#Make sure you have the epi_model_HIV_TB.Rproj open, otherwise 
-#you will need to change the working directory manually.
-indir <- paste0(here(),'/param_files')
-outdir <- paste0(here(),'/model_outputs')
+rm(list=setdiff(ls(), c("sim_calibration_ref_df",
+                "indir",
+                "outdir")))
 
 #read in data
 setwd(indir)
@@ -104,6 +101,10 @@ mort_df <- read.csv('mort_df.csv')
 #hiv_transition_df is different from calib code
 hiv_transition_df<-read_excel("hiv_param_gen/hiv_input_gen_data.xlsx") 
 birth_rate_df<-read.csv('birth_rate_df.csv')
+
+#read GBD pop_estimates
+setwd(paste0(here(), '/param_files/GBD_pop_estimates'))
+pop_df<-read.csv('pop_df.csv')
 
 #clean dataframe column names for consistency
 names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
@@ -180,10 +181,6 @@ tb_adj<-c()
 dr_adj<-c()
 hiv_adj<-c()
 g_adj<-c()
-
-
-setwd(paste0(here(), '/param_files/GBD_pop_estimates'))
-pop_df<-read.csv('pop_df.csv')
 
 #calculate gender init adjustments from GBD data
 pop_df<-pop_df%>%
@@ -808,10 +805,6 @@ for(n in 1:nrow(sim_calibration_ref_df)){
     
 }
 
-#outdir <- paste0(here(),'/param_files')
-#setwd(outdir)
-current_date <- '2021_05_24'
-outdir <- paste0(here(),'/model_outputs/calibration_data_sets/', current_date)
 setwd(outdir)
 write.csv(pop_init_df_out_all, 'pop_init_df.csv', row.names = FALSE)
 

@@ -9,16 +9,15 @@ gc()
 #load packages
 sapply(c('here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
 
-#Need to set project (upper R corner of screen) to epi_model_HIV_TB for here to work
-indir <- paste0(here(),'/param_files/mortality_param_gen')
-indir_pop <- paste0(here(),'/param_files/GBD_pop_estimates')
-outdir <- paste0(here(),'/param_files')
-setwd(indir)
-
 #to name plots according to date generated
 data_gen_date<-Sys.Date()
 data_gen_date<-str_replace_all(data_gen_date, '-', '_')
-#also need to update read files 50,57,61
+
+#Need to set project (upper R corner of screen) to epi_model_HIV_TB for here to work
+indir <- paste0(here(),'/param_files/mortality_param_gen')
+indir_pop <- paste0(here(),'/param_files/GBD_pop_estimates')
+outdir <- paste0(here(),'/model_outputs/calibration/', data_gen_date, '/ref_data')
+setwd(indir)
 
 ##########read in pop files#################
 #data pull date 02/28/2021
@@ -195,8 +194,8 @@ for (yr in unique(df_input_data$year)){
 }
 
 #adjusted mortality
-HIV_2_increase <- 5
-HIV_3_increase <- 10
+HIV_2_increase <- 10
+HIV_3_increase <- 25
 HIV_4_increase <- 1.2
 
 #L-H
@@ -211,10 +210,10 @@ HIV_4_increase <- 1.2
 #TB, HIV on ART - 12, 18, 24
 
 
-TB_Active_HIV_1<-20 #14x total increase in mort rate from non-disease mort
-TB_Active_HIV_2<-30/HIV_2_increase #25x total increase in mort rate from non-disease mort
-TB_Active_HIV_3<-50/HIV_3_increase #40x total increase in mort rate from non-disease mort
-TB_Active_HIV_4<-24/HIV_4_increase #22x total increase in mort rate from non-disease mort
+TB_Active_HIV_1<-10 
+TB_Active_HIV_2<-15/HIV_2_increase 
+TB_Active_HIV_3<-30/HIV_3_increase 
+TB_Active_HIV_4<-12/HIV_4_increase 
 
 df_input_data<-df_input_data%>%
     mutate(hiv_adj = if_else(HIV_compartment == 1, 1,
@@ -229,9 +228,9 @@ df_input_data<-df_input_data%>%
     mutate(mort_rate = expected_non_disease_mort_rate*hiv_adj*tb_adj)
 
 #testing multiple mortality levels
-df_input_data$level<-rep('H', times = nrow(df_input_data))
+#df_input_data$level<-rep('H', times = nrow(df_input_data))
 #df_input_data$level<-rep('M', times = nrow(df_input_data))
-#df_input_data$level<-rep('L', times = nrow(df_input_data))
+df_input_data$level<-rep('L', times = nrow(df_input_data))
 
 #df_input_data_all<-df_input_data
 df_input_data_all<-rbind(df_input_data, df_input_data_all)
@@ -267,6 +266,5 @@ df_input_data_all<-rbind(df_input_data, df_input_data_all)
 
 
 setwd(outdir)
-setwd("~/github/epi_model_HIV_TB/model_outputs/calibration_data_sets/May12")
 write.csv(df_input_data_all, 'mort_df.csv', row.names = FALSE)
 
