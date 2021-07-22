@@ -30,6 +30,8 @@ eta_24<-rep(0, times = nrow(hiv_transmission_df))
 for (yr in calib_years){
   for (g in genders){
     
+    print(yr)
+    
     #before 2004 no ART is available
     if(yr >= 2004){
       
@@ -59,8 +61,8 @@ for (yr in calib_years){
 hiv_transmission_df$eta_24<-eta_24
 hiv_transmission_df$eta_34<-eta_34
 
-hiv_transmission_df<-hiv_transmission_df%>%
-  filter(year<=2017)
+#hiv_transmission_df<-hiv_transmission_df%>%
+#  filter(year<=2017)
 
 
 ###create plots####
