@@ -22,8 +22,8 @@ outputs2$policy <-2
 outputs<-rbind(outputs, outputs2)
 
 ##Separating analysis datasets--------------------------------------------------------------------------------------
-#Select one row per year (midpoint ends in .5) for costing analysis years 2018-2027
-mids<-c(28.5, 29.5, 30.5, 31.5, 32.5, 33.5, 34.5, 35.5, 36.5, 37.5)
+#Select one row per year (midpoint ends in .5) for costing analysis years 2018-2027 #Consider improving with modulo %% or seq
+mids<-seq(from=28.5, to = 37.5, by=1)
 output_mids<-filter(outputs, time %in% mids)
 
 #Split off mortality and incidence data since those are cumulative and analysis only uses the last row
@@ -44,32 +44,19 @@ tb_female_mort_fractions<-read.csv(file=paste0(out_dir, "Mort_age_fractions_TB_f
 tbhiv_male_mort_fractions<-read.csv(file=paste0(out_dir, "Mort_age_fractions_TBHIV_male.csv"))
 tbhiv_female_mort_fractions<-read.csv(file=paste0(out_dir, "Mort_age_fractions_TBHIV_female.csv"))
 
-#Simplify the age fraction dataframes to vectors to use them more easily in next calcs.
-tb_male_mort_vec<-tb_male_mort_fractions$mean
-tb_female_mort_vec<-tb_female_mort_fractions$mean
-tbhiv_male_mort_vec<-tbhiv_male_mort_fractions$mean
-tb_hiv_female_mort_vec<-tbhiv_female_mort_fractions$mean
-
 #Reshape deaths dataset to multiply by mort
 deaths_end_long<-melt(deaths_end,  id.vars=c("year", "sim_id", "time", "policy")) #Will need to think more about sim_id
 
-gbd_age_groups<-c("age_8", "age_9","age_10", "age_11", "age_12","age_13", "age_14", "age_15","age_16")
-deaths_end_long[gbd_age_groups]<-NA
+#Add the matching variables to the mortality fraction dataframes, join them to the age distributions, and multiply by age fractions
+tb_male_mort_fractions$variable<-"TB_mort_HIV_neg_male"
+tb_female_mort_fractions$variable<-"TB_mort_HIV_neg_female"
+tbhiv_male_mort_fractions$variable<-"TB_mort_HIV_pos_male"
+tbhiv_female_mort_fractions$variable<-"TB_mort_HIV_pos_female"
+df<-rbind(tb_male_mort_fractions, tb_female_mort_fractions, tbhiv_male_mort_fractions, tbhiv_female_mort_fractions)
+df2<-df %>% left_join(deaths_end_long, by=c("variable"))
+df2$fractional_deaths<-df2$mean*df2$value
 
-#Multiply each mort fraction by the endpoint deaths - Stuck here now
-
-deaths_end_long <- deaths_end_long[deaths_end_long$variable=='TB_mort_HIV_neg_male',]
-#multiply deaths_end_long$value by the vector tb_male_mort_vec to get the values for columns 7:15
-
-
-#This way worked with a single policy row, but doesn't hold up to multiple policies or sim_ids
-tb_num_mort_male<-deaths_end$TB_mort_HIV_neg_male*tb_male_mort_fractions$mean
-tb_num_mort_female<-deaths_end$TB_mort_HIV_neg_female*tb_female_mort_fractions$mean
-tbhiv_num_mort_male<-deaths_end$TB_mort_HIV_pos_male*tbhiv_male_mort_fractions$mean
-tbhiv_num_mort_female<-deaths_end$TB_mort_HIV_pos_female*tbhiv_female_mort_fractions$mean
-
-df_male<-rbind(tb_num_mort_male, tbhiv_num_mort_male) #Next could mult this by life table values for YLL male
-df_female<-rbind(tb_num_mort_female, tbhiv_num_mort_female)
+#Next step to bring in life tables to finish YLLs calculation
 
 
 
