@@ -15,9 +15,9 @@ sapply(c('dplyr', 'deSolve',
 #############Set in directory and out directory###########
 ###########Make sure epi_model_HIV_TB.Rproj is open, otherwise will need to change wd manually########
 start_eval_date <- '2021_07_21' #may need to change manually 
-desc<-'/past_2018'
+desc<-'/past_2018_changing_births'
 #if analysis date is later that start date (running calib prog)
-description <- '1990_2028_ANALYSIS'
+description <- '1990_2028_ANALYSIS_changing_births'
 
 indir_ref_data<-paste0(here(),'/param_files/calibration_code_results/', start_eval_date)
 
@@ -35,12 +35,12 @@ sim_calibration_ref_df<-read.csv('sim_calibration_ref_df.csv')
 # #####Graphs that describe model states overtime####
 
 setwd(paste0(here(), '/param_files'))
-HIV_calibration_df<-read.csv('hiv_transmission_df.csv')
+HIV_calibration_df<-read.csv('hiv_transmission_df_v4.csv')
 HIV_calibration_df<-HIV_calibration_df%>%
   mutate(G_compartment = if_else(gender == 'Females', 2, 1))%>%
   dplyr::select('year', 'G_compartment', 'hiv_prevalence')
 
-HIV_ART_cov_df<-read.csv('hiv_transmission_df.csv')
+HIV_ART_cov_df<-read.csv('hiv_transmission_df_v4.csv')
 HIV_ART_cov_df<-HIV_ART_cov_df%>%
   mutate(G_compartment = if_else(gender == 'Females', 2, 1))%>%
   dplyr::select('year', 'G_compartment', 'art_coverage')%>%
@@ -208,7 +208,7 @@ top_graphs_func<-function(mse_df_top){
     mutate(mort_in_year = cum_mort - lag(cum_mort))%>%
     ungroup()%>%
     mutate(mort_in_year = if_else(year == 1990, cum_mort, mort_in_year))%>%
-    filter(year < 2027)%>%
+    filter(year < 2028)%>%
     mutate(G_compartment = if_else(grepl('female', calibration_group), '2', '1'))%>%
     left_join(total_pop_in_gender_df, by = c('G_compartment', 'year', 'sim_id'))%>%
     mutate(mort_rate_per_100K = ((mort_in_year*100000)/total_gender_pop))%>%
@@ -285,3 +285,4 @@ dir.create(file.path(outdir_best_analysis_HIV_PREV))
 dir.create(file.path(outdir_best_analysis_TB_MORT))
 
 top_graphs_func(best_mse_df)
+

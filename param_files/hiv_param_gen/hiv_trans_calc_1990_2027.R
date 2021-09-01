@@ -48,10 +48,24 @@ for (yr in calib_years){
       n2_prop_current_yr <- hiv_transmission_df$PLHIV_2_CD4_200_more[current_yr_row_temp]*
         n2_prop_eligible_current_yr
       
+      #to account for changes from mortality and aging out
+      hiv_prev_change<-hiv_transmission_df$hiv_prevalence[nxt_yr_row_temp]-
+        hiv_transmission_df$hiv_prevalence[current_yr_row_temp]
       
-      art_inititation<-(n4_prop_next_yr-n4_prop_current_yr)/(n3_prop_current_yr+n2_prop_current_yr)
+      #relevant_change<-((n3_prop_current_yr+n2_prop_current_yr)*(hiv_prev_change))
+      
+      
+      art_inititation<-(n4_prop_next_yr-n4_prop_current_yr-hiv_prev_change)/(n3_prop_current_yr+n2_prop_current_yr)
       eta_24[current_yr_row_temp]<-art_inititation*n2_prop_eligible_current_yr
       eta_34[current_yr_row_temp]<-art_inititation
+      
+      #added to v5 to test impacts of increasing ART initiation rates
+      if(g == 'Females'){
+        if(yr >= 2016){
+          eta_24[current_yr_row_temp]<-art_inititation*n2_prop_eligible_current_yr*2
+          eta_34[current_yr_row_temp]<-art_inititation*2
+        }
+      }
       
     }
   }
@@ -89,4 +103,4 @@ print(ggplot(hiv_transition_rate_plot_df,
 #dev.off()
 
 setwd(outdir)
-write.csv(hiv_transmission_df, 'hiv_transmission_df_v2.csv')
+write.csv(hiv_transmission_df, 'hiv_transmission_df_v5.csv')

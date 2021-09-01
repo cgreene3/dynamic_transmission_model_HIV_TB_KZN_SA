@@ -21,7 +21,7 @@ sapply(c('dplyr', 'deSolve',
 #############Set in directory and out directory###########
 ###########Make sure epi_model_HIV_TB.Rproj is open, otherwise will need to change wd manually########
 start_eval_date<- '2021_07_21/'
-desc<-'past_2018'
+desc<-'past_2018_v4'
 indir_params <- paste0(here(),'/param_files')
 indir_ref_data<-paste0(here(),'/param_files/calibration_code_results/', start_eval_date)
 #set outdir to local file on computer (otherwise files will overwhelm github)
@@ -40,7 +40,7 @@ birth_rate_df<-read.csv('birth_rate_df.csv')
 #these data frames change depending on combin of calib parameters
 setwd(indir_params)
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
-hiv_transition_df<-read.csv('hiv_transmission_df.csv')
+hiv_transition_df<-read.csv('hiv_transmission_df_v5.csv')
 
 #clean dataframe column names for consistency
 names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
@@ -372,16 +372,17 @@ tb_hiv_prog_calibration_model <- function(time, N_t_r_h_g, parms){
   current_yr <-as.integer(start_yr+time)
   
   if (current_yr > last_year){
-    if(current_yr < 2018){
       #HIV transitions
       eta_i_h_g<<-HIV_transitions_param_func(current_yr)
       
+      if(current_yr < 2018){
       #deaths
       mu_t_h_g<<-mort_param_func(current_yr)
       total_out_t_r_h_g<<-total_out_param_func(mu_t_h_g)
+      }
       
       last_year<<-current_yr
-    }
+    
   }
   
   #track mort
@@ -597,6 +598,8 @@ best_mse_df<-read.csv('mse_df_top.csv')
 
 setwd(outdir)
 last_year<-1989
+
+
 
 for(n in best_mse_df$sim_id){
   last_year<-1989
