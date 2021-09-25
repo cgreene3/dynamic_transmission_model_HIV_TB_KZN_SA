@@ -142,6 +142,8 @@ lapply(subset_list, function(s){
               max_perc_diff_male = max(if_else(G_compartment == 1, hiv_prev_perc_diff, 0)),
               max_perc_diff_female = max(if_else(G_compartment == 2, hiv_prev_perc_diff, 0)))
   
+  
+  #mort calibration calcs
   mort_calibration_df<-state_prog_df%>%
     filter(TB_compartment == 'mort')%>%
     mutate(calibration_group = paste0(DR_compartment, '_', HIV_compartment, '_', G_compartment))%>%

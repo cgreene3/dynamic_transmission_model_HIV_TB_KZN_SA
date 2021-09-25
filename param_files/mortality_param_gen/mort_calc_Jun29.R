@@ -10,13 +10,13 @@ gc()
 sapply(c('here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
 
 #to name plots according to date generated
-data_gen_date<-Sys.Date()
-data_gen_date<-str_replace_all(data_gen_date, '-', '_')
+data_gen_date<-'2021_09_22'#Sys.Date()
+#data_gen_date<-str_replace_all(data_gen_date, '-', '_')
 
 #Need to set project (upper R corner of screen) to epi_model_HIV_TB for here to work
 indir <- paste0(here(),'/param_files/mortality_param_gen')
 indir_pop <- paste0(here(),'/param_files/GBD_pop_estimates')
-outdir <- paste0(here(),'/param_files/calib_ref_data/', data_gen_date)
+outdir <- paste0(here(),'/param_files/calibration_code_results/', data_gen_date)
 #will give warning if wd already exists
 #ignore warning!
 dir.create(file.path(outdir))
@@ -94,17 +94,4 @@ non_disease_mort_df2<-non_disease_mort_df%>%
 
 setwd(outdir)
 write.csv(non_disease_mort_df2, 'mort_df.csv', row.names = FALSE)
-
-
-
-# #manipulate for evaluating mortality calcs
-# mort_graph_IHME<-read.csv('IHME_deaths_1990_2017_Feb28.csv')%>%
-#   mutate(Disease_Category = if_else(cause_id %in% c(947, 949, 934), 'Tuberculosis',
-#                                     if_else(cause_id == 298, 'HIV/AIDS',
-#                                             'All Causes')))%>%
-#   group_by(sex_id, year, Disease_Category)%>%
-#   summarise(expected_mort = sum(val))%>%
-#   left_join(pop_df, by = c('year', 'sex_id'))%>%
-#   mutate(per_100K = (expected_mort/expected_total_pop)*100000)%>%
-#   select(c('sex_id', 'year', 'Disease_Category', 'sex_name', 'per_100K'))
 
