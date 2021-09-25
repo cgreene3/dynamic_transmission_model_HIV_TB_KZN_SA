@@ -14,13 +14,14 @@ sapply(c('dplyr', 'deSolve',
 
 #############Set in directory and out directory###########
 ###########Make sure epi_model_HIV_TB.Rproj is open, otherwise will need to change wd manually########
-start_eval_date <- '2021_09_22' #may need to change manually 
+start_eval_date <- '2021_09_22/' #may need to change manually 
 indir_ref_data<-paste0(here(),'/param_files/calibration_code_results/', start_eval_date)
+indir_params<-paste0(here(),'/param_files/calibration_code_results/', start_eval_date)
 
 #set calib outputs to local file on computer (otherwise files will overwhelm github)
-indir_state_prog<-paste0("~/Documents/academic_posttt_2020/HIV_TB/calib_outdir/", start_eval_date)
+indir_state_prog<-paste0("~/Documents/academic_posttt_2020/HIV_TB/calib_outdir/", start_eval_date, 'to_2028')
 
-outdir_analysis <- paste0(here(),'/param_files/calibration_code_results/', start_eval_date, '/analysis/1990_2028_ANALYSIS')
+outdir_analysis <- paste0(here(),'/param_files/calibration_code_results/', start_eval_date, 'analysis/1990_2028_ANALYSIS')
 dir.create(file.path(outdir_analysis))
 
 #######Create calibration ref df#########
@@ -29,7 +30,9 @@ sim_calibration_ref_df<-read.csv('sim_calibration_ref_df.csv')
 setwd(paste0(indir_ref_data, '/analysis'))
 mse_df_top<-read.csv('mse_df_top.csv')
 
+setwd(indir_params)
 HIV_calibration_df<-read.csv('hiv_transmission_df.csv')
+
 HIV_calibration_df<-HIV_calibration_df%>%
   mutate(G_compartment = if_else(gender == 'Females', 2, 1))%>%
   dplyr::select('year', 'G_compartment', 'hiv_prevalence')
@@ -40,7 +43,9 @@ HIV_ART_cov_df<-HIV_ART_cov_df%>%
   dplyr::select('year', 'G_compartment', 'art_coverage')%>%
   rename(art_coverage_HPV_est = art_coverage)
 
+
 # #####Graphs that describe model states overtime####
+setwd(paste0(here(),'/param_files'))
 GBD_calibration_df<-read.csv('calibration_rates_df.csv')
 #match calibration group with model output calibration groups
 GBD_calibration_df$calibration_group<-if_else(GBD_calibration_df$calibration_group == "TB_only_Female",
@@ -262,15 +267,17 @@ top_graphs_func<-function(mse_df_top){
 }
 
 outdir_best_analysis<-paste0(outdir_analysis, '/tb_mort_hiv_prev_best')
-outdir_best_analysis_ART<-paste0(outdir_best_analysis, '/ART_COVERAGE')
-outdir_best_analysis_HIV_PREV<-paste0(outdir_best_analysis, '/HIV_PREV')
-outdir_best_analysis_TB_MORT<-paste0(outdir_best_analysis, '/TB_MORT')
-outdir_best_analysis_TB_MORT_GBD_OVERLAY<-paste0(outdir_best_analysis, '/TB_MORT_GBD_OVERLAY')
+outdir_best_analysis_ART<-paste0(outdir_analysis, '/ART_COVERAGE')
+outdir_best_analysis_HIV_PREV<-paste0(outdir_analysis, '/HIV_PREV')
+outdir_best_analysis_TB_MORT<-paste0(outdir_analysis, '/TB_MORT')
+outdir_best_analysis_TB_MORT_GBD_OVERLAY<-paste0(outdir_analysis, '/TB_MORT_GBD_OVERLAY')
+
 
 dir.create(file.path(outdir_best_analysis))
 dir.create(file.path(outdir_best_analysis_ART))
 dir.create(file.path(outdir_best_analysis_HIV_PREV))
 dir.create(file.path(outdir_best_analysis_TB_MORT))
+dir.create(file.path(outdir_best_analysis_TB_MORT_GBD_OVERLAY))
 
 top_graphs_func(mse_df_top)
 
@@ -340,7 +347,7 @@ vis_all_top_graphs_func<-function(mse_df_top){
     as.data.frame()
   
   mort_calibration_df$HIV_status = if_else(grepl('pos', mort_calibration_df$calibration_group),
-                                           'pos', 'neg')
+                                           'positive', 'negative')
   
   setwd(outdir_best_analysis_TB_MORT_GBD_OVERLAY)
   
@@ -350,7 +357,7 @@ vis_all_top_graphs_func<-function(mse_df_top){
               min_rate = min(mort_rate_per_100K),
               expected_rate = mean(mort_rate_per_100K))
   
-  for (g in G_compartment){
+  for (g in c(1,2)){
     
     gender_temp<-if_else(g == 1, 'Males', 'Females')
     
@@ -359,23 +366,24 @@ vis_all_top_graphs_func<-function(mse_df_top){
     df_temp_model <- mort_calibration_df_vis%>%
       filter(G_compartment == g, year < 2028)
     
-    df_neg_model<- df_temp_model%>%filter(HIV_status == 'neg')
-    df_neg_model<- df_temp_model%>%filter(HIV_status == 'pos')
+    df_neg_model<- df_temp_model%>%filter(HIV_status == 'negative')
+    df_pos_model<- df_temp_model%>%filter(HIV_status == 'positive')
     
     df_temp_GBD<-GBD_calibration_df%>%
-      filter(G_compartment == g)
+      filter(G_compartment == g)%>%
+      mutate(HIV_status = if_else(HIV_status == 'neg', 'negative', 'positive'))
     
-    df_neg_GBD <-df_temp_GBD%>%filter(HIV_status == 'neg')
-    df_pos_GBD <-df_temp_GBD%>%filter(HIV_status == 'pos')
+    df_neg_GBD <-df_temp_GBD%>%filter(HIV_status == 'negative')
+    df_pos_GBD <-df_temp_GBD%>%filter(HIV_status == 'positive')
     
     df_temp_expected_rate_model<-df_temp_model%>%
       select(c('year', 'HIV_status', 'expected_rate'))%>%
-      mutate(calibration_group = paste0('Model_', HIV_status))
+      mutate(calibration_group = paste0('Model Projections: HIV ', HIV_status))
     df_temp_expected_rate_GBD<-df_temp_GBD%>%
       select(c('year', 'HIV_status', 'expected_rate'))%>%
-      mutate(calibration_group = paste0('GBD_', HIV_status))
+      mutate(calibration_group = paste0('GBD Projections: HIV ', HIV_status))
     
-    df_temp_expected_rate_all<-rbind(df_temp_expected_rate_model, df_temp_expected_rate_GBD)
+    df_temp_expected_rate_all_df<-rbind(df_temp_expected_rate_model, df_temp_expected_rate_GBD)
     
   
     #https://stackoverflow.com/questions/57153428/r-plot-color-combinations-that-are-colorblind-accessible
@@ -390,17 +398,20 @@ vis_all_top_graphs_func<-function(mse_df_top){
                   inherit.aes = FALSE,fill = colors_for_graph[5])+
       geom_ribbon(data=df_pos_model,aes(x = year, ymin = min_rate, ymax = max_rate), 
                   inherit.aes = FALSE,fill = colors_for_graph[7])+
-      geom_line(data = df_temp, aes(x = year, y = expected_rate, 
+      geom_line(data = df_temp_expected_rate_all_df, aes(x = year, y = expected_rate, 
                                     color = calibration_group))+
       scale_color_manual(values=c(colors_for_graph[c(2,4,6,8)]))+
-      labs(title = paste0('Deaths, rate per 100K, ', gender_temp))+
-      scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4),2028))+
+      labs(title = paste0('Tuberculosis death rate per 100K, ', gender_temp))+
+      scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
       scale_y_continuous(name = 'mortality rate', limits = c(0, 600), breaks=(seq(0, 600, 100)))+
-      theme(legend.position='none', text = element_text(size=12), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black"))
+      theme(text = element_text(size=14), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.position="top", legend.title = element_blank(), legend.text=element_text(size=14),
+            plot.title = element_text(hjust = .5, size=22))+
+      guides(color=guide_legend(nrow=2,byrow=TRUE))
     
     
-    png(file_name, width = 480, height = 480)
+    png(file_name, width = 800, height = 600)
     print(graph_temp)
     dev.off()
     
@@ -408,3 +419,4 @@ vis_all_top_graphs_func<-function(mse_df_top){
   
 }
 
+vis_all_top_graphs_func(mse_df_top)

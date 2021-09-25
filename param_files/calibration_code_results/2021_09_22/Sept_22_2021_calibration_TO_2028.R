@@ -23,7 +23,7 @@ sapply(c('dplyr', 'deSolve',
 start_eval_date<- '2021_09_22/'
 indir_ref_data<-paste0(here(),'/param_files/calibration_code_results/', start_eval_date)
 #set outdir to local file on computer (otherwise files will overwhelm github)
-outdir<-paste0("~/Documents/academic_posttt_2020/HIV_TB/calib_outdir/", start_eval_date)
+outdir<-paste0("~/Documents/academic_posttt_2020/HIV_TB/calib_outdir/", start_eval_date, 'to_2028')
 
 
 ##########Read in data##########
