@@ -253,7 +253,7 @@ top_graphs_func<-function(mse_df_top){
         #                                  color = calibration_group))+
         scale_color_manual(values=c('darkorchid4', 'darkgreen'))+
         #scale_color_manual(values=c('purple', 'green', 'darkorchid4', 'darkgreen'))+
-        labs(title = paste0('Deaths, rate per 100K, ', gender_temp))+
+        labs(title = paste0('Tuberculosis death rate per 100K ', gender_temp))+
         scale_x_continuous(name = 'time', breaks=seq(from = 1990, to = 2028, by = 5))+
         scale_y_continuous(name = 'mortality rate', limits = c(0, 600), breaks=(seq(0, 600, 100)))+
         theme(legend.position='none', text = element_text(size=20), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -401,14 +401,19 @@ vis_all_top_graphs_func<-function(mse_df_top){
       geom_line(data = df_temp_expected_rate_all_df, aes(x = year, y = expected_rate, 
                                     color = calibration_group))+
       scale_color_manual(values=c(colors_for_graph[c(2,4,6,8)]))+
-      labs(title = paste0('Tuberculosis death rate per 100K, ', gender_temp))+
+      labs(title = paste0('Tuberculosis death rate per 100K ', gender_temp))+
       scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
       scale_y_continuous(name = 'mortality rate', limits = c(0, 600), breaks=(seq(0, 600, 100)))+
       theme(text = element_text(size=14), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.position="top", legend.title = element_blank(), legend.text=element_text(size=14),
             plot.title = element_text(hjust = .5, size=22))+
-      guides(color=guide_legend(nrow=2,byrow=TRUE))
+      guides(color=guide_legend(nrow=2,byrow=TRUE))+
+      geom_vline(xintercept = 2017, linetype="dashed", 
+                 color = "darkgrey", size=1.5)+
+      annotate("text", x=2013, y=450, label= "calibration period", size = 6)+
+      annotate("text", x=2021, y=450, label= "evaluation period", size = 6)
+      
     
     
     png(file_name, width = 800, height = 600)
