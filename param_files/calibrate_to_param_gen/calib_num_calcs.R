@@ -72,29 +72,30 @@ total_mort_calibration_params<-total_mort_df%>%
          expected_rate = expected_percent*100000)%>%
   select(c('year', 'sex_name', 'calibration_group', 'min_rate', 'max_rate', 'expected_rate'))
 
-setwd(paste0(here(),'/model_outputs/calibration'))
+#if want to visualize mort estimates
+#setwd(paste0(here(),'/param_files/calib'))
 
-for (g in unique(total_mort_calibration_params$sex_name)){
-  
-  file_name <- paste0('TB_moratlity_g_compartment_', g, '.png')
-  
-  df_temp <- total_mort_calibration_params%>%filter(sex_name == g)
-  df1<-df_temp%>%filter(calibration_group == unique(df_temp$calibration_group)[1])
-  df2<-df_temp%>%filter(calibration_group == unique(df_temp$calibration_group)[2])
-  
-  graph_temp <- ggplot(df_temp,aes(x = year, y = expected_rate, color = calibration_group))+
-    geom_ribbon(data=df1,aes(x = year, ymin = min_rate, ymax = max_rate), inherit.aes = FALSE,fill = "plum2")+
-    geom_ribbon(data=df2,aes(x = year, ymin = min_rate, ymax = max_rate), inherit.aes = FALSE,fill = "lightgreen")+
-    geom_line(aes(colour = calibration_group), size = 1)+
-    labs(title = paste0('Deaths, rate per 100K, ', g))+
-    #scale_y_continuous(name="rate", breaks=seq(from = 0, to = 300, by = 20))+
-    scale_x_continuous(name = 'time', breaks=seq(from = 1990, to = 2017, by = 5))+
-    scale_color_manual(values=c('purple', 'green'))
-  
-  png(file_name)
-  print(graph_temp)
-  dev.off()
-}
+# for (g in unique(total_mort_calibration_params$sex_name)){
+#   
+#   file_name <- paste0('TB_moratlity_g_compartment_', g, '.png')
+#   
+#   df_temp <- total_mort_calibration_params%>%filter(sex_name == g)
+#   df1<-df_temp%>%filter(calibration_group == unique(df_temp$calibration_group)[1])
+#   df2<-df_temp%>%filter(calibration_group == unique(df_temp$calibration_group)[2])
+#   
+#   graph_temp <- ggplot(df_temp,aes(x = year, y = expected_rate, color = calibration_group))+
+#     geom_ribbon(data=df1,aes(x = year, ymin = min_rate, ymax = max_rate), inherit.aes = FALSE,fill = "plum2")+
+#     geom_ribbon(data=df2,aes(x = year, ymin = min_rate, ymax = max_rate), inherit.aes = FALSE,fill = "lightgreen")+
+#     geom_line(aes(colour = calibration_group), size = 1)+
+#     labs(title = paste0('Deaths, rate per 100K, ', g))+
+#     #scale_y_continuous(name="rate", breaks=seq(from = 0, to = 300, by = 20))+
+#     scale_x_continuous(name = 'time', breaks=seq(from = 1990, to = 2017, by = 5))+
+#     scale_color_manual(values=c('purple', 'green'))
+#   
+#   png(file_name)
+#   print(graph_temp)
+#   dev.off()
+# }
 
 setwd(outdir)
 write.csv(total_mort_calibration_params, 'calibration_rates_df.csv', row.names = FALSE)
