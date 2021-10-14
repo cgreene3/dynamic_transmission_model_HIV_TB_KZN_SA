@@ -1,4 +1,4 @@
-#Sept 30 2021
+#Oct 13 2021
 #policy runs
 
 #based on calibration results from Sept 22 2021 for calibration evaluation results 
@@ -17,7 +17,7 @@ sapply(c('dplyr', 'deSolve',
 
 #############Set in directory and out directory###########
 ###########Make sure epi_model_HIV_TB.Rproj is open, otherwise will need to change wd manually########
-policy_eval_date<- '2021_09_30/'
+policy_eval_date<- '2021_10_13/'
 indir_ref_data<-paste0(here(), '/param_files/policy_eval_params/')
 outdir<-paste0(here(), '/policy_runs/raw_results/', policy_eval_date)
 
@@ -703,7 +703,7 @@ for(n in best_calib_results_df$sim_id){
                    policy_id = rep(p, times = nrow(out_df)),
                    out_df)
     
-    out_df<-out_df%>%filter(year <= 2017) #when policies start
+    out_df<-out_df%>%filter(year >= 2017) #when policies start
     
     if(p == 1){
       out_df_all_policies<-out_df
