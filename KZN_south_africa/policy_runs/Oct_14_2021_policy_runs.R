@@ -19,7 +19,7 @@ sapply(c('dplyr', 'deSolve',
 ###########Make sure epi_model_HIV_TB.Rproj is open, otherwise will need to change wd manually########
 policy_eval_date<- '2021_10_14/'
 indir_ref_data<-paste0(here(), '/param_files/policy_eval_params/')
-outdir<-paste0(here(), '/policy_runs/raw_results/', policy_eval_date)
+outdir<-paste0(here(), '/policy_runs/results/', policy_eval_date)
 
 ##########Read in data##########
 

@@ -16,8 +16,8 @@ sapply(c('dplyr', 'deSolve',
 ###########Make sure KZN_south_africa.Rproj is open, otherwise will need to change wd manually########
 policy_eval_date<- '2021_10_14/'
 indir_ref_data<-paste0(here(), '/param_files/policy_eval_params/')
-indir_state_prog<-paste0(here(), '/policy_runs/raw_results/', policy_eval_date)
-outdir_analysis <- paste0(here(), '/policy_runs/raw_results/', policy_eval_date, 'analysis')
+indir_state_prog<-paste0(here(), '/policy_runs/results/', policy_eval_date)
+outdir_analysis <- paste0(here(), '/policy_runs/results/', policy_eval_date, 'analysis')
 dir.create(file.path(outdir_analysis))
 
 #######Read in reference df for sim IDs tested#########
