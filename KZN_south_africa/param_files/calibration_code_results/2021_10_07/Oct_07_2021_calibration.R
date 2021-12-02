@@ -34,6 +34,7 @@ hiv_transition_df<-read.csv('hiv_transmission_df.csv')
 param_df <- read_excel("Epi_model_parameters.xlsx", sheet = 'model_matched_parameters')
 IPT_initiation_df <- read_excel("IPT_inititation_df.xlsx", sheet = 'warm_up')
 
+
 #clean dataframe column names for consistency
 names(param_df)<-str_replace_all(names(param_df), c(" " = "_" , "-" = "_" ))
 names(pop_init_df)<-str_replace_all(names(pop_init_df), c(" " = "_" , "-" = "_" ))
@@ -260,7 +261,9 @@ HIV_transitions_param_func<-function(yr, N_t_r_h_g){
       
       
       #calculate ART initiations
-      art_inititation<-(n4_prop_next_yr-n4_prop_current_yr)/(n3_prop_current_yr+n2_prop_current_yr)
+      art_inititation<-(n4_prop_next_yr-n4_prop_current_yr)/(n3_prop_current_yr+
+                                                               (n2_prop_current_yr*
+                                                                  n2_prop_eligible_current_yr))
       eta_i_h_g[2,4,g]<-art_inititation*n2_prop_eligible_current_yr
       eta_i_h_g[3,4,g]<-art_inititation
       

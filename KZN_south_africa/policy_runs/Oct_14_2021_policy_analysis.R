@@ -9,8 +9,7 @@ sapply(c('dplyr', 'deSolve',
          'readxl', 'stringr', 
          'reshape2', 'ggplot2', 
          'varhandle', 'here', 'readr',
-         'bitops', 'data.table'), require, character.only=T)
-
+         'bitops', 'data.table', 'extrafont'), require, character.only=T)
 
 #############Set in directory and out directory###########
 ###########Make sure KZN_south_africa.Rproj is open, otherwise will need to change wd manually########
@@ -183,7 +182,7 @@ vis_TB_mort<-function(mse_df_top){
         labs(title = paste0('Tuberculosis death rate per 100K ', gender_temp, ' and HIV ', hs))+
         scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
         scale_y_continuous(name = 'mortality rate', limits = c(0, max_graph), breaks=(seq(0, max_graph, breaks_graph)))+
-        theme(text = element_text(size=20), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        theme(text = element_text(size=20, family="Times New Roman"), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
               legend.position="top", legend.title = element_blank(), legend.text=element_text(size=20),
               plot.title = element_text(hjust = .5, size=22))+
@@ -288,7 +287,7 @@ vis_TB_incidence<-function(mse_df_top){
     summarise(max_rate = max(incidence_rate_per_100K),
               min_rate = min(incidence_rate_per_100K),
               expected_rate = mean(incidence_rate_per_100K))%>%
-    mutate(policy_name = paste0('Policy: ', policy_id))%>%
+    mutate(policy_name = paste0('Policy ', policy_id))%>%
     filter(year < 2028) #because does not really evaluate 2028
   
   for (g in c(1,2)){
@@ -334,26 +333,31 @@ vis_TB_incidence<-function(mse_df_top){
       
       graph_temp<-graph_temp+
         geom_line(data = df_temp2, aes(x = year, y = expected_rate, 
-                                       color = policy_name), size = 1)+
+                                       color = policy_name),#, linetype = policy_name), 
+                  size = 1.2)+
         scale_color_manual(values=c(colors_for_graph[color_lookup_expected]))
       
       
-      #max_graph = if_else(hs == 'negative', 150, 400)
-      #breaks_graph=if_else(hs == 'negative', 50, 90)
+      max_graph = if_else(hs == 'negative', 1200, 3200)
+      breaks_graph=if_else(hs == 'negative', 400, 400)
       
       graph_temp<-graph_temp+
         labs(title = paste0('Tuberculosis incidence rate per 100K ', gender_temp, ' and HIV ', hs))+
         scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
-        #scale_y_continuous(name = 'mortality rate', limits = c(0, max_graph), breaks=(seq(0, max_graph, breaks_graph)))+
-        theme(text = element_text(size=20), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        scale_y_continuous(name = 'TB incidence rate', limits = c(0, max_graph), breaks=(seq(0, max_graph, breaks_graph)))+
+        theme(text = element_text(size=22, family="Times New Roman"), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),
-              legend.position="top", legend.title = element_blank(), legend.text=element_text(size=20),
-              plot.title = element_text(hjust = .5, size=22))+
+              legend.position="top", legend.title = element_blank(), legend.text=element_text(size=24),
+              plot.title = element_text(hjust = .5, size=24),
+              axis.text.x = element_text(size = 22, family="Times New Roman"),
+              axis.text.y = element_text(size = 22, family="Times New Roman"),
+              axis.title.x = element_text(size = 22, family="Times New Roman"),
+              axis.title.y = element_text(size = 22, family="Times New Roman"))+
         guides(color=guide_legend(nrow=1,byrow=TRUE))+
         geom_vline(xintercept = 2017, linetype="dashed", 
                    color = "darkgrey", size=1.5)+
-        annotate("text", x=2013, y=10, label= "calibration period", size = 6)+
-        annotate("text", x=2021, y=10, label= "evaluation period", size = 6)
+        annotate("text", x=2012, y=10, label= "calibration period", size = 8, family="Times New Roman")+
+        annotate("text", x=2022, y=10, label= "evaluation period", size = 8, family="Times New Roman")
       
       png(file_name, width = 800, height = 600)
       print(graph_temp)
