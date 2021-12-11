@@ -338,7 +338,7 @@ vis_TB_incidence<-function(mse_df_top){
         scale_color_manual(values=c(colors_for_graph[color_lookup_expected]))
       
       
-      max_graph = if_else(hs == 'negative', 1000, 3000)
+      max_graph = if_else(hs == 'negative', 1500, 3000)
       breaks_graph=if_else(hs == 'negative', 500, 500)
       
       graph_temp<-graph_temp+
