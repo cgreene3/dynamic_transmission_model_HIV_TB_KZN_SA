@@ -37,6 +37,8 @@ colors_for_graph = palette.colors(palette = "Paired")
 color_lookup_range<-c(1,3,5)
 color_lookup_expected<-c(2,4,6)
 
+mort_start_indicators_df_4_cats<-data.frame()
+
 #####Evaluating Simulations#####
 ####merge and visualize outputs
 vis_TB_mort<-function(mse_df_top){
@@ -112,6 +114,15 @@ vis_TB_mort<-function(mse_df_top){
     mutate(mort_rate_per_100K = ((mort_in_year*100000)/total_gender_pop))%>%
     as.data.frame()%>%
     select(-c('cum_mort'))
+  
+  #pull indicators start of intervention
+  mort_start_indicators_df_4_cats<<-TB_mort_df%>%
+    filter(year == 2017,
+           policy_id == 1)%>%
+    group_by(variable)%>%
+    summarise(avg = mean(mort_in_year),
+              max = max(mort_in_year),
+              min = min(mort_in_year))
   
   TB_mort_df$HIV_status = if_else(grepl('pos', TB_mort_df$variable),
                                            'positive', 'negative')
@@ -200,6 +211,9 @@ vis_TB_mort<-function(mse_df_top){
 }
 
 vis_TB_mort(mse_df_top)
+write.csv(mort_start_indicators_df_4_cats, 'mort_start_indicators_df_4_cats.csv')
+
+incidence_start_indicators_df_4_cats<-data.frame()
 
 vis_TB_incidence<-function(mse_df_top){
   
@@ -236,6 +250,10 @@ vis_TB_incidence<-function(mse_df_top){
   names(state_prog_df)[names(state_prog_df) == "X5"] <- "G_compartment"
   state_prog_df<-subset(state_prog_df, select = -X1)
   state_prog_df<-subset(state_prog_df, select = -variable)
+  
+  incidence_trend_df<<-state_prog_df%>%
+    filter(time == 28,
+           policy_id == 1)
   
   total_pop_in_gender_df<-state_prog_df%>%
     filter(G_compartment %in% c(1,2))%>%
@@ -274,6 +292,15 @@ vis_TB_incidence<-function(mse_df_top){
     mutate(incidence_rate_per_100K = ((incidence_in_year*100000)/total_gender_pop))%>%
     as.data.frame()%>%
     select(-c('cum_incidence'))
+  
+  #pull indicators start of intervention
+  incidence_start_indicators_df_4_cats<<-TB_incidence_df%>%
+    filter(year == 2017,
+           policy_id == 1)%>%
+    group_by(variable)%>%
+    summarise(avg = mean(incidence_in_year),
+              max = max(incidence_in_year),
+              min = min(incidence_in_year))
   
   TB_incidence_df$HIV_status = if_else(grepl('pos', TB_incidence_df$variable),
                                   'positive', 'negative')
@@ -338,7 +365,7 @@ vis_TB_incidence<-function(mse_df_top){
         scale_color_manual(values=c(colors_for_graph[color_lookup_expected]))
       
       
-      max_graph = if_else(hs == 'negative', 1500, 3000)
+      max_graph = if_else(hs == 'negative', 1500, 3500)
       breaks_graph=if_else(hs == 'negative', 500, 500)
       
       graph_temp<-graph_temp+

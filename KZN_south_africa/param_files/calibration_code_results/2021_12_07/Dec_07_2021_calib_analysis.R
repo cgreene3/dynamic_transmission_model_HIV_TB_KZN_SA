@@ -180,7 +180,6 @@ lapply(subset_list, function(s){
     
   
   mse_df_temp<-reshape2::dcast(mse_df_temp, sim_id ~ calibration_group)
-  mse_df_temp$tb_mort_mse_total <-rowSums(mse_df_temp[,2:5])
   
   mse_df_temp<-mse_df_temp%>%
     left_join(HIV_prev_df, by = c('sim_id'))
@@ -204,9 +203,21 @@ mse_df3<-mse_df2%>%
          /(max(hiv_prev_mse_male)-min(hiv_prev_mse_male))),
          hiv_prev_mse_female_norm = (hiv_prev_mse_female-min(hiv_prev_mse_female)) 
          /(max(hiv_prev_mse_female)-min(hiv_prev_mse_female)))%>%
-  filter(hiv_prev_mse_male_norm <= .25,
-         hiv_prev_mse_female_norm <= .25)%>%
-  mutate(tbmort_rank_total = rank(tb_mort_mse_total),
+  filter(hiv_prev_mse_male_norm <= .3,
+         hiv_prev_mse_female_norm <= .3)%>%
+  mutate(tb_mort_mse_male_neg_norm = ((HIV_neg_male-min(HIV_neg_male))
+                                      /(max(HIV_neg_male)-min(HIV_neg_male))),
+         tb_mort_mse_female_neg_norm = ((HIV_neg_female-min(HIV_neg_female))
+                                      /(max(HIV_neg_female)-min(HIV_neg_female))),
+         tb_mort_mse_male_pos_norm = ((HIV_pos_male-min(HIV_pos_male))
+                                        /(max(HIV_pos_male)-min(HIV_pos_male))),
+         tb_mort_mse_female_pos_norm = ((HIV_pos_female-min(HIV_pos_female))
+                                        /(max(HIV_pos_female)-min(HIV_pos_female))))%>%
+  mutate(tb_mort_mse_overall_norm = ((.2*tb_mort_mse_male_neg_norm)+
+                                       (.2*tb_mort_mse_female_neg_norm)+
+                                       (.3*tb_mort_mse_male_pos_norm)+
+                                       (.3*tb_mort_mse_female_pos_norm)))%>%
+  mutate(tbmort_rank_total = rank(tb_mort_mse_overall_norm),
          tbmort_HIV_neg_male = rank(HIV_neg_male),
          tbmort_HIV_neg_female = rank(HIV_neg_female),
          tbmort_HIV_pos_male = rank(HIV_pos_male),
