@@ -394,4 +394,4 @@ vis_TB_incidence<-function(mse_df_top){
 }
 
 vis_TB_incidence(mse_df_top)
-
+write.csv(incidence_start_indicators_df_4_cats, 'incidence_start_indicators_df_4_cats.csv')

@@ -425,3 +425,38 @@ vis_all_top_graphs_func<-function(mse_df_top){
 }
 
 vis_all_top_graphs_func(mse_df_top)
+
+
+####pull 2017 stats for model###
+calibration_df_all_top<-data.frame()
+state_prog_df<-data.frame()
+
+setwd(indir_state_prog)
+
+for (sim_id_itr in mse_df_top$sim_id){
+  
+  file_name<-paste0('out_df_sim_id_', sim_id_itr, '_to_2028.csv')
+  print(sim_id_itr)
+  temp_data <- fread(file_name) 
+  temp_data$sim_id <- rep(sim_id_itr, times = nrow(temp_data))
+  #for each iteration, bind the new data to the building dataset
+  calibration_df_all_top <- rbind(calibration_df_all_top, temp_data) 
+}
+
+state_prog_df <-reshape2::melt(calibration_df_all_top, 
+                               id.vars = c("time", "year",
+                                           'sim_id'))
+
+state_prog_df <- cbind(state_prog_df,
+                       data.frame(do.call('rbind',
+                                          strsplit(as.character(state_prog_df$variable),
+                                                   '_',fixed=TRUE))))
+
+names(state_prog_df)[names(state_prog_df) == "X2"] <- "TB_compartment"
+names(state_prog_df)[names(state_prog_df) == "X3"] <- "DR_compartment"
+names(state_prog_df)[names(state_prog_df) == "X4"] <- "HIV_compartment"
+names(state_prog_df)[names(state_prog_df) == "X5"] <- "G_compartment"
+state_prog_df<-subset(state_prog_df, select = -X1)
+state_prog_df<-subset(state_prog_df, select = -variable)
+
+

@@ -1,7 +1,5 @@
-,variable,avg,max,min
-1,TB_incidence_HIV_neg_male,383,474,318
-2,TB_incidence_HIV_neg_female,318,394,264
-3,TB_incidence_HIV_pos_male,464,573,384
-4,TB_incidence_HIV_pos_female,964,1180,810
-,,,,
-,,2129,2621,1776
+"","variable","avg","max","min"
+"1","TB_incidence_HIV_neg_male",393.937191021859,435.25497302835,345.71907669153
+"2","TB_incidence_HIV_neg_female",326.549523253381,361.56270846886,286.712151416859
+"3","TB_incidence_HIV_pos_male",473.204969006412,519.2178524592,415.545845323501
+"4","TB_incidence_HIV_pos_female",983.23219826817,1076.3398349848,870.7242218916
