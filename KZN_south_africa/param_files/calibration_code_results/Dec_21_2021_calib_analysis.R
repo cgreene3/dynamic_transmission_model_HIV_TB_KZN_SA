@@ -136,7 +136,7 @@ lapply(subset_list, function(s){
   
   mort_calibration_df<-state_prog_df%>%
     filter(TB_compartment == 'mort')%>%
-    mutate(calibration_group = paste0(DR_compartment, '_', HIV_compartment, '_', G_compartment))%>%
+    mutate(calibration_group = paste0('HIV_', HIV_compartment, '_', G_compartment))%>%
     select(c('year', 'sim_id', 'time', 'calibration_group', 'value'))%>%
     group_by(year, sim_id, calibration_group)%>%
     summarise(cum_mort = max(value))%>%
@@ -572,89 +572,3 @@ write.csv(mse_df_top, 'mse_df_top.csv', row.names = FALSE)
 #write to most recent mse top to policy eval file
 #setwd(paste0(here(),'/param_files/policy_eval_params/', start_eval_date))
 #write.csv(mse_df_top, 'mse_df_top.csv')
-
-########pull incidence and mort stats########
-setwd(indir_state_prog)
-
-top_df_all_info_df<-data.frame()
-
-lapply(unique(mse_df_top$sim_id), function(sim_id_itr){ 
-  file_name<-paste0('out_df_sim_id_', sim_id_itr, '.csv')
-  print(sim_id_itr)
-  temp_data <- fread(file_name) 
-  temp_data$sim_id <- rep(sim_id_itr, times = nrow(temp_data))
-  #for each iteration, bind the new data to the building dataset
-  top_df_all_info_df <<- rbind(top_df_all_info_df, temp_data) 
-})
-
-state_prog_df <-reshape2::melt(top_df_all_info_df, 
-                               id.vars = c("time", "year",
-                                           'sim_id'))
-
-state_prog_df <- cbind(state_prog_df,
-                       data.frame(do.call('rbind',
-                                          strsplit(as.character(state_prog_df$variable),
-                                                   '_',fixed=TRUE))))
-
-names(state_prog_df)[names(state_prog_df) == "X2"] <- "TB_compartment"
-names(state_prog_df)[names(state_prog_df) == "X3"] <- "DR_compartment"
-names(state_prog_df)[names(state_prog_df) == "X4"] <- "HIV_compartment"
-names(state_prog_df)[names(state_prog_df) == "X5"] <- "G_compartment"
-state_prog_df<-subset(state_prog_df, select = -X1)
-state_prog_df<-subset(state_prog_df, select = -variable)
-
-#pull incidence stats from 2017
-incidence_stats_df_4cats<-state_prog_df%>%
-  filter(TB_compartment == 'incidence')%>%
-  mutate(calibration_group = paste0(DR_compartment, '_', HIV_compartment, '_', G_compartment))%>%
-  select(c('year', 'sim_id', 'time', 'calibration_group', 'value'))%>%
-  group_by(year, sim_id, calibration_group)%>%
-  summarise(cum_incidence = max(value))%>%
-  as.data.frame()%>%
-  group_by(calibration_group, sim_id)%>%
-  mutate(incidence_in_year = cum_incidence - lag(cum_incidence))%>%
-  ungroup()%>%
-  mutate(incidence_in_year = if_else(year == 1990, cum_incidence, incidence_in_year))%>%
-  filter(year == 2017)%>%
-  group_by(calibration_group)%>%
-  summarise(max_incidence = max(incidence_in_year),
-            min_incidence = min(incidence_in_year),
-            mean_incidence = mean(incidence_in_year))
-
-incidence_stats_df<-state_prog_df%>%
-  filter(TB_compartment == 'incidence')%>%
-  mutate(calibration_group = paste0(DR_compartment, '_', HIV_compartment, '_', G_compartment))%>%
-  select(c('year', 'sim_id', 'time', 'calibration_group', 'value'))%>%
-  group_by(year, sim_id, calibration_group)%>%
-  summarise(cum_incidence = max(value))%>%
-  as.data.frame()%>%
-  group_by(calibration_group, sim_id)%>%
-  mutate(incidence_in_year = cum_incidence - lag(cum_incidence))%>%
-  ungroup()%>%
-  mutate(incidence_in_year = if_else(year == 1990, cum_incidence, incidence_in_year))%>%
-  filter(year == 2017)%>%
-  group_by(sim_id)%>%
-  summarise(incidence_in_year_total = sum(incidence_in_year))%>%
-  summarise(max_incidence = max(incidence_in_year_total),
-            min_incidence = min(incidence_in_year_total),
-            mean_incidence = mean(incidence_in_year_total))
-
-setwd(outdir_mse_dfs)
-write.csv(incidence_stats_df, 'incidence_stats_df.csv', row.names = FALSE)
-write.csv(incidence_stats_df_4cats, 'incidence_stats_df_4cats.csv', row.names = FALSE)
-
-#pull prev stats from 2017
-prev_stats_df<-state_prog_df%>%
-  filter(TB_compartment == 6)%>%
-  group_by(time, year, sim_id)%>%
-  summarise(prev = sum(value))%>%
-  group_by(year, sim_id)%>%
-  summarise(prev = mean(prev))%>%
-  group_by(year)%>%
-  summarise(max_prev = max(prev),
-           min_prev = min(prev),
-           mean_prev = mean(prev))%>%
-  filter(year == 2017)
-
-write.csv(prev_stats_df, 'prev_stats_df.csv', row.names = FALSE)
-
