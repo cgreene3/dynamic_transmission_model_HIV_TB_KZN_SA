@@ -140,6 +140,9 @@ top_graphs_func<-function(mse_df_top){
     print(hiv_prev_graph)
     dev.off()
     
+    
+    
+    ####ART COVERAGE###
     setwd(outdir_best_analysis_ART)
     file_name_ART_coverage_graph<-paste0('ART_coverage_sim_id_', sim_id_itr, '.png')
     
@@ -321,6 +324,72 @@ vis_all_top_graphs_func<-function(mse_df_top){
   
   total_pop_in_gender_df<-as.data.frame(total_pop_in_gender_df)
   
+  #hiv prev overlay
+  HIV_calibration_df_model_proj<-state_prog_df%>%
+    filter(!TB_compartment %in% c('mort', 'incidence'),
+           HIV_compartment > 1)%>%
+    group_by(time, year, sim_id, G_compartment)%>%
+    summarise(total_prev = sum(value))%>%
+    group_by(sim_id, year, G_compartment)%>%
+    summarise(total_prev = median(total_prev))%>%
+    left_join(total_pop_in_gender_df, by = c('sim_id', 'year', 'G_compartment'))%>%
+    mutate(HIV_prev_TB_model_estimates_per_100K = total_prev*(100000/total_gender_pop))%>%
+    mutate(G_compartment = as.integer(G_compartment))%>%
+    select(c('year', 'G_compartment', 'HIV_prev_TB_model_estimates_per_100K'))%>%
+    mutate(categories_data_vis = paste0('TB-HIV model projections for ',
+                                        if_else(G_compartment == 1, 'males', 'females')))
+    
+  hiv_prev_calibration_df_vis<-HIV_calibration_df_model_proj%>%
+    group_by(categories_data_vis, year, G_compartment)%>%
+    summarise(max_rate = max(HIV_prev_TB_model_estimates_per_100K)/100000,
+              min_rate = min(HIV_prev_TB_model_estimates_per_100K)/100000,
+              hiv_prevalence = mean(HIV_prev_TB_model_estimates_per_100K)/100000)
+  
+  #https://stackoverflow.com/questions/57153428/r-plot-color-combinations-that-are-colorblind-accessible
+  colors_for_hiv_graph = palette.colors(palette = "Accent")
+  
+  HIV_calibration_df$categories_data_vis <- paste0('HPV-HIV model projections for ', HIV_calibration_df$gender_name, 's')
+  
+  hiv_prev_all_data_vis <- rbind(hiv_prev_calibration_df_vis%>%
+                                   select(c('year', 'categories_data_vis', 'hiv_prevalence')), 
+                                 HIV_calibration_df%>%select(c('year', 
+                                                               'categories_data_vis',
+                                                               'hiv_prevalence')))
+  
+  
+  hiv_prev_graph_temp <- ggplot()+
+    geom_ribbon(data = hiv_prev_calibration_df_vis%>%
+                  filter(G_compartment == 1), aes(x = year, ymin = min_rate, ymax = max_rate),
+                inherit.aes = FALSE, fill = colors_for_hiv_graph[1])+
+    geom_ribbon(data = hiv_prev_calibration_df_vis%>%
+                  filter(G_compartment == 2), aes(x = year, ymin = min_rate, ymax = max_rate),
+                inherit.aes = FALSE, fill = colors_for_hiv_graph[2])+
+    geom_line(data = hiv_prev_all_data_vis,
+              aes(x = year, 
+                  y = hiv_prevalence,
+                  group = categories_data_vis,
+                  color = categories_data_vis,
+                  linetype = categories_data_vis),
+              size = .5)+
+    scale_linetype_manual(values=c("dashed", "dashed", "solid", "solid"))+
+    scale_color_manual(values=c('darkorchid1','forestgreen', 'darkorchid4', 'darkgreen'))+
+    ggtitle(paste0('Projected HIV prevalence: HPV-HIV model projections\ncompared to TB-HIV model projections (average over best calibration parameters)'))+
+    ylab('HIV prevalence')+
+    scale_x_continuous(name = 'year', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
+    scale_y_continuous(name = 'HIV prevalence', limits = c(0, 1))+
+    theme(text = element_text(size=10), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.position="top", legend.title = element_blank(), legend.text=element_text(size=10),
+          plot.title = element_text(hjust = .5, size=12))+
+    guides(linetype = guide_legend(nrow = 2, byrow = TRUE))+
+    geom_vline(xintercept = 2017, linetype="dashed", 
+               color = "darkgrey", size=1.5)+
+    annotate("text", x=2013, y=.5, label= "calibration period", size = 4)+
+    annotate("text", x=2021, y=.5, label= "evaluation period", size = 4)
+  
+  
+  
+  #mort overlay
   mort_calibration_df<-state_prog_df%>%
     filter(TB_compartment == 'mort')%>%
     mutate(calibration_group = paste0(DR_compartment, '_', HIV_compartment, '_', G_compartment))%>%
@@ -380,10 +449,6 @@ vis_all_top_graphs_func<-function(mse_df_top){
       mutate(calibration_group = paste0('GBD Projections: HIV ', HIV_status))
     
     df_temp_expected_rate_all_df<-rbind(df_temp_expected_rate_model, df_temp_expected_rate_GBD)
-    
-  
-    #https://stackoverflow.com/questions/57153428/r-plot-color-combinations-that-are-colorblind-accessible
-    colors_for_graph = palette.colors(palette = "Paired")
     
     graph_temp <- ggplot()+
       geom_ribbon(data = df_neg_GBD, aes(x = year, ymin = min_rate, ymax = max_rate),

@@ -1,7 +1,5 @@
 #Last updated Dec 21 2021
 #make sure to change start eval date before running
-#testing reinfection rate of .4
-#testing increased duration of 1.5 for HIV+, 2 for HIV-
 
 #clean workspace
 rm(list = ls())
@@ -121,12 +119,9 @@ iota_r <- param_df%>%
 iota_r <- iota_r$Reference_expected_value
 
 #zeta - Indicator that diminishes force of infection due to the partially-protective effect of LTBI infection and acquiring a new TB infection#
-#zeta <- param_df%>%
-#  filter(notation == 'zeta')
-#zeta <-zeta$Reference_expected_value
-
-#testing .4
-zeta<-.4
+zeta <- param_df%>%
+  filter(notation == 'zeta')
+zeta <-zeta$Reference_expected_value
 
 #########Parameters that Describe TB progression ######
 
@@ -197,12 +192,6 @@ for (h in HIV_SET){
            HIV_compartment == h)
   upsilon_h[h] <- temp$Reference_expected_value
 }
-
-#upsilon h - testing increased duration
-#2 for HIV-
-#1.5 for HIV+
-
-upsilon_h<-c(.25, (1/3), (1/3), (1/3))
 
 #gamma_r -indicator if DR compartment can move onto after IPT#
 gamma_r <- c(1,0)

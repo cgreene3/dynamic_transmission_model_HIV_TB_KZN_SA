@@ -1,7 +1,5 @@
 #Last updated Dec 21 2021
 #make sure to change start eval date before running
-#testing reinfection rate of .4
-#testing increased duration of 1.5 for HIV+, 2 for HIV-
 
 #clean workspace
 rm(list = ls())
@@ -132,14 +130,11 @@ iota_r <- param_df%>%
 iota_r <- iota_r$Reference_expected_value
 
 #zeta - Indicator that diminishes force of infection due to the partially-protective effect of LTBI infection and acquiring a new TB infection#
-#zeta <- param_df%>%
-#  filter(notation == 'zeta')
-#zeta <-zeta$Reference_expected_value
+zeta <- param_df%>%
+  filter(notation == 'zeta')
+zeta <-zeta$Reference_expected_value
 
-#testing .4
-zeta<-.4
-
-#########Parameters that Describe TB progression ######
+#########Parameters that describe TB progression ######
 
 #kappa_t_h_g_p - Rate of IPT initiation, per year#
 kappa_t_h_g <- array(data = 0, c(length(TB_SET), length(HIV_SET), length(G_SET)))
@@ -215,12 +210,6 @@ for (h in HIV_SET){
            HIV_compartment == h)
   upsilon_h[h] <- temp$Reference_expected_value
 }
-
-#upsilon h - testing increased duration
-#2 for HIV-
-#1.5 for HIV+
-
-upsilon_h<-c(.25, (1/3), (1/3), (1/3))
 
 #gamma_r -indicator if DR compartment can move onto after IPT#
 gamma_r <- c(1,0)
@@ -479,61 +468,55 @@ tb_hiv_prog_calibration_model <- function(time, N_t_r_h_g, parms){
     last_year<<-current_yr
   }
   
-  #track mort
+  #track TB mort
   dN_t_r_h_g[129]<-mu_t_h_g[6,1,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,1,1]]) #tb active, hiv -, males
-  
   dN_t_r_h_g[130]<-mu_t_h_g[6,1,2]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,1,2]]) #tb active, hiv -, females
-  
   dN_t_r_h_g[131]<-mu_t_h_g[6,2,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,2,1]])+ #tb active, hiv+, CD4 > 200, males
     mu_t_h_g[6,3,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,3,1]])+ #tb active, hiv+, CD4 <= 200, males
     mu_t_h_g[6,4,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,4,1]]) #tb active, hiv+, on ART, males
-  
   dN_t_r_h_g[132]<-mu_t_h_g[6,2,2]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,2,2]])+ #tb active, hiv+, CD4 > 200, females
     mu_t_h_g[6,3,2]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,3,2]])+ #tb active, hiv+, CD4 <= 200, females
     mu_t_h_g[6,4,2]*sum(N_t_r_h_g[N_t_r_h_g_ref[6,1:2,4,2]]) #tb active, hiv+, on ART, females
   
+  #track HIV ONLY
+  #base mortality is same for TB compartments no TB
+  #so look up from TB compartment 1 by HIV status and gender since by TB (inactive) are all the same
+  dN_t_r_h_g[133]<-mu_t_h_g[1,2,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[c(1,2,3,4,5,7,8),1:2,2,1]])+ #NO tb active, hiv+, CD4 > 200, males
+    mu_t_h_g[1,3,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[c(1,2,3,4,5,7,8),1:2,3,1]])+ #NO tb, hiv+, CD4 <= 200, males
+    mu_t_h_g[1,4,1]*sum(N_t_r_h_g[N_t_r_h_g_ref[c(1,2,3,4,5,7,8),1:2,4,1]]) #NO tb, hiv+, on ART, males
+  dN_t_r_h_g[134]<-mu_t_h_g[1,2,2]*sum(N_t_r_h_g[N_t_r_h_g_ref[c(1,2,3,4,5,7,8),1:2,2,2]])+ #no tb, hiv+, CD4 > 200, females
+    mu_t_h_g[1,3,2]*sum(N_t_r_h_g[N_t_r_h_g_ref[c(1,2,3,4,5,7,8),1:2,3,2]])+ #no tb, hiv+, CD4 <= 200, females
+    mu_t_h_g[1,4,2]*sum(N_t_r_h_g[N_t_r_h_g_ref[c(1,2,3,4,5,7,8),1:2,4,2]]) #no tb, hiv+, on ART, females
+  
   #track incidence
-  #HIV-, males
-  dN_t_r_h_g[133]<- (theta_h[1]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,1,1]])) + #from recent TB infection to active 
+  dN_t_r_h_g[135]<- (theta_h[1]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,1,1]])) + #from recent TB infection to active 
     (theta_h[1]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,1,1]])) + #from remote TB infection to active 
     (theta_h[1]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,1,1]])) + #from TB infection on IPT to active
     (theta_h[1]*pi_i_t[8,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,1:2,1,1]])) #from TB after on IPT to active
-  
-  #HIV- females
-  dN_t_r_h_g[134]<- (theta_h[1]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,1,2]])) + #from recent TB infection to active 
+  dN_t_r_h_g[136]<- (theta_h[1]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,1,2]])) + #from recent TB infection to active 
     (theta_h[1]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,1,2]])) + #from remote TB infection to active 
     (theta_h[1]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,1,2]])) + #from TB infection on IPT to active
     (theta_h[1]*pi_i_t[8,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,1:2,1,2]])) #from TB after on IPT to active
-  
-  #HIV+, males
-  #CD4 more
-  dN_t_r_h_g[135]<- (theta_h[2]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,2,1]])) + #from recent TB infection to active 
+  dN_t_r_h_g[137]<- (theta_h[2]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,2,1]])) + #from recent TB infection to active 
     (theta_h[2]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,2,1]])) + #from remote TB infection to active 
     (theta_h[2]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,2,1]])) + #from TB infection on IPT to active
     (theta_h[2]*pi_i_t[8,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,1:2,2,1]])) + #from TB after on IPT to active
-    #CD4 less
     (theta_h[3]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,3,1]])) + #from recent TB infection to active 
     (theta_h[3]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,3,1]])) + #from remote TB infection to active 
     (theta_h[3]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,3,1]])) + #from TB infection on IPT to active
     (theta_h[3]*pi_i_t[8,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,1:2,3,1]])) + #from TB after on IPT to active
-    #on ART
     (theta_h[4]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,4,1]])) + #from recent TB infection to active 
     (theta_h[4]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,4,1]])) + #from remote TB infection to active 
     (theta_h[4]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,4,1]])) + #from TB infection on IPT to active
     (theta_h[4]*pi_i_t[8,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,1:2,4,1]])) #from TB after on IPT to active
-  
-  #HIV+, females
-  #CD4 more
-  dN_t_r_h_g[136]<-(theta_h[2]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,2,2]])) + #from recent TB infection to active 
+  dN_t_r_h_g[138]<-(theta_h[2]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,2,2]])) + #from recent TB infection to active 
     (theta_h[2]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,2,2]])) + #from remote TB infection to active 
     (theta_h[2]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,2,2]])) + #from TB infection on IPT to active
     (theta_h[2]*pi_i_t[8,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,1:2,2,2]])) + #from TB after on IPT to active
-    #CD4 less
     (theta_h[3]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,3,2]])) + #from recent TB infection to active 
     (theta_h[3]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,3,2]])) + #from remote TB infection to active 
     (theta_h[3]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,3,2]])) + #from TB infection on IPT to active
     (theta_h[3]*pi_i_t[8,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[8,1:2,3,2]])) + #from TB after on IPT to active
-    #on ART
     (theta_h[4]*pi_i_t[3,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[3,1:2,4,2]])) + #from recent TB infection to active 
     (theta_h[4]*pi_i_t[4,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[4,1:2,4,2]])) + #from remote TB infection to active 
     (theta_h[4]*pi_i_t[5,6]*sum(N_t_r_h_g[N_t_r_h_g_ref[5,1:2,4,2]])) + #from TB infection on IPT to active
@@ -730,13 +713,16 @@ for(n in mse_df_top$sim_id){
   N_init <- pop_init_df_temp$value
   
   #add in mort calc placeholders
-  calibration_mort_states<-c('TB_mort_HIV_neg_male', 'TB_mort_HIV_neg_female', 
-                             'TB_mort_HIV_pos_male', 'TB_mort_HIV_pos_female')
+  calibration_TB_mort_states<-c('TB_mort_HIV_neg_male', 'TB_mort_HIV_neg_female', 
+                                'TB_mort_HIV_pos_male', 'TB_mort_HIV_pos_female')
+  calibration_HIVONLY_mort_states<-c('HIV_mort_TB_neg_male', 'HIV_mort_TB_neg_female')
   calibration_incidence<-c('TB_incidence_HIV_neg_male', 'TB_incidence_HIV_neg_female', 
                            'TB_incidence_HIV_pos_male', 'TB_incidence_HIV_pos_female')
-  N_init <-c(N_init, 0,0,0,0,0,0,0,0)
+  
+  N_init <-c(N_init, 0,0,0,0,0,0,0,0,0,0)
   names(N_init) <- c(pop_init_df_temp$compartment_id, 
-                     calibration_mort_states,
+                     calibration_TB_mort_states,
+                     calibration_HIVONLY_mort_states,
                      calibration_incidence)
   
   out_df_all_policies <- data.frame()
