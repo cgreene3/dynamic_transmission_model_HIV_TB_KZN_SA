@@ -1,0 +1,693 @@
+measure_id,measure_name,location_id,location_name,sex_id,sex_name,age_id,age_name,cause_id,cause_name,metric_id,metric_name,year,val,upper,lower
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1992,212084.3712,251865.182,161650.2963
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1992,225846.1159,268685.3041,169449.2175
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1991,208322.2028,248862.0034,157985.2255
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1991,222950.958,266963.7882,167484.4113
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1990,203924.1062,245226.3032,155498.6614
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1990,219541.0433,264870.6308,164698.6521
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1993,215542.5076,255376.3204,165563.6625
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1993,228528.325,271933.2743,171528.5745
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1994,219174.5547,259879.604,168288.8146
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1994,231500.9394,274795.6204,174030.6934
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1996,229534.2565,269839.7729,176041.037
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1996,240985.0729,283789.8849,182553.6554
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1995,223548.7317,265983.0275,171108.6054
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1995,235324.636,279834.5956,177452.6165
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1997,237736.9421,278568.162,183846.1871
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1997,249031.1403,290721.3935,189447.8037
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1998,247638.959,288621.4329,191267.2076
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1998,258948.1463,301591.8811,198023.4699
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,1999,258441.0279,300235.2454,199605.9464
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,1999,269814.2091,314440.854,207349.6901
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2001,278612.6435,323958.1856,214007.1795
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2001,289572.6224,337946.2202,223493.519
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2000,269071.381,314110.6736,206816.3166
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2000,280338.0766,327064.0053,215176.3266
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2002,286213.4935,332731.2472,221723.6307
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2002,296804.7377,345503.3203,230287.4943
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2003,291671.2452,338778.6699,224800.0985
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2003,301737.2345,352014.1331,233795.2818
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2005,296236.3803,348708.0029,225469.2826
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2005,304641.9385,359344.8661,234086.8872
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2004,294976.1908,343186.9471,226290.1667
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2004,304306.8519,356409.0588,234798.1819
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2006,295241.0595,345532.5309,224437.3531
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2006,302541.0094,355787.8194,232122.3043
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2007,291967.5302,340495.3027,222727.1138
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2007,298008.3379,350616.9067,228431.1959
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2008,286759.7101,334559.2078,216914.5826
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2008,291298.6704,344272.3843,222714.8788
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2009,280069.5752,329932.3947,211415.668
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2009,282779.3772,337516.5352,215415.7962
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2011,263513.3002,313575.575,202467.7873
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2011,261225.3063,316708.5622,196827.5037
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2010,272347.3337,324770.2857,205578.6421
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2010,272829.7669,329253.9853,204780.5135
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2013,244473.2105,295613.8597,184147.3542
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2013,235438.6811,290624.7873,175140.0053
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2012,253962.4526,302322.3829,193586.7951
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2012,248333.7201,302146.7582,185959.993
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2014,235751.8709,289659.4236,171439.343
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2014,223621.6303,281131.5543,161869.1012
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2016,221540.0788,280650.6844,158165.0339
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2016,205145.8215,264431.9349,142071.1247
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2015,228305.7875,286022.4335,163848.819
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2015,213695.3795,273792.3777,150312.5568
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2017,216139.3088,277203.3254,151755.4927
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2017,199026.3345,259257.314,135486.2475
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2018,212598.0421,271821.4713,148500.1446
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2018,195676.2544,255986.0356,133823.6641
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,954,Latent tuberculosis infection,1,Number,2019,210069.8819,269804.8883,145056.1916
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,954,Latent tuberculosis infection,1,Number,2019,193828.1576,253546.344,132129.5817
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1992,0.000988351,0.002719733,0.000161191
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1992,0.007764553,0.021617372,0.001265232
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1991,0.000254762,0.0007775,3.54E-05
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1991,0.00201681,0.006080143,0.000273852
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1990,0,0,0
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1990,0,0,0
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1993,0.002147757,0.005922972,0.000359919
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1993,0.016744692,0.045833856,0.002719749
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1994,0.003679946,0.011452714,0.000563899
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1994,0.028471994,0.087804729,0.004274609
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1996,0.009318207,0.030737733,0.000957149
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1996,0.069550896,0.231215217,0.007079938
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1995,0.005542887,0.019571095,0.000410629
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1995,0.042551865,0.150066493,0.00322874
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1997,0.016194837,0.054409532,0.001956062
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1997,0.117249385,0.393652776,0.014113518
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1998,0.025530266,0.083710811,0.003239082
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1998,0.18114111,0.615067021,0.021456148
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1999,0.036560465,0.120189001,0.004510204
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,1999,0.256000731,0.856193704,0.031263925
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2001,0.062623251,0.212804211,0.007395541
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2001,0.43342077,1.474079781,0.051314837
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2000,0.04828131,0.168930816,0.005005685
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2000,0.335036504,1.195088195,0.035541143
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2002,0.080299534,0.262433705,0.010384454
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2002,0.555942319,1.744807331,0.074354082
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2003,0.098063995,0.321371537,0.013455021
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2003,0.677007139,2.126761498,0.094082319
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2005,0.11991931,0.41364517,0.013602372
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2005,0.805488391,2.795294432,0.090060592
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2004,0.112433009,0.376143753,0.014411607
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2004,0.769230922,2.526907362,0.10085802
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2006,0.122086293,0.397507223,0.016453663
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2006,0.793492425,2.582848716,0.103287715
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2007,0.122815405,0.371132369,0.019062471
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2007,0.762576965,2.389081215,0.112303665
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2008,0.122192429,0.355197124,0.019406605
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2008,0.718734472,2.152068859,0.109766627
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2009,0.120371426,0.348239044,0.01996885
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2009,0.66823204,1.968343644,0.107207428
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2011,0.113394906,0.31730209,0.020045133
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2011,0.554109085,1.533843704,0.100566164
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2010,0.117526613,0.340670399,0.018484111
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2010,0.617052615,1.793702124,0.096525374
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2013,0.103425326,0.268812409,0.020233952
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2013,0.403023235,1.042500759,0.083456872
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2012,0.108372929,0.286708482,0.020912811
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2012,0.477053888,1.253553117,0.096325751
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2014,0.099430692,0.260917297,0.019098964
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2014,0.346612003,0.904734799,0.068837455
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2016,0.10463782,0.301096686,0.016617836
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2016,0.326610861,0.939898606,0.051310686
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2015,0.097147357,0.272389546,0.015374996
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2015,0.320370496,0.895564243,0.050727504
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2017,0.116467284,0.363974626,0.015883326
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2017,0.338256138,1.055861181,0.046130833
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2018,0.123948472,0.394635195,0.016314154
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2018,0.33892199,1.076571309,0.044840877
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2019,0.13058689,0.496063783,0.014673619
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,1,Number,2019,0.333826674,1.274691415,0.037502383
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1992,2.87158528,10.0637587,0.183810047
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1992,23.78624053,82.92811121,1.483031196
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1991,1.741704329,6.487199206,0.078827621
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1991,14.8682082,54.41343747,0.716319863
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1990,0.936855549,4.090155012,0.0421622
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1990,7.841749174,34.39293852,0.353508689
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1993,4.279224128,14.51687162,0.343371226
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1993,34.3382426,115.4214515,2.796525411
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1994,5.923207662,20.53641211,0.510449658
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1994,46.33639751,159.9528363,4.102565164
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1996,10.2589368,33.85435767,1.02613834
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1996,76.98113423,255.6381274,7.624203863
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1995,7.775729887,27.43653533,0.577939915
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1995,59.70121487,210.8225204,4.532030154
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1997,13.6231345,45.72865637,1.58241208
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1997,99.52291626,332.8111119,11.5510365
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1998,17.54829391,57.55092819,2.17523609
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1998,125.3320792,425.3750683,14.50394059
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1999,21.63587441,71.08950454,2.643964288
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,1999,151.9214441,508.8225311,18.34551406
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2001,28.91726349,97.60236725,3.484824896
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2001,198.816023,677.4693574,23.79143526
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2000,25.37210119,88.71455482,2.63079376
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2000,176.0660427,629.3401005,18.65316186
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2002,32.49169857,104.6884391,4.378602681
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2002,221.5758545,696.4787127,29.81267642
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2003,35.62840181,114.5396816,5.120577155
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2003,241.3467965,758.2324068,33.94338962
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2005,38.73235161,133.5064285,4.386532766
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2005,260.1932975,901.930428,29.06783233
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2004,37.85769252,124.7160257,5.015574538
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2004,255.1425163,838.6000041,33.96897726
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2006,37.94225891,125.6713868,4.851826031
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2006,251.2042485,817.5002603,31.8491537
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2007,35.83935341,110.8418453,5.230597925
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2007,228.8325919,719.0513016,33.17766355
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2008,32.99845227,97.85011696,4.975717234
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2008,199.3699339,598.054029,29.98542541
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2009,29.99846321,87.5485215,4.716102408
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2009,169.0764123,497.3056827,26.82067693
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2011,24.93741379,69.67345856,4.509840857
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2011,121.5619691,337.6190265,22.0217152
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2010,27.382017,79.41457531,4.299895935
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2010,143.7746091,418.0610655,22.465106
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2013,20.13566475,52.26509129,4.105359109
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2013,79.6163234,205.0159959,16.6243523
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2012,22.40102147,58.81085063,4.450497235
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2012,99.18623266,260.6591006,19.90779922
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2014,18.46844093,48.44805529,3.622318259
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2014,65.30991264,169.1471801,13.19645518
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2016,18.41893036,52.97101171,2.901113333
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2016,57.15700868,165.6508178,8.943836463
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2015,17.69287793,49.57344127,2.79925056
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2015,58.35194728,163.4818147,9.249066225
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2017,19.50573722,60.96355717,2.660710895
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2017,56.65501506,177.215944,7.744353818
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2018,19.95519896,63.53300234,2.641401869
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2018,54.71466452,173.2562119,7.215451162
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2019,20.24143568,77.17319191,2.275371792
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,1,Number,2019,51.74632407,197.7491324,5.817884025
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1992,321.8812549,370.410249,280.0902069
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1992,2616.750459,3040.346791,2143.549792
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1991,256.6966189,294.3066814,222.3880798
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1991,2111.547669,2437.124876,1738.195118
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1990,189.9097284,218.1448111,163.4328344
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1990,1579.801961,1814.591937,1359.460491
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1993,385.0404856,442.1175097,334.6219221
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1993,3088.455487,3610.573341,2516.943529
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1994,446.4510052,514.3035032,386.1958549
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1994,3525.56471,4155.426833,2736.079462
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1996,575.5245747,660.72512,497.4980905
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1996,4358.551944,5197.888634,3215.483766
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1995,507.0756931,584.8247773,437.9716094
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1995,3931.317256,4654.958162,2900.819267
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1997,655.1882625,750.3192247,567.1958548
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1997,4835.925562,5787.380117,3542.226278
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1998,737.1129724,844.8509164,634.5728011
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1998,5321.667261,6389.492663,3933.471065
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1999,809.8354823,931.4291625,693.7157109
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,1999,5758.578716,6942.172865,4226.758878
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2001,888.2647981,1021.621912,759.315366
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2001,6269.854609,7461.572265,4906.719229
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2000,858.9355727,990.5564303,731.3789149
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2000,6072.283289,7302.065683,4531.637319
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2002,910.3291131,1045.054287,779.3445596
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2002,6399.849891,7514.891235,5146.483649
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2003,924.6742687,1059.369988,790.8536972
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2003,6458.368644,7530.729608,5323.800577
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2005,931.4802554,1066.20841,784.3390296
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2005,6375.677723,7323.304957,5327.686469
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2004,931.516398,1064.301218,788.9135816
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2004,6447.826015,7465.95742,5371.494862
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2006,921.1905178,1049.315799,781.7452037
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2006,6164.28849,6990.899623,5256.175781
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2007,899.3233838,1026.671754,768.7868708
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2007,5778.39264,6557.557859,4996.279198
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2008,869.4955052,991.0807989,745.6219127
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2008,5287.155142,5993.293884,4544.980768
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2009,835.5928927,956.1272448,710.8768818
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2009,4760.882743,5435.263428,4058.301925
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2011,765.6918831,881.2933121,650.3946782
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2011,3773.712155,4341.527842,3205.653225
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2010,801.306288,920.9138804,674.4515481
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2010,4265.567527,4901.452721,3590.752531
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2013,696.3250313,802.3285799,593.8662112
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2013,2795.763544,3217.131822,2394.499633
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2012,729.245832,839.2714573,618.3055907
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2012,3262.962477,3749.793472,2775.625318
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2014,670.8972311,775.7631302,570.9020107
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2014,2423.684536,2797.994445,2064.745241
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2016,666.9140882,772.8566634,564.918303
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2016,2079.946215,2410.377879,1761.987851
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2015,656.280839,762.1172624,557.0032217
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2015,2189.450296,2542.417739,1859.605643
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2017,679.1366079,790.6268093,573.6741269
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2017,1988.820508,2314.767747,1679.982504
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2018,664.5104454,770.8457294,562.3332214
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2018,1833.91339,2127.780841,1549.781479
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2019,631.1899204,736.8859491,526.9335553
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,1,Number,2019,1621.002802,1892.359976,1353.891841
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1990,0,0,0
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1990,0,0,0
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1991,0.000399006,0.001241403,5.22E-05
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1991,0.000417786,0.001563724,3.64E-05
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1992,0.001542639,0.004312864,0.000233208
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1992,0.001591958,0.005350485,0.000161887
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1993,0.003339595,0.009588271,0.000501181
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1993,0.00339382,0.011238094,0.000337833
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1994,0.005698083,0.017927628,0.00075099
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1994,0.005696337,0.020799681,0.0004813
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1996,0.013594822,0.047739308,0.001216943
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1996,0.012174942,0.051677235,0.000792771
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1995,0.008542683,0.030944878,0.000582681
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1995,0.008388889,0.037517236,0.000397901
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1998,0.034735468,0.121713134,0.003715318
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1998,0.026392731,0.107721839,0.002112169
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1997,0.022420957,0.078898043,0.002254885
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1997,0.018047098,0.076060646,0.001321421
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1999,0.050175307,0.171031398,0.005555468
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,1999,0.037630761,0.16219505,0.003097165
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2000,0.06816195,0.239327736,0.006643377
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2000,0.052138418,0.240667606,0.003803885
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2001,0.092502104,0.310512358,0.010238496
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2001,0.080040315,0.350879702,0.00659989
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2002,0.125146069,0.445445903,0.014716159
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2002,0.127769356,0.528626214,0.011199664
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2003,0.162157975,0.548757822,0.019206585
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2003,0.189086331,0.734161751,0.016077895
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2004,0.199144254,0.679504395,0.023525848
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2004,0.256645469,1.004711394,0.022397285
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2005,0.231569169,0.803286154,0.024629014
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2005,0.322605797,1.31674796,0.026084963
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2008,0.299839283,0.892626589,0.04391159
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2008,0.563221424,1.778194904,0.071989955
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2006,0.257616576,0.832222857,0.032169048
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2006,0.395676431,1.377666687,0.040659777
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2007,0.279739151,0.859688265,0.037892876
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2007,0.480582157,1.523170566,0.05750797
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2009,0.319917801,0.972944482,0.04723238
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2009,0.630360784,1.942759995,0.08502287
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2011,0.369778929,1.063303501,0.06135131
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2011,0.68629381,2.026902528,0.109764448
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2010,0.34190835,1.065881357,0.047084298
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2010,0.670203046,2.133272555,0.089670736
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2013,0.440233828,1.164015425,0.078855918
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2013,0.695359802,1.949584604,0.11966836
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2012,0.403785779,1.125082551,0.070322986
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2012,0.692792316,1.930196571,0.113699635
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2014,0.475974176,1.257259422,0.083678116
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2014,0.699233073,1.948704288,0.11748472
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2016,0.543870009,1.590956995,0.081406885
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2016,0.737050375,2.116779136,0.105969895
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2015,0.508006617,1.440687426,0.078164956
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2015,0.708971872,2.034695104,0.105893665
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2017,0.578522394,1.79005352,0.075162953
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2017,0.78389003,2.51867012,0.095830024
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2018,0.604728358,2.007230947,0.074029445
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2018,0.846484306,2.777021939,0.10001513
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2019,0.627830127,2.321246223,0.063393505
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,947,Extensively drug-resistant tuberculosis,1,Number,2019,0.927010721,3.286298773,0.094699952
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1990,3.240565135,14.51566263,0.13354538
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1990,8.404430976,39.47876191,0.315064214
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1991,4.229854012,16.91805405,0.223320176
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1991,8.646560764,36.46595242,0.391806534
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1992,5.658831573,20.75429967,0.36003017
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1992,9.140752361,37.95518797,0.494803822
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1993,7.462786184,26.94232709,0.533919312
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1993,9.846565091,39.15694911,0.590464844
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1994,9.584766699,33.83719672,0.710602388
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1994,10.73126765,49.25184064,0.557874429
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1996,15.00714057,52.55415027,1.328252073
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1996,13.21226794,56.50482421,0.830721659
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1995,11.98535588,43.43453197,0.818574761
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1995,11.76939446,52.6231861,0.558657796
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1998,23.87826338,83.16953371,2.472183406
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1998,18.42636397,73.98108771,1.409090686
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1997,18.99272118,66.37096312,1.853836655
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1997,15.39606983,63.99042634,1.07667795
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1999,29.55256105,100.7095002,3.250814605
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,1999,22.4028675,96.10280548,1.804602924
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2000,35.82150451,125.6617019,3.47953356
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2000,27.39805772,126.3647171,1.995748925
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2001,43.50736446,146.1579898,4.830345123
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2001,36.62205205,161.4125327,3.068720261
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2002,52.69597753,188.4688908,6.192417058
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2002,51.7092912,215.3173461,4.585753695
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2003,61.97715995,209.7177322,7.291783293
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2003,70.01684031,273.7109299,5.983806165
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2004,69.84455521,240.2099987,8.219783996
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2004,88.55079295,350.2978142,7.682758284
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2005,74.79370559,259.1193456,7.969929218
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2005,104.2025827,424.9912735,8.445509617
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2008,78.90111708,235.4521615,11.5137524
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2008,147.6033251,455.6533708,18.92165242
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2006,77.11506965,248.2449928,9.666307313
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2006,118.8511827,410.0894737,12.24340922
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2007,78.34878787,240.5545331,10.65207564
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2007,134.3614922,418.5475141,16.1047425
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2009,79.20422374,241.0415282,11.66041274
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2009,155.7045356,472.5568686,21.14285235
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2011,81.27872326,233.6286091,13.47174324
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2011,151.0610965,453.1743324,23.75165404
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2010,79.67280026,248.9095881,10.99432444
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2010,156.1609543,497.3032673,20.92317171
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2013,87.50993526,233.3325142,15.12183663
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2013,138.3154654,391.7864423,22.98185753
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2012,84.17431091,238.6334743,14.27177134
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2012,144.7250292,413.0837822,23.37874617
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2014,90.53522498,240.1247629,15.55024501
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2014,132.8403672,371.3001119,21.71920496
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2016,94.69390098,277.5079171,14.44490261
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2016,128.8268558,370.4578782,18.70704093
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2015,92.51982257,262.1438057,14.20252143
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2015,129.1252202,370.2262331,19.29012804
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2017,96.88623143,299.5016263,12.57811107
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2017,131.2911754,421.7368347,16.06729487
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2018,97.5966428,323.2304761,11.87823395
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2018,136.1146086,446.7809904,16.06068644
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2019,97.30754924,359.7026555,9.805969649
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,1,Number,2019,143.6831201,509.2680813,14.66255889
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1990,812.5156669,1246.468747,450.2898953
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1990,2088.087883,3507.372619,873.758457
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1991,834.1512288,1284.119906,457.141224
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1991,1760.985123,3160.335788,735.8774009
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1992,860.3332144,1346.278482,464.488547
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1992,1453.311223,2890.488157,572.5322871
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1993,891.1027325,1416.146555,465.632398
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1993,1196.832065,2661.407372,438.856114
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1994,927.0586967,1473.526127,473.8696603
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1994,1023.048299,2537.782932,351.0670455
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1996,1030.158472,1663.995563,483.3402913
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1996,979.1175193,2565.08625,341.6315396
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1995,969.2832533,1554.687858,467.5318831
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1995,963.122868,2490.156627,323.9424491
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1999,1367.909118,2234.890138,644.4395939
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1999,1122.012489,3102.529916,464.7799695
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1998,1234.922626,2012.128674,593.341791
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1998,1060.251943,2847.440099,417.7026789
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1997,1120.216391,1827.758387,540.1341168
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,1997,1011.837032,2652.063309,371.9082263
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2001,1658.148139,2655.640207,793.6145035
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2001,1376.520115,3782.521898,552.593861
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2000,1510.239744,2447.660988,710.82217
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2000,1193.425797,3462.985671,507.9663915
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2002,1809.795013,2875.783776,896.2155616
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2002,1739.849511,4352.91887,583.3706527
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2003,1961.726395,3099.500592,982.1663601
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2003,2221.202994,5129.745009,613.7427909
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2004,2111.123329,3313.460494,1072.642142
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2004,2748.276012,5879.656453,639.9751978
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2005,2255.663913,3543.881995,1166.830302
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2005,3244.376385,6677.540236,661.5088651
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2008,2631.610763,3996.977857,1410.899023
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2008,5032.126702,8823.616665,1775.835547
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2006,2388.709176,3674.066702,1243.888351
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2006,3781.948054,7291.110249,865.1361078
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2007,2511.20407,3813.164616,1330.846693
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2007,4414.088322,8125.301526,1265.122279
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2009,2758.972573,4206.643338,1515.869209
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2009,5534.085353,9449.273952,2270.07742
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2010,2901.909404,4410.359221,1635.411751
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2010,5828.888074,9754.557251,2548.051586
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2011,3157.70654,4731.616277,1812.348772
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2011,5980.967463,9595.25999,2865.125324
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2013,3922.483396,5696.5657,2328.319284
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2013,6153.211391,9430.709363,3291.93113
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2012,3536.57011,5098.616819,2060.183205
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2012,6093.871822,9543.571122,3064.093939
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2014,4211.230361,6112.584446,2531.53681
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2014,6148.664441,9374.235795,3382.997787
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2016,4267.293037,6179.405531,2555.070695
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2016,5896.824223,8947.468183,3179.999535
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2015,4304.280042,6319.514217,2569.187849
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2015,6069.110408,9254.844685,3306.073438
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2017,4228.275459,6067.963691,2566.640807
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2017,5752.371014,8990.034583,3011.384478
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2018,4079.683743,5795.829546,2459.650291
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2018,5699.058664,8802.681068,3017.442055
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2019,3798.443369,5731.090717,2200.313163
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,934,Drug-susceptible tuberculosis,1,Number,2019,5681.482019,8918.722532,2990.19902
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1992,1437.146649,3163.692066,439.3249267
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1992,11872.88214,20275.38145,6306.003975
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1991,855.9239063,1938.348613,259.7793856
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1991,7115.627102,12286.13702,3628.974885
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1990,485.1626748,1109.127452,143.0002656
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1990,4034.703344,7117.16794,2038.495815
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1993,2259.38585,5082.131826,706.6363886
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1993,18519.66172,31878.1025,10208.23599
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1994,3310.681123,7447.675438,996.0747037
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1994,26915.86132,45537.28306,14891.42526
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1996,5821.922185,13171.18501,1621.350642
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1996,46265.55255,73874.88056,27115.25979
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1995,4537.375647,10294.4497,1277.506459
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1995,36521.16684,60637.7232,20601.65825
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1999,8759.508425,20003.35487,2205.257666
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1999,66670.12047,97319.84139,41796.14322
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1997,7017.395255,16119.09783,1939.665305
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1997,54930.28528,83932.56022,32819.48599
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1998,8007.201937,18107.4509,2093.983717
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,1998,61774.12706,92475.1465,37456.57473
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2001,9494.211811,22031.41188,2394.387101
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2001,70005.00692,100360.2631,44175.65892
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2000,9274.352457,21530.4668,2333.040568
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2000,69492.82218,99389.24086,44099.19424
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2003,9251.199173,20962.35844,2285.153796
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2003,66256.82377,93352.16576,42405.17354
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2002,9424.01864,21682.43325,2371.789512
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2002,68488.17214,96878.60749,43728.19113
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2005,8961.841524,19982.87788,2330.107186
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2005,61707.77375,87078.88284,39890.80243
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2004,9100.203096,20391.32837,2287.040249
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2004,64052.72408,90603.92009,41393.06592
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2006,8804.05853,19198.13931,2422.896655
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2006,59059.81959,83864.42965,38224.26306
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2007,8679.938626,18849.54687,2539.32478
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2007,56529.85648,80024.46502,36345.86156
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2008,8708.109991,18701.85321,2741.63602
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2008,54678.0694,78092.25001,35000.02363
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2009,8916.379261,18278.00208,3109.611245
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2009,53473.56269,76605.08066,34588.27697
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2010,9141.414112,18155.10347,3521.306971
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2010,51685.40382,73840.82936,33337.01676
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2011,9940.061266,18725.73804,4137.661513
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2011,49367.61297,70402.2331,32149.72944
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2013,11907.39914,19892.85945,6841.395004
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2013,47339.10328,67042.24824,29273.29897
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2012,10960.12709,19157.93421,5620.26201
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2012,46866.9449,67564.7838,30269.84293
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2014,12858.264,20261.50944,7883.014212
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2014,46677.83181,65421.03075,30408.21843
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2015,13759.51967,20739.11459,8922.080638
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2015,45889.92513,64014.17611,30100.44179
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2016,14593.78666,20913.76038,9797.213187
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2016,45263.18414,63460.65524,29687.01027
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2018,15783.92904,21729.6723,11369.96022
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2018,43571.62352,63149.80041,28399.74424
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2017,15267.42489,21516.54578,10654.63014
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2017,44699.68363,62900.18337,29208.5337
+5,Prevalence,485,KwaZulu-Natal,1,Male,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2019,16057.20053,21566.00953,11958.60762
+5,Prevalence,485,KwaZulu-Natal,2,Female,8,15-19 years,300,HIV/AIDS resulting in other diseases,1,Number,2019,41231.69664,60019.50815,26968.6961
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,

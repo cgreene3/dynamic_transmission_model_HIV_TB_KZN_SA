@@ -1,0 +1,631 @@
+measure_id,measure_name,location_id,location_name,sex_id,sex_name,age_id,age_name,cause_id,cause_name,metric_id,metric_name,year,val,upper,lower
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1990,3.951941105,7.253950334,2.281227353
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1990,5.731942809,10.29596919,3.458927179
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1990,4.869209406,8.702809829,2.886150514
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1990,0.571213201,2.131991384,0.082938746
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1990,0.413357782,1.505874435,0.06010915
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1990,0.489867339,1.774176647,0.072929199
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1990,0,0,0
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1990,0,0,0
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1990,0,0,0
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1990,3.185559734,5.777738109,1.854160366
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1990,4.622998626,8.233562105,2.811121389
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1990,3.926298986,7.003219103,2.340842723
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1990,0.038638933,0.14991781,0.00455276
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1990,0.056854306,0.221382829,0.006698194
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1990,0.048025657,0.183776089,0.005512371
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1990,0,0,0
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1990,0,0,0
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1990,0,0,0
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1991,7.121549933,12.86087364,4.169461583
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1991,10.35351027,18.34372262,6.335379466
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1991,8.787228134,15.5901051,5.26830696
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1990,57.21039728,68.06494029,49.0244241
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1990,41.31039193,54.49203303,34.38014704
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1990,49.01682597,56.99632554,43.29649259
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1991,57.35239805,68.02544031,49.75887554
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1991,37.40134008,48.40925084,31.03259179
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1991,47.07008055,54.25090364,41.80437935
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1991,0.859634142,2.842405592,0.14658521
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1991,0.561538365,1.861266143,0.093811375
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1991,0.706002418,2.479480096,0.122532382
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1991,0,0,0
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1991,0,0,0
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1991,0,0,0
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1991,5.686611338,10.05214562,3.371215554
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1991,8.27668246,14.28211454,5.103632786
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1991,7.021474565,12.10923663,4.240762564
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1991,0.102981331,0.359072611,0.014095314
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1991,0.151609057,0.537969507,0.02186553
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1991,0.128042945,0.449145482,0.018284159
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1991,0,0,0
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1991,0,0,0
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1991,0,0,0
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1992,57.50165002,67.18097632,51.00719071
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1992,40.7263635,52.8416766,33.42267535
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1992,48.85353503,56.02474295,43.79516383
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1992,12.56514665,22.64538922,7.479661901
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1992,18.09353137,31.7237627,11.0880439
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1992,15.41517885,27.33422826,9.251506425
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1992,1.156407703,3.616542086,0.233573249
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1992,0.817953988,2.484073251,0.162438164
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1992,0.981925637,2.985006962,0.200716901
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1992,0,0,0
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1992,0,0,0
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1992,0,0,0
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1992,9.88928084,17.11237554,5.997110846
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1992,14.26686445,24.14156796,8.824787421
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1992,12.14604387,20.41701726,7.481495356
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1992,0.239362284,0.790380729,0.038428033
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1992,0.348150914,1.103989812,0.059983891
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1992,0.295445772,0.942034481,0.049203974
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1992,0,0,0
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1992,0,0,0
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1992,0,0,0
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1993,21.51482415,40.93108731,12.73999067
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1993,30.73372295,55.29503216,18.59474928
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1993,26.26906988,47.30603026,15.82159643
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1994,35.51335544,69.37593493,20.89939831
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1994,50.3474207,93.50234656,29.88339811
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1994,43.1668642,80.09779211,25.69554421
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1996,87.50185641,172.3785385,49.1845824
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1996,121.6407569,232.2384387,67.90996995
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1996,105.1333209,202.4053753,58.98182963
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1994,51.13342346,60.30034097,44.51908962
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1994,30.5074129,38.37594088,25.77274966
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1994,40.49161019,46.16707764,35.85967308
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1994,1.415093507,3.659546699,0.370023929
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1994,0.843247342,2.374817374,0.230791401
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1994,1.120054382,2.948462783,0.313602126
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1994,0.001419575,0.004030445,0.000364574
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1994,0.000846703,0.002479938,0.000224326
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1994,0.001124007,0.003212942,0.000299339
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1994,25.583149,39.74790416,16.24811779
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1994,36.51131978,56.39050142,23.49879572
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1994,31.221445,48.1184861,20.08881877
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1994,0.852774374,2.433618909,0.202566646
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1994,1.219492687,3.468889419,0.289641114
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1994,1.041979542,2.917020289,0.252478827
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1994,0.000856496,0.00265119,0.00019053
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1994,0.001225127,0.003771346,0.000289209
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1994,0.001046688,0.003255374,0.000246009
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1993,51.71820794,61.2184115,44.96507311
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1993,30.87418353,39.67727599,25.88638034
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1993,40.96880975,47.41142884,36.27043387
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1993,1.261507057,3.715019244,0.294156337
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1993,0.754360874,2.147641055,0.174495937
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1993,0.999968491,2.906392205,0.247395219
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1993,0.000632766,0.001959826,0.000145845
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1993,0.000378446,0.001176674,8.57E-05
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1993,0.000501611,0.00158028,0.000115232
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1993,16.29913638,26.74260161,10.1589982
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1993,23.41287548,38.08796501,14.65893522
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1993,19.96773764,32.08060523,12.50982557
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1993,0.479532029,1.445274811,0.096455567
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1993,0.69229461,2.108442484,0.140635922
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1993,0.589255068,1.788020067,0.12108724
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1993,0.000240736,0.000745396,4.55E-05
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1993,0.000347662,0.001102743,6.86E-05
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1993,0.000295879,0.000952098,5.58E-05
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1995,56.96798476,113.506892,32.65771981
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1995,80.08122235,154.1320361,46.36876373
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1995,68.90090948,131.1694517,40.10273322
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1996,50.98001527,58.63139678,45.121931
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1996,18.63891792,23.59742161,15.11487917
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1996,34.27704884,38.73975814,30.02386789
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1995,1.586313123,4.095726249,0.49811366
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1995,0.70162181,1.833658125,0.215308103
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1995,1.129563833,2.879099929,0.347681624
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1995,0.002387543,0.006335318,0.000703373
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1995,0.001056507,0.002772573,0.000314285
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1995,0.001700355,0.004423232,0.000508848
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1995,37.42879051,56.42115007,24.88737956
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1995,53.01275606,78.35563198,35.56897906
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1995,45.47449536,67.93489968,30.50948181
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1995,1.352351265,3.689053749,0.366123887
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1995,1.913734815,5.222972678,0.517274245
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1995,1.642182908,4.439564269,0.44634245
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1995,0.002036895,0.005804902,0.000520144
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1995,0.00288304,0.007971823,0.000771815
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1995,0.002473744,0.006820101,0.000655648
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1995,52.64940872,60.73493656,46.34692807
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1995,23.55343687,29.96369621,19.83931203
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1995,37.62771215,42.47198897,33.18799035
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1997,2.014211278,4.549274722,0.735477038
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1997,0.774098763,1.761558083,0.256575387
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1997,1.373335251,3.084480597,0.490657972
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1997,0.005051468,0.0120803,0.001723699
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1997,0.001940846,0.004512082,0.000622805
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1997,0.003443934,0.008083449,0.001168146
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1996,1.62174145,3.693631709,0.562340691
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1996,0.5836668,1.437553821,0.19091042
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1996,1.085614743,2.529887001,0.373031959
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1996,0.003253109,0.007837377,0.001056736
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1996,0.001169907,0.002905412,0.000381287
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1996,0.002177213,0.005263138,0.0007222
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1996,51.5172844,74.22473812,34.76151457
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1996,72.26053028,103.922459,49.22552821
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1996,62.23039459,89.13208665,42.40542399
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1996,1.956173086,4.85612154,0.57756465
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1996,2.737331831,6.957082553,0.816813648
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1996,2.359612343,5.991944704,0.705593698
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1996,0.003924204,0.009947929,0.001123211
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1996,0.005491746,0.013606178,0.001610478
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1996,0.004733781,0.011599902,0.001401463
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1997,123.1543881,239.1060396,68.64252136
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1997,170.2819217,320.4599611,94.12419501
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1997,147.5093608,280.3883916,82.19722961
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1997,71.35766969,103.239769,47.60595966
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1997,99.61162992,144.0572211,67.18570797
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1997,85.95899461,123.9349137,58.11273862
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1997,2.992451798,7.015210409,0.907655928
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1997,4.156704492,9.804426117,1.333863218
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1997,3.594124333,8.404146385,1.143129459
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1997,0.007504559,0.018262887,0.002199789
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1997,0.010425082,0.025373214,0.003127469
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1997,0.009013852,0.021679617,0.002668902
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1998,166.2123494,313.7523496,93.89452028
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1998,228.7151998,421.856477,124.8339836
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1998,198.542905,367.9171346,109.972811
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2000,268.2817866,484.2588345,151.6516472
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2000,370.7914636,651.8416741,199.4644777
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2000,321.4110892,566.6433144,180.1398202
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1998,66.10647329,72.58977185,60.38523376
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1998,24.28565381,28.71588038,20.66177457
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1998,44.47401461,48.90217844,40.52714588
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1999,65.41879996,72.44642903,59.18769453
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1999,27.27246285,32.19048125,22.49864101
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1999,45.6662504,50.56597398,41.0411959
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1998,2.621814291,6.049121669,0.897187064
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1998,0.952816713,2.253273199,0.305652722
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1998,1.75849976,4.081055039,0.606989991
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1998,0.007893211,0.018608509,0.00260629
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1998,0.002868105,0.006943744,0.000898269
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1998,0.005293898,0.012633461,0.001755451
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1998,92.80262334,134.2027779,61.66505287
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1998,130.1352012,187.1076437,86.91829361
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1998,112.1134704,161.7321992,74.77104159
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1998,4.410600791,10.6568769,1.282532531
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1998,6.132632851,14.14257151,1.902752023
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1998,5.301348219,12.1037591,1.600616779
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1998,0.013288703,0.033266863,0.003638525
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1998,0.018477828,0.044831195,0.005270807
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1998,0.015972857,0.03844546,0.00456494
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1999,217.0935328,398.8766147,121.7635497
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1999,299.1110457,538.9000496,160.3766567
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,1999,259.5630098,469.3709617,143.4483528
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1997,57.42921044,64.81665506,52.47467383
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1997,22.21580458,26.1608423,18.93618735
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,1997,39.23132327,43.45951824,35.76377029
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2000,71.83157463,79.56632993,63.72765102
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2000,34.39388311,40.67693745,28.22046865
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2000,52.42815343,58.28265407,45.88160858
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1999,3.061640297,7.421162065,1.022733929
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1999,1.262554841,3.191854026,0.396366718
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,1999,2.130056105,5.142952404,0.70285602
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1999,0.010773903,0.027288618,0.0034155
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1999,0.004441435,0.011125747,0.001320174
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,1999,0.007494889,0.018458289,0.002343586
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1999,112.1193724,163.6067458,70.90754009
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1999,158.1136874,228.5261896,101.0350274
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,1999,135.9356823,197.175908,86.8570806
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1999,6.294269979,16.16721799,1.680510864
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1999,8.774556566,22.03813107,2.517716347
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,1999,7.578586835,19.00782273,2.142415161
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1999,0.022150602,0.058006426,0.005805559
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1999,0.030884684,0.080961395,0.00834355
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,1999,0.026673196,0.070687217,0.007252628
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2001,4.767231697,12.6848026,1.434241262
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2001,2.372561093,6.168377594,0.69684729
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2001,3.526378481,9.347956467,1.054429941
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2001,0.021634433,0.06073453,0.006221903
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2001,0.010759182,0.031282597,0.002966353
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2001,0.015999173,0.043849222,0.004557165
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2001,148.9150723,217.8673289,91.44292706
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2001,213.4364058,309.0506376,132.400496
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2001,182.3482736,263.3452828,113.2346754
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2001,11.9364264,34.15620606,3.127923819
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2001,16.87860204,48.54853452,4.630579134
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2001,14.49732748,42.1561486,3.932932775
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2001,0.054115248,0.156496206,0.013960061
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2001,0.076558924,0.220512257,0.020054084
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2001,0.065744951,0.189598612,0.017032875
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2000,4.085688721,10.63231046,1.291912098
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2000,1.931019213,5.120001083,0.568474701
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2000,2.968954267,8.048370103,0.920424421
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2000,0.016450871,0.043372449,0.004863083
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2000,0.007776835,0.02130075,0.002231988
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2000,0.011955242,0.032076789,0.003535121
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2000,132.6391549,192.8823331,83.98830011
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2000,188.6609369,272.5888014,119.8025059
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2000,161.674445,232.6587969,102.6915268
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2000,9.068122015,25.31607318,2.295923916
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2000,12.71940386,35.30745984,3.411301201
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2000,10.96052928,30.69322441,2.826696348
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2000,0.036508747,0.101942553,0.009445506
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2000,0.051225671,0.14725693,0.013389925
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2000,0.044136319,0.125327553,0.011651988
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2003,82.80281285,92.31621278,71.13237041
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2003,49.76371345,62.10774128,39.53526047
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2003,65.72564017,74.99623398,56.03161573
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2001,320.4204897,569.4166529,181.0618471
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2001,444.7962715,765.6031591,239.8240787
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2001,384.8686391,659.0912525,214.5997276
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2004,420.6637839,699.4453509,247.7732581
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2004,603.3075081,973.5347445,350.9840971
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2004,514.8703172,828.7107767,306.3992306
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2001,71.61727244,79.49012837,61.81973475
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2001,36.34768546,44.31147502,29.1470473
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2001,53.34153114,60.23455844,45.69877194
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2003,394.0746887,670.3188998,227.6465219
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2003,557.9718712,918.7841344,314.9702213
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2003,478.7894823,787.1391148,277.3987883
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2002,76.52150623,85.74376616,66.30988446
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2002,42.94541734,53.01133881,33.91069235
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2002,59.13959163,67.27155133,50.3194426
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2003,6.203113507,15.91186847,1.939948447
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2003,3.668589113,9.162656421,1.102579308
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2003,4.893074447,12.14952649,1.548922605
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2003,0.034433426,0.090842284,0.010598507
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2003,0.020338075,0.055015004,0.005812791
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2003,0.027147854,0.072063928,0.008194925
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2002,361.4367114,623.8479637,206.0990591
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2002,506.1277579,851.3572111,278.5985261
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2002,436.3414277,732.6627487,248.4535051
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2003,188.0392074,270.1540314,115.2817339
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2003,276.0292186,392.6400526,171.8953331
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2003,233.5192793,334.1365572,143.5835416
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2003,17.00892932,43.3211047,4.541338019
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2003,24.6564299,63.66903083,6.982022595
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2003,20.9617516,53.03690798,5.786181092
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2003,0.094354462,0.263320773,0.023153044
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2003,0.136850422,0.396140684,0.035131822
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2003,0.116319675,0.326585471,0.030556868
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2004,85.48982778,95.99578859,74.19099721
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2004,53.63537555,67.84241244,41.48449796
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2004,69.0594931,79.54187102,58.79198154
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2002,5.562344902,14.57403357,1.785600334
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2002,3.064634158,7.93832214,0.904353321
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2002,4.269311786,10.85352587,1.338771581
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2002,0.028048224,0.077419209,0.008641797
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2002,0.015454305,0.04257903,0.004403184
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2002,0.021528512,0.059435737,0.00651586
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2002,168.5831536,246.1519931,101.9407456
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2002,244.2794904,352.5320291,148.7913575
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2002,207.7701853,300.6057532,126.6102418
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2002,14.77299788,39.23041916,4.104687381
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2002,21.13267453,56.33425911,5.977651007
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2002,18.06532167,47.4262512,5.130193812
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2002,0.074465592,0.209276401,0.018452843
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2002,0.106581753,0.300584773,0.02756072
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2002,0.091091721,0.258725142,0.023301914
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2005,6.592608925,16.65534931,1.9738554
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2005,4.013275471,10.4924874,1.126720072
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2005,5.265510507,13.45744534,1.548671838
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2005,0.043256457,0.11839123,0.012357524
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2005,0.026317619,0.072501916,0.007143561
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2005,0.034541219,0.094060606,0.009685328
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2006,439.0889967,712.4943546,269.0336301
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2006,634.1352191,970.7690865,398.6839001
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2006,539.1729578,817.0885295,340.1095399
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2005,436.4425499,714.5574101,262.438326
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2005,630.4965626,991.5763659,379.1176543
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2005,536.2856985,836.2029778,327.5657133
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2004,6.479069851,16.39253694,2.060840519
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2004,4.014612272,10.36149979,1.158353677
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2004,5.207917469,12.92361219,1.627946146
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2004,0.039232214,0.110370539,0.011728188
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2004,0.02428777,0.064341394,0.006684796
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2004,0.03152396,0.084084983,0.009288623
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2004,201.0339784,288.7028681,123.7613311
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2004,299.4151013,422.1722373,185.16248
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2004,251.7783693,356.953159,155.4340638
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2004,18.40361357,47.75203223,4.791279054
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2004,27.08082302,70.42821576,7.263243762
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2004,22.87926596,60.05513624,6.043567535
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2004,0.111395336,0.323753348,0.027502217
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2004,0.164007662,0.468867555,0.041600903
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2004,0.138532457,0.39479683,0.035195182
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2006,87.80028953,98.62121344,75.86171196
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2006,52.42308464,67.26273493,40.12306191
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2006,69.64720379,81.4668388,58.15915532
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2005,208.5333898,295.9608796,127.6298836
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2005,313.5159836,437.7417183,193.6761036
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2005,262.5482106,369.1964466,161.7613153
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2005,19.17296592,51.85798238,4.933715944
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2005,28.49789301,75.81626334,7.443936816
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2005,23.97075427,63.94405708,6.316888622
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2005,0.125721727,0.36045068,0.030780337
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2005,0.186988449,0.533667107,0.04627093
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2005,0.1572442,0.445898813,0.03901349
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2006,6.651990736,16.53036625,1.915876289
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2006,3.9407607,10.10919491,1.111769328
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2006,5.260778755,12.99503483,1.522788418
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2006,0.047012621,0.125581887,0.012618393
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2006,0.027799394,0.075140455,0.007187681
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2006,0.037153748,0.100610178,0.010021413
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2006,211.100499,295.3307081,130.5235033
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2006,317.9642521,439.8063516,198.3058768
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2006,265.935438,366.5948622,165.5133499
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2006,19.30347173,49.61400306,4.792261115
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2006,28.74464017,75.0499486,7.408185464
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2006,24.14801331,62.42622704,6.173906855
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2006,0.136342459,0.399740567,0.032313645
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2006,0.203177192,0.583310084,0.050183182
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2006,0.170637329,0.496190874,0.041477251
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2007,431.0998417,690.5664965,269.0349902
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2007,617.1148852,924.5725463,399.7876244
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2007,526.2892753,785.832166,342.0349528
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2005,86.60491092,96.90007468,74.80881153
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2005,53.3525431,68.62471835,41.72550225
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2005,69.49616344,80.94354891,58.66198593
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2007,6.167297418,15.40214939,1.798141621
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2007,3.345620945,8.746318678,0.942023873
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2007,4.723361592,11.87634493,1.358776579
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2007,0.046719804,0.122649997,0.012576334
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2007,0.025312657,0.065139993,0.006727997
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2007,0.035765129,0.093816554,0.009748346
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2007,203.9437326,283.8590326,125.1923439
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2007,304.0418691,416.2423391,187.5454423
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2007,255.166928,349.602974,157.10028
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2007,18.39157902,47.28532265,4.62020901
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2007,27.10065188,68.04306015,7.087275914
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2007,22.84827078,57.75422926,5.888084218
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2007,0.139213804,0.383574899,0.031670487
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2007,0.205335523,0.584599307,0.047652754
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2007,0.173050255,0.48017872,0.039794842
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2007,82.20836692,92.32841329,71.06899503
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2007,44.99542186,59.15319666,33.62461175
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2007,63.16539546,74.33053151,52.8922958
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2010,359.513908,580.5062385,234.4211652
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2010,490.9475821,727.6957191,347.2213034
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2010,426.2231949,636.032877,301.366788
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2010,4.02836969,9.307822916,1.329063701
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2010,1.953693696,4.485888696,0.608533203
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2010,2.975365906,6.779586869,0.967662437
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2010,0.036657228,0.08878631,0.010960144
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2010,0.017760264,0.041799822,0.005251272
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2010,0.027066056,0.064268501,0.008337984
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2010,164.8386913,230.1942088,99.64154096
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2010,232.5069367,319.2116638,140.5547232
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2010,199.1837739,273.5474813,120.4132739
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2010,12.76097965,29.05194505,3.84479194
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2010,17.809568,40.31884127,5.665137211
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2010,15.32339549,34.47715649,4.75872511
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2010,0.116032175,0.27563326,0.03142732
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2010,0.16219545,0.390524693,0.044177915
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2010,0.13946239,0.33620784,0.038106194
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2010,62.16771721,70.74721474,54.15995642
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2010,30.35596793,40.28416713,22.69750879
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2010,46.02163346,54.55470426,38.96739887
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2008,411.8788845,656.1966226,263.8200733
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2008,581.2982328,860.9526452,393.4124042
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2008,498.340559,739.3954399,339.271356
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2009,70.35348555,79.96183587,61.3732622
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2009,35.20622174,46.13873524,26.06706662
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2009,52.46506736,61.89212584,44.02673447
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2009,5.010430251,11.79586275,1.559693531
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2009,2.494037278,5.926456398,0.737373377
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2009,3.72969642,8.882873706,1.14633166
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2009,0.04305911,0.108316301,0.012079888
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2009,0.021422879,0.051897325,0.00592671
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2009,0.032047216,0.078850829,0.008769598
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2009,177.5808489,246.8000908,107.8178497
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2009,255.2024411,349.2670326,155.0124748
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2009,217.0868403,297.0143537,131.8378472
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2009,15.14778042,35.90099125,4.188164462
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2009,21.52482641,51.38163609,6.261524956
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2009,18.39341758,43.6188955,5.231233172
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2009,0.130061484,0.320001309,0.032264071
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2009,0.185079231,0.481482412,0.046333367
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2009,0.158063108,0.400388424,0.040120243
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2011,331.811503,539.0065,217.2619744
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2011,439.752749,653.3540812,308.8298321
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2011,386.4431027,574.531004,277.0631208
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2012,299.2425948,489.6173215,191.6456317
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2012,379.588943,567.0215277,266.3249314
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2012,339.7937055,506.8106935,241.8449899
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2008,77.05778053,86.9818759,66.80610597
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2008,40.20373955,53.30301333,29.76075523
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2008,58.24964483,68.73818704,48.72922471
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2009,386.1880167,617.326466,252.3371306
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2009,535.4118872,789.3754041,376.8507536
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2009,462.1364323,685.759075,321.4472556
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2011,3.142395844,6.723859534,1.142878188
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2011,1.397857084,3.143692189,0.482181765
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2011,2.259443806,4.932143708,0.800122314
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2011,0.030157799,0.070208292,0.010033378
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2011,0.013403928,0.030738842,0.004399942
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2011,0.021678272,0.049466215,0.007312915
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2011,52.63219666,60.81926372,45.81896847
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2011,23.60172498,31.5339434,17.6617472
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2011,37.93919314,45.20264477,31.92148769
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2012,46.9178655,54.65876186,40.41198204
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2012,20.270929,26.81479253,15.46415947
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2012,33.46905427,39.63619079,28.27922715
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2011,147.4778055,208.4296086,88.15672095
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2011,201.2898571,279.1994672,120.3081658
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2011,174.7133486,242.5130748,104.2868188
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2011,10.51424089,23.11334128,3.307251297
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2011,14.18327521,31.07796478,4.46283661
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2011,12.37122533,26.60828797,3.874785276
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2011,0.10088054,0.226730096,0.029265102
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2011,0.136314985,0.306740472,0.039103258
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2011,0.118814745,0.267344617,0.03446705
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2008,5.665681005,14.22042471,1.665080961
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2008,2.938639792,7.262931454,0.843447097
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2008,4.273959504,10.92174686,1.250502447
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2008,0.045804023,0.117885509,0.012431934
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2008,0.023736962,0.060870876,0.006498012
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2008,0.034542293,0.086873879,0.009146251
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2008,191.7048692,266.1553601,117.2169914
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2008,281.0023191,385.2917904,171.9819311
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2008,237.2770375,326.1879153,145.2292947
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2008,16.91200146,41.15678238,4.341821227
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2008,24.50449149,61.09224362,6.352601304
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2008,20.78676198,51.40273086,5.388611483
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2008,0.136593309,0.359035307,0.03290812
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2008,0.198151339,0.533035561,0.048055662
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2008,0.168008908,0.445650769,0.040381624
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2012,2.632987663,5.338904664,1.014706746
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2012,1.120375199,2.402131199,0.423881132
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2012,1.869566341,3.827430271,0.715559217
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2012,0.026581835,0.058766223,0.009559482
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2012,0.01130121,0.024773054,0.004037755
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2012,0.018869645,0.041437694,0.006861272
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2012,130.359706,186.15357,77.7593313
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2012,169.7492964,236.9140786,101.1061236
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2012,150.2397836,209.8230558,89.59581355
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2012,8.720033452,18.43140496,2.954894473
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2012,11.20689801,23.73192668,3.809902106
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2012,9.975163551,21.34048688,3.423455836
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2012,0.088005174,0.195748444,0.026581004
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2012,0.113290707,0.247808417,0.034478869
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2012,0.100766879,0.224456365,0.03048108
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2014,260.6811555,441.7912675,161.2618436
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2014,323.9917933,514.1123882,214.9866298
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2014,292.4633479,457.0427301,201.2433651
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2014,2.090942217,3.963963099,0.892209397
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2014,0.819982428,1.642410767,0.34807389
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2014,1.452915338,2.770631636,0.631294413
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2014,0.023163123,0.046095064,0.009440694
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2014,0.009080009,0.018989146,0.003591448
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2014,0.016093344,0.03249689,0.006550898
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2014,105.7386761,152.4206068,63.08326022
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2014,134.9913048,189.9982633,80.45669514
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2014,120.4236123,170.8055238,71.80473308
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2014,6.539426404,13.42700646,2.52029267
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2014,8.21259814,16.53836891,3.088800999
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2014,7.379365283,14.67567264,2.824416751
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2014,0.072460583,0.153300784,0.024680903
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2014,0.091121378,0.193525539,0.030635863
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2014,0.081828376,0.173206304,0.027897158
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2015,264.060447,455.7995952,157.4795818
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2015,323.5525769,517.7953592,209.7634141
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2015,293.8513332,462.4011328,198.3614788
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2015,38.01229881,44.92197853,32.37048694
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2015,13.67623589,17.874077,10.58954636
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2015,25.8259326,30.72159074,22.03646635
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2014,40.3141191,47.17352301,34.98303853
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2014,16.2193855,20.79488723,12.64018135
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2014,28.21846682,33.28760197,24.14648478
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2015,1.984717088,3.826615994,0.867859535
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2015,0.694687966,1.425377744,0.283130291
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2015,1.338730621,2.60815885,0.574763921
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2015,0.022981265,0.046938768,0.009177707
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2015,0.008037218,0.01708704,0.002968219
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2015,0.015497983,0.031490884,0.006102089
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2015,102.0550085,149.2342158,60.61348747
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2015,128.6112799,183.3249854,76.49485622
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2015,115.3531517,164.5557939,68.61095541
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2015,6.359487754,12.93009989,2.393220866
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2015,7.871692664,15.80270293,2.960536857
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2015,7.116729502,14.30609241,2.688968852
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2015,0.073621607,0.159680907,0.02538374
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2015,0.091241143,0.201128027,0.032366408
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2015,0.08244465,0.179988622,0.028883492
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2013,42.96336849,50.59369211,37.34899149
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2013,17.9519434,23.24030704,13.88460344
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2013,30.37437315,36.07314262,25.96942272
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2013,273.6724575,454.2780893,173.1692368
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2013,340.0313397,525.7951451,231.7315515
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2013,307.0728597,472.1350788,214.91814
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2013,2.290566078,4.509439756,0.950407115
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2013,0.935905684,1.920753766,0.376710684
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2013,1.608725146,3.165349598,0.668343197
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2013,0.024242171,0.048693032,0.009501333
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2013,0.009894998,0.021668819,0.003829071
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2013,0.017020811,0.034708116,0.00662764
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2013,115.6888859,165.6959137,68.9826469
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2013,147.3290929,208.1095354,87.65285597
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2013,131.6143446,186.0091869,78.36207099
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2013,7.353778179,15.0067464,2.736636872
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2013,9.226847608,18.42681914,3.296561881
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2013,8.296549821,16.84504563,3.033370747
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2013,0.077849377,0.16519358,0.024828764
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2013,0.09782564,0.206758464,0.030527099
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2013,0.087904026,0.186034321,0.027926788
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2017,34.81332667,41.81282695,29.01933446
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2017,10.88852836,15.01434105,7.903195087
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2017,22.88309939,27.46322853,18.90009623
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2017,1.907020225,4.161391332,0.675411756
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2017,0.578964091,1.324745351,0.188238939
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2017,1.244778007,2.693487262,0.432573387
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2017,0.02398662,0.05640256,0.007977607
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2017,0.007279658,0.017827055,0.00222647
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2017,0.015655605,0.036864468,0.005100023
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2017,98.54528124,147.5384771,57.70486647
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2017,114.7378636,169.2003717,66.79419373
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2017,106.6197981,155.99155,62.23730761
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2017,6.466858034,15.10200555,1.974166086
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2017,7.347983463,16.95105639,2.235433308
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2017,6.906235891,16.02771142,2.112271911
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2017,0.081328694,0.204198426,0.02299403
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2017,0.092523823,0.234323767,0.026487662
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2017,0.086911204,0.217762014,0.024696648
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2018,246.1261,404.0214983,149.6105011
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2018,282.1637893,420.898213,188.6652478
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2018,264.0677926,390.8152196,181.1905822
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2018,36.11719469,42.53359243,30.01890796
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2018,12.6472438,17.35411603,8.804631095
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2018,24.43246541,29.42600048,20.06212118
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2016,281.9420937,487.3831285,164.6666531
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2016,331.8287585,523.8760723,212.917568
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2016,306.8664721,478.1321172,203.373204
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2016,35.23497191,42.08530921,29.67628144
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2016,11.49998705,15.59405793,8.645530414
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2016,23.37649738,28.20936758,19.74307524
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2017,280.6374142,470.4284401,162.9588159
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2017,319.2303973,491.1224372,207.2291619
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2017,299.8820094,452.6467467,200.6625442
+1,Deaths,196,South Africa,1,Male,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2019,223.3478105,368.7092783,137.9955854
+1,Deaths,196,South Africa,2,Female,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2019,261.1021894,389.9989869,175.4065759
+1,Deaths,196,South Africa,3,Both,24,15-49 years,300,HIV/AIDS resulting in other diseases,3,Rate,2019,242.1191511,358.4238238,165.7585365
+1,Deaths,196,South Africa,1,Male,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2019,36.50131482,43.34962812,30.65075739
+1,Deaths,196,South Africa,2,Female,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2019,13.56504581,18.54572198,9.503307148
+1,Deaths,196,South Africa,3,Both,24,15-49 years,934,Drug-susceptible tuberculosis,3,Rate,2019,25.09748487,29.89034295,20.72753499
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2019,2.172323527,5.38214549,0.616953428
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2019,0.784181599,2.124920384,0.207509098
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2019,1.482144384,3.804403813,0.415380372
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2019,0.029459119,0.077764323,0.007946984
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2019,0.010633277,0.029382424,0.002776054
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2019,0.020098979,0.053986173,0.005333927
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2019,78.30551584,117.1197119,45.48245003
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2019,93.96930278,139.459389,54.50398813
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2019,86.09349402,125.4539414,49.96792612
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2019,5.6546523,14.92224115,1.351655629
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2019,6.58374127,17.13113885,1.5854828
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2019,6.116591973,16.10870224,1.468095506
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2019,0.076696161,0.223225688,0.017488366
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2019,0.089399779,0.262881613,0.020623329
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2019,0.083012353,0.241353154,0.019147643
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2016,1.87616588,3.806762401,0.747725723
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2016,0.591303991,1.272007134,0.223797501
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2016,1.234223108,2.499607611,0.494479261
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2016,0.022646216,0.048771696,0.008168551
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2016,0.007142524,0.01637224,0.002503174
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2016,0.014900261,0.032670246,0.005353789
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2016,102.4377555,151.1955887,60.35219609
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2016,123.7337139,180.0598598,72.74339495
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2016,113.0776435,163.7016747,66.50491332
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2016,6.495475568,14.39868448,2.208237737
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2016,7.68227542,16.70948974,2.62706855
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2016,7.088424579,15.55518414,2.400312682
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2016,0.07843933,0.18065082,0.024111347
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2016,0.092885833,0.216107232,0.02918098
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2016,0.085657093,0.195660799,0.026544997
+1,Deaths,196,South Africa,1,Male,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2018,2.054455813,4.951191064,0.642034649
+1,Deaths,196,South Africa,2,Female,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2018,0.698176262,1.673922705,0.21622064
+1,Deaths,196,South Africa,3,Both,24,15-49 years,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2018,1.379219659,3.259015486,0.429500871
+1,Deaths,196,South Africa,1,Male,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2018,0.02685912,0.066903968,0.008128069
+1,Deaths,196,South Africa,2,Female,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2018,0.009124307,0.023299929,0.002529233
+1,Deaths,196,South Africa,3,Both,24,15-49 years,947,Extensively drug-resistant tuberculosis,3,Rate,2018,0.018029681,0.046348686,0.005301309
+1,Deaths,196,South Africa,1,Male,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2018,86.29295877,128.8711724,50.21446836
+1,Deaths,196,South Africa,2,Female,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2018,101.3246259,149.1621351,58.95928724
+1,Deaths,196,South Africa,3,Both,24,15-49 years,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2018,93.77661146,137.1894977,54.4178433
+1,Deaths,196,South Africa,1,Male,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2018,5.923011581,14.67436645,1.581506078
+1,Deaths,196,South Africa,2,Female,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2018,6.767853049,16.83525686,1.83847083
+1,Deaths,196,South Africa,3,Both,24,15-49 years,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2018,6.343623618,15.67972139,1.711431711
+1,Deaths,196,South Africa,1,Male,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2018,0.077436074,0.215138259,0.020282355
+1,Deaths,196,South Africa,2,Female,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2018,0.088585906,0.241950126,0.022933528
+1,Deaths,196,South Africa,3,Both,24,15-49 years,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2018,0.082987119,0.22793442,0.021618764
