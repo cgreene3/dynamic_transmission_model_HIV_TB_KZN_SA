@@ -1,9 +1,10 @@
 # Impact of Isoniazid Preventive Therapy for HIV-Infected Adults in South Africa: A Compartmental Epidemiological Model
 
-This  compartmental  model  evaluates  the  impacts  of  different  strategies  to  provide  isoniazid preventive therapy (IPT) to prevent tuberculosis (TB) among people living with HIV (PLHIV). The model was developed in the context of rural KwaZulu-Natal,  South Africa for the Delivery Optimization for Antiretroviral Therapy study (DO ART). This model was adapted from Dowdy, David W., et al. (2014) who developed a similar model for application in Rio de Janeiro, Brazil. The appendix is stored in the documentation folder.
+We introduce a compartmental model that evaluates the impacts of community based antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) to prevent tuberculosis (TB) cases and deaths compared to the standard of care. The model was developed in the context of rural KwaZulu-Natal, South Africa for the Delivery Optimization for Antiretroviral Therapy study (DO ART). The appendix is stored in the documentation folder.
 
-Make sure you have the epi_model_HIV_TB.Rproj open, otherwise you will need to change the working directory manually.
+In order to run the code you need to download the following packages:
 
-If you would like to use your own parameter files, you can simply update the data input files in the param_files folder:
-- If you want to update the calibration parameters you can update Calibration_parameters.xlsx
-- If you want to update the epi model parameter you can update Epi_model_parameters.xlsx
+1. test
+2. test
+
+$N_t$

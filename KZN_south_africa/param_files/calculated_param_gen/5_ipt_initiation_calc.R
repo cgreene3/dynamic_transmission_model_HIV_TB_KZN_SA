@@ -6,14 +6,16 @@ rm(list = ls())
 gc()
 
 #load packages
-sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr', 'normalr'), require, character.only=T)
+sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
+
+#'normalr'
 
 #Need to set project (upper R corner of screen) 
 #to epi_model_HIV_TB/KZN_south_africa for here to work
 indir<-paste0(here(), '/param_files/calculated_param_gen/input_data/DO_ART')
 
 #update parameter file
-outdir <- paste0(here(),'/param_files/')
+outdir <- paste0(here(),'/param_files/input_parameters')
 
 setwd(indir)
 IPT_scenario_df<-read.csv('IPT_initiation_scenario_ref.csv')
@@ -231,6 +233,11 @@ ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'female', 2, 'no', 
                            policy_3_IPT_coverage_male_not_on_art$ipt_init_perc, 
                            3))
+
+#now assume all on IPT also on ART
+ipt_initiation_df<-ipt_initiation_df%>%
+  filter(on_art == "yes")%>%
+  select(-c(on_art))
 
 setwd(outdir)
 write.csv(ipt_initiation_df, 'ipt_initiation_df.csv')

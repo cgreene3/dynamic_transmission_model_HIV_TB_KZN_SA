@@ -6,14 +6,16 @@ rm(list = ls())
 gc()
 
 #load packages
-sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr', 'normalr'), require, character.only=T)
+sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
+
+#, 'normalr'
 
 #Need to set project (upper R corner of screen) 
 #to epi_model_HIV_TB for here to work
 indir<-paste0(here(), '/param_files/calculated_param_gen/input_data/DO_ART')
 
 #update parameter file
-outdir <- paste0(here(),'/param_files/')
+outdir <- paste0(here(),'/param_files/input_parameters')
 
 setwd(indir)
 art_scenario_ref_df<-read.csv('art_coverage_scenario_ref.csv')

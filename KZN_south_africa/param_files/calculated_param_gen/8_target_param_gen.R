@@ -20,7 +20,7 @@ calib_years <-c(2005, 2017)
 setwd(indir)
 
 #get popestimates
-pop_df<-read.csv('pop_estimates.csv')
+pop_df<-read.csv('pop_estimates_all_ages.csv')
 
 #input mortality rate calibration targets
 TB_mort_num_df<-read.csv('disease_mort_num_pulled_2_22_22.csv')

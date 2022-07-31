@@ -12,12 +12,12 @@ sapply(c('here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.
 
 #Need to set project (upper R corner of screen) to KZN_south_africa for here to work
 indir <- paste0(here(),'/param_files/calculated_param_gen/input_data/GBD')
-outdir <- paste0(here(),'/param_files')
+outdir <- paste0(here(),'/param_files/input_parameters')
 
 setwd(indir)
 
 #read in pop estimates
-pop_df<-read.csv('pop_estimates.csv')
+pop_df<-read.csv('pop_estimates_all_ages.csv')
 
 #read in incidence rate df
 hiv_inc_df<-read.csv('HIV_inc_num_pulled_2_22_22.csv')%>%
@@ -75,12 +75,12 @@ female_1980_1989_df<-data.frame(year = 1989:1980,
                               sex = rep('Female', times = length(1980:1989)))
 female_1980_1989_df$val = female_vals
 
-hiv_inc_df<-rbind(hiv_inc_df,
-                  female_1980_1989_df,
-                  male_1980_1989_df)
+hiv_inc_df2<-rbind(data.frame(hiv_inc_df),
+                   data.frame(female_1980_1989_df),
+                              data.frame(male_1980_1989_df))
 
-hiv_inc_df$max = hiv_inc_df$val*1.25
-hiv_inc_df$min = hiv_inc_df$val*.75
+hiv_inc_df2$max = hiv_inc_df2$val*1.25
+hiv_inc_df2$min = hiv_inc_df2$val*.75
 
 setwd(outdir)
-write.csv(hiv_inc_df, 'hiv_inc_df.csv', row.names = FALSE)
+write.csv(hiv_inc_df2, 'hiv_inc_df.csv', row.names = FALSE)
