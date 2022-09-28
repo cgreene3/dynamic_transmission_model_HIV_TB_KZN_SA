@@ -3,8 +3,7 @@ rm(list = ls())
 gc()
 
 #generates histograms of accepted parameter values
-#can be used to generate a re-fitted sample to a beta distribution (still between same min and max)
-##NEEDS TO BE FIXED!!!##
+#used to assess calibrated parameter value ranges fit
 
 library(readxl)
 library(here)
@@ -24,7 +23,7 @@ set.seed(as.integer(1))
 outdir_sample <- paste0(here(),'/param_files/input_parameters')
 indir_params <- paste0(here(),'/param_files/calculated_param_gen/input_data')
 outdir_graphs <-paste0(here(),'/param_files/distribution_of_accepted_points_graphs')
-indir_calib_analysis<-paste0(here(), '/calibration_analysis/sept_27/calibration_analysis')
+indir_calib_analysis<-paste0(here(), '/calibration_analysis/')
 
 setwd(indir_calib_analysis)
 best_results_df_plot_dist<-read.csv('best_results_df_plot_dist.csv')%>%
@@ -59,12 +58,13 @@ for (mp in model_params_df$model_matched_param){
     
     setwd(outdir_graphs)
     png(file=paste0(mp, '.jpg'))
+    
     hist(selected_vals_temp,
          main = mp,
-         xlim = c(min_temp*.9, max_temp*1.1),
+         #xlim = c(min_temp, max_temp),
          freq = FALSE,
          xlab = "value",
-         breaks = 6)
+         breaks = 10)
     dev.off()
   #   
   #   #range01 <- function(x){(x-min_temp)/(max_temp-min_temp)} #so can fit to beta dist
