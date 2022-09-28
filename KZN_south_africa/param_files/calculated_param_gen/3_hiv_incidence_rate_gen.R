@@ -3,6 +3,11 @@
 #(num HIV incidence)/pop estimate = incidence rate by gender
 #KZN population estimates
 
+#scales up linearly between 1980-1990 
+#(when hiv incidence estimates don't exist from GBD)
+#GBD from 1990-2017
+#scales down according to reduced incidence projections from DO ART HPV-HIV model
+
 #clean workspace
 rm(list = ls())
 gc()
@@ -11,11 +16,12 @@ gc()
 sapply(c('here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
 
 #Need to set project (upper R corner of screen) to KZN_south_africa for here to work
-indir <- paste0(here(),'/param_files/calculated_param_gen/input_data/GBD')
+indir_GBD <- paste0(here(),'/param_files/calculated_param_gen/input_data/GBD')
+indir_DOART<- paste0(here(), '/param_files/calculated_param_gen/input_data/DO_ART')
 outdir <- paste0(here(),'/param_files/input_parameters')
 graph_outdir<-paste0(here(),'/param_files/dynamic_param_graphs')
 
-setwd(indir)
+setwd(indir_GBD)
 
 #read in pop estimates
 pop_df<-read.csv('pop_estimates_all_ages.csv')
@@ -77,17 +83,147 @@ hiv_inc_df2<-rbind.data.frame(as.data.frame(hiv_inc_df),
                    as.data.frame(female_1980_1989_df),
                               as.data.frame(male_1980_1989_df))
 
-hiv_inc_df2$max = hiv_inc_df2$val*1.25
-hiv_inc_df2$min = hiv_inc_df2$val*.75
+hiv_inc_df2$policy_id <- 1
+
+hiv_inc_df2<-hiv_inc_df2%>%
+  filter(year <= 2017)
+
+#projections from 2018 to 2028 (evaluation years)
+GBD_2017_female_val<-hiv_inc_df2%>%
+  filter(sex == 'Female',
+         year == 2017)
+
+GBD_2017_male_val<-hiv_inc_df2%>%
+  filter(sex == 'Male',
+         year == 2017)
+
+setwd(indir_DOART)
+incidence_do_art_df_SOC<-readxl::read_excel('incidence_est.xlsx', sheet = 'option_1')%>%
+  filter(year > 2017)%>%
+  select(c('year', 'sex', 'Percent_Decrease_SOC'))%>%
+  arrange(sex, year)%>%
+  group_by(sex)%>%
+  mutate(cum_perc_decrease = if_else(year == 2018, 
+                                     1+Percent_Decrease_SOC,
+                                     cumprod(1+Percent_Decrease_SOC)))%>%
+  mutate(val = if_else(sex == "Female", 
+                       (cum_perc_decrease*GBD_2017_female_val$val),
+                       (cum_perc_decrease*GBD_2017_male_val$val)))%>%
+  select(c('year', 'sex', 'val'))%>%
+  ungroup()
+
+incidence_do_art_df_SOC$policy_id = 1
+incidence_do_art_df_SOC<-as.data.frame(incidence_do_art_df_SOC)
+
+incidence_do_art_df_DO_ART<-readxl::read_excel('incidence_est.xlsx', sheet = 'option_1')%>%
+  filter(year > 2017)%>%
+  select(c('year', 'sex', 'Percent_Decrease_DO_ART'))%>%
+  arrange(sex, year)%>%
+  group_by(sex)%>%
+  mutate(cum_perc_decrease = if_else(year == 2018, 
+                                     1+Percent_Decrease_DO_ART,
+                                     cumprod(1+Percent_Decrease_DO_ART)))%>%
+  mutate(val = if_else(sex == "Female", 
+                       (cum_perc_decrease*GBD_2017_female_val$val),
+                       (cum_perc_decrease*GBD_2017_male_val$val)))%>%
+  select(c('year', 'sex', 'val'))%>%
+  ungroup()
+
+incidence_do_art_df_DO_ART<-as.data.frame(incidence_do_art_df_DO_ART)
+
+incidence_do_art_df_DO_ART_2<-incidence_do_art_df_DO_ART
+incidence_do_art_df_DO_ART_2$policy_id = 2
+
+incidence_do_art_df_DO_ART_3<-incidence_do_art_df_DO_ART
+incidence_do_art_df_DO_ART_3$policy_id = 3
+
+hiv_inc_df3<-rbind(hiv_inc_df2, incidence_do_art_df_SOC, incidence_do_art_df_DO_ART_2,
+                   incidence_do_art_df_DO_ART_3)
+
+
+hiv_inc_df3$max = hiv_inc_df3$val*1.25
+hiv_inc_df3$min = hiv_inc_df3$val*.75
+
+hiv_inc_df3$policy_id<-as.factor(hiv_inc_df3$policy_id)
+
+#reshape data for ribbon
+hiv_inc_ribbon_graph<-hiv_inc_df3%>%
+  filter(policy_id != 3)%>%
+  mutate(`policy id` = if_else(policy_id == 1, 'Policy 1', 'Policy 2 and 3'))
+
+hiv_inc_ribbon_graph_female<-hiv_inc_ribbon_graph%>%filter(sex == 'Female')
+hiv_inc_ribbon_graph_male<-hiv_inc_ribbon_graph%>%filter(sex == 'Male')
+
+hiv_inc_df_graph_female<-hiv_inc_df3%>%
+  filter(sex == 'Female')%>%
+  select(-c('sex'))
+
+hiv_inc_df_graph_male<-hiv_inc_df3%>%
+  filter(sex == 'Male')%>%
+  select(-c('sex'))
+
+hiv_inc_df_point_graph_female<-melt(hiv_inc_df_graph_female, id = c('year', 'policy_id'))
+hiv_inc_df_point_graph_female<-hiv_inc_df_point_graph_female%>%
+  filter(policy_id != 3)%>%
+  mutate(`policy id` = if_else(policy_id == 1, 'Policy 1', 'Policies 2 and 3'))
+
+hiv_inc_df_point_graph_male<-melt(hiv_inc_df_graph_male, id = c('year', 'policy_id'))
+hiv_inc_df_point_graph_male<-hiv_inc_df_point_graph_male%>%
+  filter(policy_id != 3)%>%
+  mutate(`policy id` = if_else(policy_id == 1, 'Policy 1', 'Policies 2 and 3'))
+
+
+hiv_inc_plot_female<-ggplot()+
+  geom_ribbon(data = hiv_inc_ribbon_graph_female,
+              aes(ymin = min, ymax = max, 
+                  x = year, fill = `policy id`))+
+  scale_fill_manual(values = c("plum2", "purple"), name = "policy id")+
+  geom_point(data = hiv_inc_df_point_graph_female,
+             aes(x = year, y=value, group = variable, shape = variable), 
+             size = 1.5, color = "black")+
+  labs(title=(bquote(atop("HIV incidence rate calibration ranges, Females", 
+                          eta[{"1,2,2"}]~(tau)~~"for"~all~tau~"in"~Year~Y))))+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1980, to = 2030, by = 10))+
+  scale_y_continuous(name = 'HIV incidence rate', limits = c(0, .05), breaks=(seq(0, .05, .01)))+
+  theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        legend.title=element_blank())+
+  scale_shape_manual(values=c(8, 17, 6))+
+  geom_vline(xintercept = 2017, linetype="dashed", 
+             color = "darkgrey", size=1)+
+  annotate("text", x=2009, y=.045, label= "calibration period", size = 5)+
+  annotate("text", x=2024.5, y=.045, label= "evaluation period", size = 5)
+
+hiv_inc_plot_male<-ggplot()+
+  geom_ribbon(data = hiv_inc_ribbon_graph_male,
+              aes(ymin = min, ymax = max, 
+                  x = year, fill = `policy id`))+
+  scale_fill_manual(values = c("darkseagreen1", "darkgreen"), name = "policy id")+
+  geom_point(data = hiv_inc_df_point_graph_male,
+             aes(x = year, y=value, group = variable, shape = variable), 
+             size = 1.5, color = "black")+
+  labs(title=(bquote(atop("HIV incidence rate calibration ranges, Males", 
+                          eta[{"1,2,1"}]~(tau)~~"for"~all~tau~"in"~Year~Y))))+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1980, to = 2030, by = 10))+
+  scale_y_continuous(name = 'HIV incidence rate', limits = c(0, .05), breaks=(seq(0, .05, .01)))+
+  theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        legend.title=element_blank())+
+  scale_shape_manual(values=c(8, 17, 6))+
+  geom_vline(xintercept = 2017, linetype="dashed", 
+             color = "darkgrey", size=1)+
+  annotate("text", x=2009, y=.045, label= "calibration period", size = 5)+
+  annotate("text", x=2024.5, y=.045, label= "evaluation period", size = 5)
 
 setwd(outdir)
-write.csv(hiv_inc_df2, 'hiv_inc_df.csv', row.names = FALSE)
+write.csv(hiv_inc_df3, 'hiv_inc_df.csv', row.names = FALSE)
 
-##assume sigmodal scale up between 1980-1990
-#sigmoid = function(x) {
-#  1 / (1 + exp(-x))
-#}
+setwd(graph_outdir)
+png("hiv_inc_plot_female.png", width = 600, height = 480)
+print(hiv_inc_plot_female)
+dev.off()
 
-#yrs_sigmodal_scale_up<-seq(0, (1990-1980), 1)
-#sogmoid_estimates_perc<-sigmoid(yrs_sigmodal_scale_up)
 
+png("hiv_inc_plot_male.png", width =600, height = 480)
+print(hiv_inc_plot_male)
+dev.off()

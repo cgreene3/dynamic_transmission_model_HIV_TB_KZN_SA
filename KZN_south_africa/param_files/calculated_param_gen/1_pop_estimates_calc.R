@@ -1,6 +1,8 @@
 #Estimates populations every year by gender in KZN
 #Uses GBD
-#15-59
+
+#for 15 - 59 (all ages in model) used for mortality and hiv incidnece estimate
+#15-19 (for calculating aging into model, births perc)
 
 #clean workspace
 rm(list = ls())
