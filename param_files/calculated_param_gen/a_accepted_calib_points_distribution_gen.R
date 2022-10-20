@@ -8,16 +8,9 @@ gc()
 library(readxl)
 library(here)
 library(dplyr)
-library(ExtDist)
-library(lhs)
 library(ggplot2)
 library(stringr)
 library(reshape2)
-
-n_samples <- 100000
-sample_df <- data.frame(matrix(nrow = n_samples, ncol = 0))
-
-set.seed(as.integer(1)) 
 
 #update parameter file
 outdir_sample <- paste0(here(),'/param_files/input_parameters')
@@ -26,8 +19,9 @@ outdir_graphs <-paste0(here(),'/param_files/distribution_of_accepted_points_grap
 indir_calib_analysis<-paste0(here(), '/calibration_analysis/')
 
 setwd(indir_calib_analysis)
-best_results_df_plot_dist<-read.csv('best_results_df_plot_dist.csv')%>%
-  filter(total_in_confidence == 20)
+best_results_df_plot_dist<-read.csv("almost_best_calibration_sets_ref_df.csv")#%>%
+  #filter(total_in_confidence == 20) #change if want to see dist of parameter sets
+#with 18, 19, or 20 in calib targets
 
 setwd(indir_params)
 model_params_df<-read_excel('KZN_SA_model_parameters.xlsx')%>%
@@ -56,16 +50,54 @@ for (mp in model_params_df$model_matched_param){
     #fit to beta distribution
     selected_vals_temp<-unlist(best_results_df_plot_dist%>%select(mp))
     
+    bin_width<-(max_temp-min_temp)/10
+    bins<-seq(min_temp, max_temp, by = bin_width)
+    bins_ref_df<-data.frame(bins)
+    bins_ref_df<-bins_ref_df%>%
+      mutate(bins_array_temp = as.numeric(row.names(bins_ref_df)),
+             bins_avg = bins+(bin_width/2))
+    
+    selected_vals_bin<-rep(0, times = length(selected_vals_temp))
+    
+    #id bin selected vals 
+       for (i in 1:length(selected_vals_temp)){
+         for (b in 1:length(bins)){
+           if (selected_vals_temp[i] >= bins[b]){
+             if (selected_vals_temp[i] < bins[b+1]){
+               selected_vals_bin[i]<-b
+             }
+           }
+         }
+       }
+    
+    
+    selected_vals_temp_df<-data.frame(selected_vals_bin)
+    selected_vals_temp_df<-selected_vals_temp_df%>%
+      mutate(prop_of_total = 1/nrow(selected_vals_temp_df))%>%
+      group_by(selected_vals_bin)%>%
+      summarise(prop_of_total_best = sum(prop_of_total))%>%
+      left_join(bins_ref_df, by = c('selected_vals_bin'='bins_array_temp'))
+    
     setwd(outdir_graphs)
     png(file=paste0(mp, '.jpg'))
-    
-    hist(selected_vals_temp,
-         main = mp,
-         #xlim = c(min_temp, max_temp),
-         freq = FALSE,
-         xlab = "value",
-         breaks = 10)
+    plot(ggplot()+
+           geom_bar(data = selected_vals_temp_df,
+                    aes(y = prop_of_total_best, x = bins_avg),
+                    stat = "identity")+
+           xlim(min_temp, max_temp)+
+           ggtitle(mp)+
+           xlab('Value')+
+           ylab('Density'))
     dev.off()
+    
+    
+    #hist(selected_vals_temp,
+    #     main = mp,
+    #     #xlim = c(min_temp, max_temp),
+    #     freq = FALSE,
+    #     xlab = "value",
+    #     breaks = 10)
+    #dev.off()
   #   
   #   #range01 <- function(x){(x-min_temp)/(max_temp-min_temp)} #so can fit to beta dist
   #   #selected_vals_01<-range01(selected_vals_temp)

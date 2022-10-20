@@ -1,5 +1,5 @@
 #calculated IPT initiations based on linear scale up in warm up (calibration period)
-#in 2018 differentiated by policy
+#in 2018 differentiated by program
 
 #clean workspace
 rm(list = ls())
@@ -35,28 +35,28 @@ n_years_warmup_without_ipt<-15
 n_years_warmup_with_ipt<-13
 
 scale_up_male_yes<-IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+  filter(program_id == 1,
          G_SET == 1,
          on_art == 'yes')
 
 scale_up_male_yes<-(scale_up_male_yes$ipt_init_perc)/n_years_warmup_with_ipt
 
 scale_up_male_no<-IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+  filter(program_id == 1,
          G_SET == 1,
          on_art == 'no')
 
 scale_up_male_no<-(scale_up_male_no$ipt_init_perc)/n_years_warmup_with_ipt
 
 scale_up_female_yes<-IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+  filter(program_id == 1,
          G_SET == 2,
          on_art == 'yes')
 
 scale_up_female_yes<-(scale_up_female_yes$ipt_init_perc)/n_years_warmup_with_ipt
 
 scale_up_female_no<-IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+  filter(program_id == 1,
          G_SET == 2,
          on_art == 'no')
 
@@ -95,143 +95,143 @@ ipt_initiation_df<-ipt_initiation_df%>%
   mutate(ipt_init_perc = (year-2004)*scale_up)%>%
   select(-c('scale_up'))
 
-#baseline (policy 1) in calib period
-ipt_initiation_df$POLICY_ID<-rep(1, times = nrow(ipt_initiation_df))
+#baseline (program 1) in calib period
+ipt_initiation_df$program_id<-rep(1, times = nrow(ipt_initiation_df))
 
-###add in policy info
+###add in program info
 
-###policy 1 on art males###
-policy_1_IPT_coverage_male_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+###program 1 on art males###
+program_1_IPT_coverage_male_on_art = IPT_scenario_df%>%
+  filter(program_id == 1,
          G_SET == 1,
          on_art == 'yes')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'male', 1, 'yes', 
-                           policy_1_IPT_coverage_male_on_art$ipt_init_perc, 
+                           program_1_IPT_coverage_male_on_art$ipt_init_perc, 
                            1))
 
-###policy 1 on art females###
-policy_1_IPT_coverage_female_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+###program 1 on art females###
+program_1_IPT_coverage_female_on_art = IPT_scenario_df%>%
+  filter(program_id == 1,
          G_SET == 2,
          on_art == 'yes')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'female', 2, 'yes', 
-                           policy_1_IPT_coverage_female_on_art$ipt_init_perc, 
+                           program_1_IPT_coverage_female_on_art$ipt_init_perc, 
                            1))
 
-###policy 1 not on art males###
-policy_1_IPT_coverage_male_not_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+###program 1 not on art males###
+program_1_IPT_coverage_male_not_on_art = IPT_scenario_df%>%
+  filter(program_id == 1,
          G_SET == 1,
          on_art == 'no')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'male', 1, 'no', 
-                           policy_1_IPT_coverage_male_not_on_art$ipt_init_perc, 
+                           program_1_IPT_coverage_male_not_on_art$ipt_init_perc, 
                            1))
 
-###policy 1 not on art females###
-policy_1_IPT_coverage_female_not_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 1,
+###program 1 not on art females###
+program_1_IPT_coverage_female_not_on_art = IPT_scenario_df%>%
+  filter(program_id == 1,
          G_SET == 2,
          on_art == 'no')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'female', 2, 'no', 
-                           policy_1_IPT_coverage_male_not_on_art$ipt_init_perc, 
+                           program_1_IPT_coverage_male_not_on_art$ipt_init_perc, 
                            1))
 
-###policy 2
-###policy 2 on art males###
-policy_2_IPT_coverage_male_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 2,
+###program 2
+###program 2 on art males###
+program_2_IPT_coverage_male_on_art = IPT_scenario_df%>%
+  filter(program_id == 2,
          G_SET == 1,
          on_art == 'yes')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'male', 1, 'yes', 
-                           policy_2_IPT_coverage_male_on_art$ipt_init_perc, 
+                           program_2_IPT_coverage_male_on_art$ipt_init_perc, 
                            2))
 
-###policy 2 on art females###
-policy_2_IPT_coverage_female_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 2,
+###program 2 on art females###
+program_2_IPT_coverage_female_on_art = IPT_scenario_df%>%
+  filter(program_id == 2,
          G_SET == 2,
          on_art == 'yes')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'female', 2, 'yes', 
-                           policy_2_IPT_coverage_female_on_art$ipt_init_perc, 
+                           program_2_IPT_coverage_female_on_art$ipt_init_perc, 
                            2))
 
-###policy 2 not on art males###
-policy_2_IPT_coverage_male_not_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 2,
+###program 2 not on art males###
+program_2_IPT_coverage_male_not_on_art = IPT_scenario_df%>%
+  filter(program_id == 2,
          G_SET == 1,
          on_art == 'no')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'male', 1, 'no', 
-                           policy_2_IPT_coverage_male_not_on_art$ipt_init_perc, 
+                           program_2_IPT_coverage_male_not_on_art$ipt_init_perc, 
                            2))
 
-###policy 2 not on art females###
-policy_2_IPT_coverage_female_not_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 2,
+###program 2 not on art females###
+program_2_IPT_coverage_female_not_on_art = IPT_scenario_df%>%
+  filter(program_id == 2,
          G_SET == 2,
          on_art == 'no')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'female', 2, 'no', 
-                           policy_2_IPT_coverage_male_not_on_art$ipt_init_perc, 
+                           program_2_IPT_coverage_male_not_on_art$ipt_init_perc, 
                            2))
 
-###policy 3
-###policy 3 on art males###
-policy_3_IPT_coverage_male_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 3,
+###program 3
+###program 3 on art males###
+program_3_IPT_coverage_male_on_art = IPT_scenario_df%>%
+  filter(program_id == 3,
          G_SET == 1,
          on_art == 'yes')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'male', 1, 'yes', 
-                           policy_3_IPT_coverage_male_on_art$ipt_init_perc, 
+                           program_3_IPT_coverage_male_on_art$ipt_init_perc, 
                            3))
 
-###policy 3 on art females###
-policy_3_IPT_coverage_female_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 3,
+###program 3 on art females###
+program_3_IPT_coverage_female_on_art = IPT_scenario_df%>%
+  filter(program_id == 3,
          G_SET == 2,
          on_art == 'yes')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'female', 2, 'yes', 
-                           policy_3_IPT_coverage_female_on_art$ipt_init_perc, 
+                           program_3_IPT_coverage_female_on_art$ipt_init_perc, 
                            3))
 
-###policy 3 not on art males###
-policy_3_IPT_coverage_male_not_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 3,
+###program 3 not on art males###
+program_3_IPT_coverage_male_not_on_art = IPT_scenario_df%>%
+  filter(program_id == 3,
          G_SET == 1,
          on_art == 'no')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'male', 1, 'no', 
-                           policy_3_IPT_coverage_male_not_on_art$ipt_init_perc, 
+                           program_3_IPT_coverage_male_not_on_art$ipt_init_perc, 
                            3))
 
-###policy 3 not on art females###
-policy_3_IPT_coverage_female_not_on_art = IPT_scenario_df%>%
-  filter(POLICY_ID == 3,
+###program 3 not on art females###
+program_3_IPT_coverage_female_not_on_art = IPT_scenario_df%>%
+  filter(program_id == 3,
          G_SET == 2,
          on_art == 'no')
 
 ipt_initiation_df<-rbind(ipt_initiation_df,
                          c(2018, 'female', 2, 'no', 
-                           policy_3_IPT_coverage_male_not_on_art$ipt_init_perc, 
+                           program_3_IPT_coverage_male_not_on_art$ipt_init_perc, 
                            3))
 
 #now assume all on IPT also on ART

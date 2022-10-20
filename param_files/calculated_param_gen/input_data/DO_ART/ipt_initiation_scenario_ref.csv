@@ -1,4 +1,4 @@
-﻿POLICY_ID,G_SET,on_art,ipt_init_perc
+﻿program_id,G_SET,on_art,ipt_init_perc
 1,1,yes,0.29
 2,1,yes,0.17
 3,1,yes,0.7

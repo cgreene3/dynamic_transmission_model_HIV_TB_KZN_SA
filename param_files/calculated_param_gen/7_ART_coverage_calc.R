@@ -25,13 +25,13 @@ n_years_warmup_without_art<-14
 n_years_warmup_with_art<-14
 
 scale_up_male<-art_scenario_ref_df%>%
-  filter(POLICY_ID == 1,
+  filter(program_id == 1,
          G_SET == 1)
 
 scale_up_male<-(scale_up_male$art_coverage)/n_years_warmup_with_art
 
 scale_up_female<-art_scenario_ref_df%>%
-  filter(POLICY_ID == 1,
+  filter(program_id == 1,
          G_SET == 2)
 
 scale_up_female<-(scale_up_female$art_coverage)/n_years_warmup_with_art
@@ -53,50 +53,50 @@ art_coverage_df<-art_coverage_df%>%
                                                         ((n_years_warmup_with_art)*scale_up_male),
                                                         ((n_years_warmup_with_art)*scale_up_female))))))
 
-art_coverage_df$policy_id<-rep(1, times = nrow(art_coverage_df))
+art_coverage_df$program_id<-rep(1, times = nrow(art_coverage_df))
 
 
 #add in information from other policies
 
 #p2 males
 policy_2_art_coverage_male<-art_scenario_ref_df%>%
-  filter(POLICY_ID == 2,
+  filter(program_id == 2,
          G_SET == 1)
 
 art_coverage_df<-rbind(art_coverage_df, 
                        data.frame(year = 2018, sex = 'Male', 
                                   art_coverage = policy_2_art_coverage_male$art_coverage,
-                                  policy_id = 2))
+                                  program_id = 2))
 
 #p2 females
 policy_2_art_coverage_female<-art_scenario_ref_df%>%
-  filter(POLICY_ID == 2,
+  filter(program_id == 2,
          G_SET == 2)
 
 art_coverage_df<-rbind(art_coverage_df, 
                        data.frame(year = 2018, sex = 'Female', 
                                   art_coverage = policy_2_art_coverage_female$art_coverage,
-                                  policy_id = 2))
+                                  program_id = 2))
 
 #p3 males
 policy_3_art_coverage_male<-art_scenario_ref_df%>%
-  filter(POLICY_ID == 3,
+  filter(program_id == 3,
          G_SET == 1)
 
 art_coverage_df<-rbind(art_coverage_df, 
                        data.frame(year = 2018, sex = 'Male', 
                                   art_coverage = policy_3_art_coverage_male$art_coverage,
-                                  policy_id = 3))
+                                  program_id = 3))
 
 #p3 females
 policy_3_art_coverage_female<-art_scenario_ref_df%>%
-  filter(POLICY_ID == 3,
+  filter(program_id == 3,
          G_SET == 2)
 
 art_coverage_df<-rbind(art_coverage_df, 
                        data.frame(year = 2018, sex = 'Female', 
                                   art_coverage = policy_2_art_coverage_female$art_coverage,
-                                  policy_id = 3))
+                                  program_id = 3))
 
 
 setwd(outdir)

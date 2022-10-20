@@ -17,15 +17,15 @@ graph_outdir<-paste0(here(),'/param_files/dynamic_param_graphs')
 
 setwd(indir)
 #read in pop estimates
-pop_df<-read.csv('pop_estimates_all_ages.csv')
+pop_df<-read.csv('pop_estimates_15_59.csv')
 
 #read in all cause mort num and summarise
-all_cause_mort_df<-read.csv('all_cause_mort_num_rate_pulled_2_22_22.csv')%>%
+all_cause_mort_df<-read.csv('all_cause_mort_num_rate.csv')%>%
   filter(metric == 'Number')%>%
   group_by(year, sex)%>%
   summarise(all_cause_val = sum(val))
 
-disease_mort_df<-read.csv('disease_mort_num_pulled_2_22_22.csv')%>%
+disease_mort_df<-read.csv('disease_mort_num.csv')%>%
   group_by(year, sex)%>%
   summarise(disease_val = sum(val))
 
@@ -62,56 +62,88 @@ base_mort_df_graph_male<-base_mort_df%>%
   filter(sex == 'Male')%>%
   select(-c('sex'))
 
-base_mort_df_graph_male<-melt(base_mort_df_graph_male, id = c('year'))
-  
-baseline_mort_plot_male<-ggplot()+
-  geom_ribbon(data = base_mort_df%>%filter(sex == 'Male'),
-              aes(ymin = min, ymax = max, x = year), fill = "darkseagreen1")+
-  #geom_line(data = base_mort_df%>%filter(sex == 'Male'), aes(x = year, y = val), color = 'darkgreen', size = .5)+
-  geom_point(data = base_mort_df_graph_male,
-             aes(x=year, y=value, group = variable, shape = variable), size = 1.5, color = 'black')+
-  labs(title=(bquote(atop("Baseline mortality rate calibration ranges, Males",
-                          mu[{1}]^{BASELINE}~(tau)~~"for"~all~tau~"in"~Year~Y))))+
-  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
-  scale_y_continuous(name = 'baseline mortality rate', limits = c(0, .012), breaks=(seq(0, .012, .003)))+
-  theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank())+
-  scale_shape_manual(values=c(8, 17, 6))+
+#without max/min
+baseline_mort_plot_male<-ggplot(data=base_mort_df_graph_male, 
+       aes(x=year, y=val, group=1)) +
+  geom_line(color="grey", size = 1)+
+  geom_point(color="#228B22", size = 2)+
   geom_vline(xintercept = 2017, linetype="dashed", 
              color = "darkgrey", size=1)+
   annotate("text", x=2010, y=.011, label= "calibration period", size = 5.5)+
-  annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)
+  annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)+
+  labs(title=(bquote(atop("Baseline mortality rate values, Males"))))+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+  scale_y_continuous(name = bquote(atop(mu[{1}]^{VAL}~(Y))), limits = c(0, .012), breaks=(seq(0, .012, .003)))+
+  theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank(),
+        plot.title = element_text(hjust = 0.5))
+# with max/min
+# base_mort_df_graph_male<-melt(base_mort_df_graph_male, id = c('year'))
+#   
+# baseline_mort_plot_male<-ggplot()+
+#   geom_ribbon(data = base_mort_df%>%filter(sex == 'Male'),
+#               aes(ymin = min, ymax = max, x = year), fill = "darkseagreen1")+
+#   #geom_line(data = base_mort_df%>%filter(sex == 'Male'), aes(x = year, y = val), color = 'darkgreen', size = .5)+
+#   geom_point(data = base_mort_df_graph_male,
+#              aes(x=year, y=value, group = variable, shape = variable), size = 1.5, color = 'black')+
+#   labs(title=(bquote(atop("Baseline mortality rate calibration ranges, Males",
+#                           mu[{1}]^{BASELINE}~(tau)~~"for"~all~tau~"in"~Year~Y))))+
+#   scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+#   scale_y_continuous(name = 'baseline mortality rate', limits = c(0, .012), breaks=(seq(0, .012, .003)))+
+#   theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank())+
+#   scale_shape_manual(values=c(8, 17, 6))+
+#   geom_vline(xintercept = 2017, linetype="dashed", 
+#              color = "darkgrey", size=1)+
+#   annotate("text", x=2010, y=.011, label= "calibration period", size = 5.5)+
+#   annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)
 
 base_mort_df_graph_female<-base_mort_df%>%
   filter(sex == 'Female')%>%
   select(-c('sex'))
 
-base_mort_df_graph_female<-melt(base_mort_df_graph_female, id = c('year'))
-
-baseline_mort_plot_female<-ggplot()+
-  geom_ribbon(data = base_mort_df%>%filter(sex == 'Female'),
-              aes(ymin = min, ymax = max, x = year), fill = "plum2")+
-  geom_point(data = base_mort_df_graph_female,
-             aes(x=year, y=value, group = variable, shape = variable), size = 1.5, color = 'black')+
-  labs(title=(bquote(atop("Baseline mortality rate calibration ranges, Females",
-                          mu[{2}]^{BASELINE}~(tau)~~"for"~all~tau~"in"~Year~Y))))+
-  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
-  scale_y_continuous(name = 'baseline mortality rate', limits = c(0, .012), breaks=(seq(0, .012, .003)))+
-  theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.title=element_blank())+
-  scale_shape_manual(values=c(8, 17, 6))+
+baseline_mort_plot_female<-ggplot(data=base_mort_df_graph_female, 
+                                aes(x=year, y=val, group=1)) +
+  geom_line(color="grey", size = 1)+
+  geom_point(color="#8B008B", size = 2)+
   geom_vline(xintercept = 2017, linetype="dashed", 
              color = "darkgrey", size=1)+
   annotate("text", x=2010, y=.011, label= "calibration period", size = 5.5)+
-  annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)
+  annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)+
+  labs(title=(bquote(atop("Baseline mortality rate values, Females"))))+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+  scale_y_continuous(name = bquote(atop(mu[{2}]^{VAL}~(Y))), limits = c(0, .012), breaks=(seq(0, .012, .003)))+
+  theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank(),
+        plot.title = element_text(hjust = 0.5))
+
+# base_mort_df_graph_female<-melt(base_mort_df_graph_female, id = c('year'))
+# 
+# baseline_mort_plot_female<-ggplot()+
+#   geom_ribbon(data = base_mort_df%>%filter(sex == 'Female'),
+#               aes(ymin = min, ymax = max, x = year), fill = "plum2")+
+#   geom_point(data = base_mort_df_graph_female,
+#              aes(x=year, y=value, group = variable, shape = variable), size = 1.5, color = 'black')+
+#   labs(title=(bquote(atop("Baseline mortality rate calibration ranges, Females",
+#                           mu[{2}]^{BASELINE}~(tau)~~"for"~all~tau~"in"~Year~Y))))+
+#   scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+#   scale_y_continuous(name = 'baseline mortality rate', limits = c(0, .012), breaks=(seq(0, .012, .003)))+
+#   theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#         legend.title=element_blank())+
+#   scale_shape_manual(values=c(8, 17, 6))+
+#   geom_vline(xintercept = 2017, linetype="dashed", 
+#              color = "darkgrey", size=1)+
+#   annotate("text", x=2010, y=.011, label= "calibration period", size = 5.5)+
+#   annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)
 
 setwd(graph_outdir)
 
-png("baseline_mort_plot_male.png", width = 540, height = 480)
+png("baseline_mort_plot_male.png", width = 540, height = 440)
 print(baseline_mort_plot_male)
 dev.off()
 
-png("baseline_mort_plot_female.png", width = 540, height = 480)
+png("baseline_mort_plot_female.png", width = 540, height = 440)
 print(baseline_mort_plot_female)
 dev.off()
+
