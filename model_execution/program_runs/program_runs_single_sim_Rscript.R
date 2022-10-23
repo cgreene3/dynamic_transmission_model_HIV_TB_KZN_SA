@@ -624,10 +624,8 @@ tb_hiv_prog_calibration_model <- function(time, N_t_r_h_g, parms){
   FOI_2_g <- array(0, dim = length(G_SET))
   
   for (g in G_SET){
-    FOI_1_g[g]<-FOI_1_g[g]<-((beta_g[g]*(phi_h[1]*N_t_r_h_g[N_t_r_h_g_ref[6, 1, 1, g]])+
-                                (phi_h[2]*N_t_r_h_g[N_t_r_h_g_ref[6, 1, 2, g]])+
-                                (phi_h[3]*N_t_r_h_g[N_t_r_h_g_ref[6, 1, 3, g]])+
-                                (phi_h[4]*N_t_r_h_g[N_t_r_h_g_ref[6, 1, 4, g]]))/100000)
+    FOI_1_g[g]<-(beta_g[g]*(sum((phi_h)*N_t_r_h_g[N_t_r_h_g_ref[6, 1, HIV_SET,g]])/
+                              sum(N_t_r_h_g[1:128])))
   }
   
   for (g in G_SET){
