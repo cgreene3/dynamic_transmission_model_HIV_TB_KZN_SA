@@ -53,76 +53,105 @@ for (i in 2:length(all_files_in_outdir)){
 display.brewer.pal(n = 10, name = "Paired")
 colors_for_graphs <- brewer.pal(n = 10, name = "Paired")
 
-colors_for_calib_graph_fill_tb<-colors_for_graphs[c(1, 3, 5, 7)]
-colors_for_calib_graph_line_tb<-colors_for_graphs[c(2, 4, 6, 8)]
+colors_model_projections_fill<-colors_for_graphs[c(7, 9, 3)] #orange, purple, green
+colors_model_projections_line<-c("#d95f02", "#7570b3", "#1b9e77")
 
-colors_for_calib_graph_fill_hiv<-colors_for_graphs[c(7, 9)]
-colors_for_calib_graph_line_hiv<-colors_for_graphs[c(8, 10)]
+colors_GBD_estimates_line<-colors_for_graphs[c(2)]
 
 ###calibration graphs####
 outputs_combined_df_calibration<-outputs_combined_df%>%
   filter(program_id == 1)%>%
   select(-c('program_id'))
 outputs_combined_df_calibration<-melt(outputs_combined_df_calibration, id = c("year", "sim_id"))
+
 outputs_combined_df_calibration<-outputs_combined_df_calibration%>%
   left_join(graph_ref, by = c('variable'))
 
 outputs_combined_df_calibration$title<-paste0(outputs_combined_df_calibration$measure, 
-                                              outputs_combined_df_calibration$sex, "s")
+                                              outputs_combined_df_calibration$sex, 
+                                              if_else(grepl("Tuberculosis", 
+                                                            outputs_combined_df_calibration$measure),
+                                                      paste0("s and ",
+                                                      outputs_combined_df_calibration$hs), "s"))
+                                          
 
-for(current_measure_eval in unique(outputs_combined_df_calibration$title)){
+for(current_var_eval in unique(outputs_combined_df_calibration$title)){
   
   outputs_df_select<-outputs_combined_df_calibration%>%
-    filter(title == current_measure_eval)
+    filter(title == current_var_eval)
   
-  if(!grepl('hiv', as.character(current_measure_eval), ignore.case = TRUE)){
-    outputs_df_summarised<-outputs_df_select%>%
-      group_by(year, hs)%>%
-      summarise(upper_rate = max(value),
-                lower_rate = min(value),
-                val_rate = mean(value))%>%
-      mutate(group = paste0('Model Projections: ', hs))%>%
-      select(-c('hs'))
-  } else {
-    outputs_df_summarised<-outputs_df_select%>%
-      group_by(year, hs)%>%
-      summarise(upper_rate = max(value),
-                lower_rate = min(value),
-                val_rate = mean(value))%>%
-      select(-c('hs'))
-    outputs_df_summarised$group = "Model Projections"
-  }
-  
+  outputs_df_summarised<-outputs_df_select%>%
+    group_by(year)%>%
+    summarise(upper_rate = max(value),
+              lower_rate = min(value),
+              val_rate = mean(value))%>%
+    filter(year <= 2017)
+  outputs_df_summarised$group = "Model Projections"
   
   sex_temp<-unique(outputs_df_select$sex)
+  TB_HIV_coinfection_temp<-unique(outputs_df_select$TB_HIV_coinfection)
   
-  if (grepl('inc', current_measure_eval)){
-    GBD_df<-TB_inc_df%>%
-      filter(sex == sex_temp)%>%
-      filter(year <= 2018)
+  if (grepl('inc', current_var_eval)){
     measure_temp<-"TB incidence rate"
-    max_min_graph_y_axis<-c(0, 2400, 400)
-  } else if (grepl('mort', current_measure_eval)){
-    GBD_df<-TB_mort_df%>%
-      filter(sex == sex_temp)%>%
-      filter(year <= 2018)
+    GBD_df<-TB_inc_df%>%
+      filter(TB_HIV_coinfection == TB_HIV_coinfection_temp,
+             sex == sex_temp)%>%
+      filter(year == 2017|year == 2005)
+    if(grepl('negative', current_var_eval)){
+      max_min_graph_y_axis<-c(0, 1200, 200)
+    } else {
+      max_min_graph_y_axis<-c(0, 2400, 400)
+    }
+  } else if (grepl('mort', current_var_eval)){
     measure_temp<-"TB mortality rate"
-    max_min_graph_y_axis<-c(0, 1000, 100)
+    GBD_df<-TB_mort_df%>%
+      filter(TB_HIV_coinfection == TB_HIV_coinfection_temp,
+             sex == sex_temp)%>%
+      filter(year == 2017|year == 2005)
+    if(grepl('negative', current_var_eval)){
+      max_min_graph_y_axis<-c(0, 150, 20)
+    } else{
+      max_min_graph_y_axis<-c(0, 600, 150)
+    }
   } else {
     GBD_df<-HIV_prev_df%>%
       filter(sex == sex_temp)%>%
-      filter(year <= 2018)
+      filter(year == 2017|year == 2005)
     measure_temp<-"HIV prevalence rate"
     max_min_graph_y_axis<-c(0, 50000, 10000)
   }
   
-  if(!grepl('hiv', as.character(current_measure_eval), ignore.case = TRUE)) {
-    GBD_df$group = paste0("GBD Projections: ", 
-                          if_else(GBD_df$TB_HIV_coinfection == "no", 
-                                  "HIV negative", "HIV positive"))
-    } else {
-      GBD_df$group <- "GBD Projections"
-  }
+  calib_graph_temp<-ggplot(outputs_df_summarised)+
+    geom_ribbon(aes(ymin = lower_rate, ymax = upper_rate, x = year), 
+                fill = colors_model_projections_fill[1])+
+    geom_line(aes(x = year, y = val_rate), size = .7,
+              color = colors_model_projections_line[1])+
+    theme(text = element_text(size=20, family="Times New Roman"), 
+          panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.position="top", legend.title = element_blank(), legend.text=element_text(size=15),
+          plot.title = element_text(hjust = .5, size=18))+
+    ggtitle(current_var_eval)+
+    scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2017, by = 3)))+
+    guides(color=guide_legend(nrow=1,byrow=TRUE))+
+    ylim(max_min_graph_y_axis[1:2])+
+    ylab(measure_temp)+
+    geom_segment(x = 2005, y = unlist(GBD_df%>%
+                       filter(year == 2005)%>%
+                       select(c("lower_rate"))), 
+                     xend = 2005, yend = min(unlist(GBD_df%>%
+                       filter(year == 2005)%>%
+                       select(c("upper_rate"))), max_min_graph_y_axis[2]), 
+                     col = colors_GBD_estimates_line, size = 1)+
+    geom_segment(x = 2017, y = unlist(GBD_df%>%
+                                        filter(year == 2017)%>%
+                                        select(c("lower_rate"))), 
+                 xend = 2017, yend = min(unlist(GBD_df%>%
+                                                  filter(year == 2017)%>%
+                                                  select(c("upper_rate"))), max_min_graph_y_axis[2]), 
+                 col = colors_GBD_estimates_line, size = 1)+
+    geom_point(data = GBD_df, aes(x = year, y = val_rate), 
+               col = colors_GBD_estimates_line, size = 2)
   
   calibration_graph_df<-rbind(data.frame(GBD_df%>%select(year, val_rate, upper_rate, lower_rate, group)),
                               data.frame(outputs_df_summarised))
@@ -136,10 +165,10 @@ for(current_measure_eval in unique(outputs_combined_df_calibration$title)){
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.position="top", legend.title = element_blank(), legend.text=element_text(size=15),
             plot.title = element_text(hjust = .5, size=20))+
-      geom_vline(xintercept = 2018, linetype="dashed", 
+      geom_vline(xintercept = 2017, linetype="dashed", 
                  color = "darkgrey", size=1.5)+
-      annotate("text", x=2013, y=max_min_graph_y_axis[2]*.9, label= "calibration period", size = 6)+
-      annotate("text", x=2023, y=max_min_graph_y_axis[2]*.9, label= "evaluation period", size = 6)+
+      annotate("text", x=2012, y=max_min_graph_y_axis[2]*.9, label= "calibration period", size = 6)+
+      annotate("text", x=2022, y=max_min_graph_y_axis[2]*.9, label= "evaluation period", size = 6)+
       ggtitle(current_measure_eval)+
       scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
       #scale_y_continuous(name = measure_temp, breaks = c(seq(from = max_min_graph_y_axis[1],
@@ -159,10 +188,10 @@ for(current_measure_eval in unique(outputs_combined_df_calibration$title)){
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.position="top", legend.title = element_blank(), legend.text=element_text(size=15),
             plot.title = element_text(hjust = .5, size=18))+
-      geom_vline(xintercept = 2018, linetype="dashed", 
+      geom_vline(xintercept = 2017, linetype="dashed", 
                  color = "darkgrey", size=1.5)+
-      annotate("text", x=2013, y=max_min_graph_y_axis[2]*.9, label= "calibration period", size = 6)+
-      annotate("text", x=2023, y=max_min_graph_y_axis[2]*.9, label= "evaluation period", size = 6)+
+      annotate("text", x=2012, y=max_min_graph_y_axis[2]*.9, label= "calibration period", size = 6)+
+      annotate("text", x=2022, y=max_min_graph_y_axis[2]*.9, label= "evaluation period", size = 6)+
       ggtitle(current_measure_eval)+
       scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
       guides(color=guide_legend(nrow=1,byrow=TRUE))+
@@ -216,10 +245,21 @@ for(current_var_eval in unique(outputs_combined_df_program$title)){
   program_eval_summarised_connect<-program_eval_summarised%>%
     filter(year == 2018)
   
-  program_eval_summarised$group<-if_else(program_eval_summarised$year <= 2018,
+  program_eval_summarised_connect2<-program_eval_summarised%>%
+    filter(year == 2017)
+  program_eval_summarised_connect2<-rbind(program_eval_summarised_connect2,
+                                          program_eval_summarised_connect2,
+                                          program_eval_summarised_connect2)
+  program_eval_summarised_connect2$group<-c('Program 1',
+                                            'Program 2',
+                                            'Program 3')
+  
+  program_eval_summarised$group<-if_else(program_eval_summarised$year <= 2017,
                                          "Calibration Period", program_eval_summarised$group)
   
-  program_eval_summarised<-rbind(program_eval_summarised, program_eval_summarised_connect)
+  program_eval_summarised<-rbind(program_eval_summarised,
+                                 program_eval_summarised_connect2,
+                                 program_eval_summarised_connect)
   
   if (grepl('inc', current_var_eval)){
     measure_temp<-"TB incidence rate"
@@ -245,10 +285,10 @@ for(current_var_eval in unique(outputs_combined_df_program$title)){
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position="top", legend.title = element_blank(), legend.text=element_text(size=15),
           plot.title = element_text(hjust = .5, size=20))+
-    geom_vline(xintercept = 2018, linetype="dashed", 
+    geom_vline(xintercept = 2017, linetype="dashed", 
                color = "darkgrey", size=1.5)+
-    annotate("text", x=2013, y=1, label= "calibration period", size = 6)+
-    annotate("text", x=2023, y=1, label= "evaluation period", size = 6)+
+    annotate("text", x=2012, y=1, label= "calibration period", size = 6)+
+    annotate("text", x=2022, y=1, label= "evaluation period", size = 6)+
     ggtitle(current_var_eval)+
     scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
     scale_color_manual(values=c("black", colors_for_program_graph_line))+
@@ -263,3 +303,4 @@ for(current_var_eval in unique(outputs_combined_df_program$title)){
   print(program_graph_temp)
   dev.off()
 }
+
