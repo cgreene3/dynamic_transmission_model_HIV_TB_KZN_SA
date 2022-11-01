@@ -20,7 +20,7 @@ indir_calib_analysis<-paste0(here(), '/calibration_analysis/')
 
 setwd(indir_calib_analysis)
 best_results_df_plot_dist<-read.csv("almost_best_calibration_sets_ref_df.csv")%>%
-  filter(total_in_confidence == 19) #change if want to see dist of parameter sets
+  filter(total_in_confidence == 20) #change if want to see dist of parameter sets
 #with 19, or 20 in calib targets
 
 setwd(indir_params)

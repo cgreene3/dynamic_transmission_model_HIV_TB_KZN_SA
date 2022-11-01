@@ -17,10 +17,10 @@ sapply(c('dplyr', 'deSolve',
 #location where we sent outputs
 library(here)
 #indir_outputs<-paste0(here(), '/test/program_outputs')
-indir_outputs<-paste0(here(), '/program_outputs')
+indir_outputs<-paste0(here(), '/results/program_outputs')
 indir_target_calibration_estimates<-paste0(here(), '/param_files/target_calibration_estimates')
-outdir_graphs_prog<-paste0(here(), '/graphs_results/program')
-outdir_graphs_calib<-paste0(here(), '/graphs_results/calibration')
+outdir_graphs_prog<-paste0(here(), '/results/graphs/program')
+outdir_graphs_calib<-paste0(here(), '/results/graphs/calibration')
 
 setwd(indir_target_calibration_estimates)
 HIV_prev_df<-read.csv('KZN_GBD_HIV_prev_rate_calibration_df.csv')%>%
@@ -32,7 +32,7 @@ TB_mort_df<-read.csv('KZN_GBD_TB_mort_rate_calibration_df.csv')%>%
   mutate(TB_HIV_coinfection = as.character(TB_HIV_coinfection),
          sex = as.character(sex))
 
-setwd(paste0(here(), '/graphs_results'))
+setwd(paste0(here(), '/results/graphs'))
 graph_ref<-read.csv('graph_ref.csv')
 graph_ref$variable<-as.character(graph_ref$variable)
 graph_ref$measure<-as.character(graph_ref$measure)
@@ -48,7 +48,10 @@ outputs_combined_df<-read.csv(all_files_in_outdir[1])
 for (i in 2:length(all_files_in_outdir)){
   temp<-read.csv(all_files_in_outdir[i])
   outputs_combined_df<-rbind(outputs_combined_df, temp)
+  print(i)
 }
+
+
 
 display.brewer.pal(n = 10, name = "Paired")
 colors_for_graphs <- brewer.pal(n = 10, name = "Paired")
@@ -109,9 +112,9 @@ for(current_var_eval in unique(outputs_combined_df_calibration$title)){
              sex == sex_temp)%>%
       filter(year == 2017|year == 2005)
     if(grepl('negative', current_var_eval)){
-      max_min_graph_y_axis<-c(0, 150, 20)
+      max_min_graph_y_axis<-c(0, 260, 40)
     } else{
-      max_min_graph_y_axis<-c(0, 600, 150)
+      max_min_graph_y_axis<-c(0, 800, 200)
     }
   } else {
     GBD_df<-HIV_prev_df%>%
@@ -151,58 +154,10 @@ for(current_var_eval in unique(outputs_combined_df_calibration$title)){
                                                   select(c("upper_rate"))), max_min_graph_y_axis[2]), 
                  col = colors_GBD_estimates_line, size = 1)+
     geom_point(data = GBD_df, aes(x = year, y = val_rate), 
-               col = colors_GBD_estimates_line, size = 2)
-  
-  calibration_graph_df<-rbind(data.frame(GBD_df%>%select(year, val_rate, upper_rate, lower_rate, group)),
-                              data.frame(outputs_df_summarised))
-  
-  if(!grepl('hiv', as.character(current_measure_eval), ignore.case = TRUE)){
-    calib_graph_temp<-ggplot(calibration_graph_df)+
-      geom_ribbon(aes(ymin = lower_rate, ymax = upper_rate, x = year, fill = group))+
-      geom_line(aes(x = year, y = val_rate, colour = group, linetype = group), size = .7)+
-      theme(text = element_text(size=18, family="Times New Roman"), 
-            panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black"),
-            legend.position="top", legend.title = element_blank(), legend.text=element_text(size=15),
-            plot.title = element_text(hjust = .5, size=20))+
-      geom_vline(xintercept = 2017, linetype="dashed", 
-                 color = "darkgrey", size=1.5)+
-      annotate("text", x=2012, y=max_min_graph_y_axis[2]*.9, label= "calibration period", size = 6)+
-      annotate("text", x=2022, y=max_min_graph_y_axis[2]*.9, label= "evaluation period", size = 6)+
-      ggtitle(current_measure_eval)+
-      scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
-      #scale_y_continuous(name = measure_temp, breaks = c(seq(from = max_min_graph_y_axis[1],
-      #                                                       to = max_min_graph_y_axis[2],
-      #                                                       by = max_min_graph_y_axis[3])))+
-      guides(color=guide_legend(nrow=2,byrow=TRUE))+
-      scale_color_manual(values=colors_for_calib_graph_line_tb)+
-      scale_fill_manual(values=colors_for_calib_graph_fill_tb)+
-      ylim(max_min_graph_y_axis[1:2])+
-      ylab(measure_temp)
-  } else {
-    calib_graph_temp<-ggplot(calibration_graph_df)+
-      geom_ribbon(aes(ymin = lower_rate, ymax = upper_rate, x = year, fill = group))+
-      geom_line(aes(x = year, y = val_rate, colour = group, linetype = group), size = .7)+
-      theme(text = element_text(size=20, family="Times New Roman"), 
-            panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black"),
-            legend.position="top", legend.title = element_blank(), legend.text=element_text(size=15),
-            plot.title = element_text(hjust = .5, size=18))+
-      geom_vline(xintercept = 2017, linetype="dashed", 
-                 color = "darkgrey", size=1.5)+
-      annotate("text", x=2012, y=max_min_graph_y_axis[2]*.9, label= "calibration period", size = 6)+
-      annotate("text", x=2022, y=max_min_graph_y_axis[2]*.9, label= "evaluation period", size = 6)+
-      ggtitle(current_measure_eval)+
-      scale_x_continuous(name = 'time', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
-      guides(color=guide_legend(nrow=1,byrow=TRUE))+
-      scale_color_manual(values=colors_for_calib_graph_line_hiv)+
-      scale_fill_manual(values=colors_for_calib_graph_fill_hiv)+
-      ylim(max_min_graph_y_axis[1:2])+
-      ylab(measure_temp)
-  }
+               col = colors_GBD_estimates_line, size = 6)
   
   file_name<-paste0("calibration_",
-                    str_replace_all(current_measure_eval, " ", "_"),
+                    str_replace_all(current_var_eval, " ", "_"),
                     ".png")
                     
   
