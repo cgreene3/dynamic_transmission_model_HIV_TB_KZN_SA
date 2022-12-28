@@ -16,14 +16,16 @@ library(reshape2)
 outdir_sample <- paste0(here(),'/param_files/input_parameters')
 indir_params <- paste0(here(),'/param_files/calculated_param_gen/input_data')
 outdir_graphs <-paste0(here(),'/param_files/distribution_of_accepted_points_graphs')
-indir_calib_analysis<-paste0(here(), '/calibration_analysis/')
+indir_calib_analysis<-paste0(here(), '/results/calibration_analysis/')
 
 setwd(indir_calib_analysis)
 best_results_df_plot_dist<-read.csv("almost_best_calibration_sets_ref_df.csv")%>%
   filter(total_in_confidence == 20) #change if want to see dist of parameter sets
-#with 19, or 20 in calib targets
+#with 18, 19, or 20 in calib targets
 
 setwd(indir_params)
+
+
 model_params_df<-read_excel('KZN_SA_model_parameters.xlsx')%>%
   select(c('model_matched_param', 'min', 'max', 'value', 'calibrated'))
 
@@ -78,13 +80,17 @@ for (mp in model_params_df$model_matched_param){
       summarise(prop_of_total_best = sum(prop_of_total))%>%
       left_join(bins_ref_df, by = c('selected_vals_bin'='bins_array_temp'))
     
+    selected_vals_temp_df<-data.frame(selected_vals_temp_df)
+    
     setwd(outdir_graphs)
     png(file=paste0(mp, '.jpg'))
     plot(ggplot()+
            geom_bar(data = selected_vals_temp_df,
-                    aes(y = prop_of_total_best, x = bins_avg),
+                    aes(x = bins_avg,
+                        y = prop_of_total_best),
                     stat = "identity")+
-           xlim(min_temp, max_temp)+
+           #xlim(min_temp, max_temp)+
+           #ylim(0,1)+
            ggtitle(mp)+
            xlab('Value')+
            ylab('Density'))

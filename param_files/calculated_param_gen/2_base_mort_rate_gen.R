@@ -38,18 +38,18 @@ base_mort_df<-pop_df%>%
 base_mort_df<-base_mort_df%>%
   filter(year <= 2017)
 
-base_mort_df_2017_mort_vals_female<-base_mort_df%>%filter(year == 2017, sex == "Female")
-base_mort_df_2017_mort_vals_male<-base_mort_df%>%filter(year == 2017, sex == "Male")
+base_mort_df_2018_mort_vals_female<-base_mort_df%>%filter(year == 2017, sex == "Female")
+base_mort_df_2018_mort_vals_male<-base_mort_df%>%filter(year == 2017, sex == "Male")
 
 
-base_mort_df_2018_2029<-data.frame(year = rep(2018:2029, times = 2),
+base_mort_df_2018_2028<-data.frame(year = rep(2018:2028, times = 2),
                                    sex = rep(c("Female", "Male"),
-                                             each = length(2018:2029)),
-                                   val = rep(c(base_mort_df_2017_mort_vals_female$val,
-                                               base_mort_df_2017_mort_vals_male$val),
-                                             each = length(2018:2029)))
+                                             each = length(2018:2028)),
+                                   val = rep(c(base_mort_df_2018_mort_vals_female$val,
+                                               base_mort_df_2018_mort_vals_male$val),
+                                             each = length(2018:2028)))
 
-base_mort_df<-rbind(base_mort_df, base_mort_df_2018_2029)
+base_mort_df<-rbind(base_mort_df, base_mort_df_2018_2028)
 base_mort_df$max = base_mort_df$val*1.25
 base_mort_df$min = base_mort_df$val*.75
 
@@ -66,13 +66,13 @@ base_mort_df_graph_male<-base_mort_df%>%
 baseline_mort_plot_male<-ggplot(data=base_mort_df_graph_male, 
        aes(x=year, y=val, group=1)) +
   geom_line(color="grey", size = 1)+
-  geom_point(color="#228B22", size = 2)+
+  geom_point(color="blue", size = 2)+
   geom_vline(xintercept = 2017, linetype="dashed", 
              color = "darkgrey", size=1)+
   annotate("text", x=2010, y=.011, label= "calibration period", size = 5.5)+
   annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)+
-  labs(title=(bquote(atop("Baseline mortality rate values, Males"))))+
-  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+  #labs(title=(bquote(atop("Baseline mortality rate values, Males"))))+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2027, by = 4))+
   scale_y_continuous(name = bquote(atop(mu[{1}]^{VAL}~(Y))), limits = c(0, .012), breaks=(seq(0, .012, .003)))+
   theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank(),
@@ -105,13 +105,13 @@ base_mort_df_graph_female<-base_mort_df%>%
 baseline_mort_plot_female<-ggplot(data=base_mort_df_graph_female, 
                                 aes(x=year, y=val, group=1)) +
   geom_line(color="grey", size = 1)+
-  geom_point(color="#8B008B", size = 2)+
+  geom_point(color="blue", size = 2)+
   geom_vline(xintercept = 2017, linetype="dashed", 
              color = "darkgrey", size=1)+
   annotate("text", x=2010, y=.011, label= "calibration period", size = 5.5)+
   annotate("text", x=2024, y=.011, label= "evaluation period", size = 5.5)+
-  labs(title=(bquote(atop("Baseline mortality rate values, Females"))))+
-  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+  #labs(title=(bquote(atop("Baseline mortality rate values, Females"))))+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2027, by = 4))+
   scale_y_continuous(name = bquote(atop(mu[{2}]^{VAL}~(Y))), limits = c(0, .012), breaks=(seq(0, .012, .003)))+
   theme(text = element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank(),

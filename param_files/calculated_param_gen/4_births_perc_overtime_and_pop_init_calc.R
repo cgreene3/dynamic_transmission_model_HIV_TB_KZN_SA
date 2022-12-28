@@ -45,6 +45,7 @@ uninfected_df_no_hiv<-all_prev_num_estimates_df%>%
            'HIV_compartment', 'G_compartment',
            'HIV_adj', 'n_uninfected', 'val'))
 
+
 unif_hiv_pos<-uninfected_df_no_hiv%>%
   mutate(HIV_compartment = 2,
          HIV_adj = 1-HIV_adj)
@@ -61,13 +62,17 @@ uninfected_df<-uninfected_df%>%
            'G_compartment',
            'pop_estimate'))
 
+
+recent_adj_calc<-2/15 #equally likely to have been infected with TB in first 15 years
+
+
 #latent TB in GBD not seperated by DR or HIV status
 latent_TB_df_recent<-all_prev_num_estimates_df%>%
   filter(cause == "Latent tuberculosis infection")%>%
   mutate(TB_compartment = 3,
          DR_compartment = 1, 
          DR_adj = 1-.036,
-         recent_adj = 0.5)
+         recent_adj = recent_adj_calc)
 
 latent_TB_df_recent<-rbind(latent_TB_df_recent,
                            latent_TB_df_recent%>%
@@ -79,7 +84,7 @@ latent_TB_df_remote<-all_prev_num_estimates_df%>%
   mutate(TB_compartment = 4,
          DR_compartment = 1, 
          DR_adj = 1-.036,
-         recent_adj = 0.5)
+         recent_adj = 1-recent_adj_calc)
 
 latent_TB_df_remote<-rbind(latent_TB_df_remote,
                            latent_TB_df_remote%>%
@@ -93,6 +98,7 @@ latent_TB_df<-latent_TB_df%>%
   left_join(HIV_prev, by = c('year', 'sex'))%>%
   mutate(HIV_compartment = 1,
          HIV_adj = 1-val.y)
+
 
 latent_TB_df<-rbind(latent_TB_df,
                     latent_TB_df%>%
@@ -122,16 +128,19 @@ active_TB_df<-all_prev_num_estimates_df%>%
   summarise(pop_estimate = sum(val))%>%
   filter(!is.na(year))
 
+
 #combine
 birth_perc_df_overtime_temp<-rbind(data.frame(uninfected_df),
                               data.frame(latent_TB_df),
                               data.frame(active_TB_df))
+
 
 birth_perc_df<-data.frame(year = as.integer(),
                                    TB_compartment = as.integer(),
                                    DR_compartment = as.integer(),
                                    HIV_compartment = as.integer(),
                                    G_compartment = as.integer())
+
 
 for (year in unique(pop_estimates_df$year)){
   for (t in 1:8){

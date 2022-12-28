@@ -1,11 +1,11 @@
 ﻿variable,measure,sex,hs,TB_HIV_coinfection
-Tb_inc_neg_female_Y_per_100k_female,Tuberculosis incidence rate per 100K ,Female,HIV negative,no
-Tb_inc_neg_male_Y_per_100k_male,Tuberculosis incidence rate per 100K ,Male,HIV negative,no
-Tb_inc_pos_female_Y_per_100k_female,Tuberculosis incidence rate per 100K ,Female,HIV positive,yes
-Tb_inc_pos_male_Y_per_100k_male,Tuberculosis incidence rate per 100K ,Male,HIV positive,yes
-Tb_mort_neg_female_Y_per_100k_female,Tuberculosis mortality rate per 100K ,Female,HIV negative,no
-Tb_mort_neg_male_Y_per_100k_male,Tuberculosis mortality rate per 100K ,Male,HIV negative,no
-Tb_mort_pos_female_Y_per_100k_female,Tuberculosis mortality rate per 100K ,Female,HIV positive,yes
-Tb_mort_pos_male_Y_per_100k_male,Tuberculosis mortality rate per 100K ,Male,HIV positive,yes
+Tb_inc_neg_female_Y_per_100k_female,Tuberculosis incidence rate per 100K ,Female,HIV-,no
+Tb_inc_neg_male_Y_per_100k_male,Tuberculosis incidence rate per 100K ,Male,HIV-,no
+Tb_inc_pos_female_Y_per_100k_female,Tuberculosis incidence rate per 100K ,Female,HIV+,yes
+Tb_inc_pos_male_Y_per_100k_male,Tuberculosis incidence rate per 100K ,Male,HIV+,yes
+Tb_mort_neg_female_Y_per_100k_female,Tuberculosis mortality rate per 100K ,Female,HIV-,no
+Tb_mort_neg_male_Y_per_100k_male,Tuberculosis mortality rate per 100K ,Male,HIV-,no
+Tb_mort_pos_female_Y_per_100k_female,Tuberculosis mortality rate per 100K ,Female,HIV+,yes
+Tb_mort_pos_male_Y_per_100k_male,Tuberculosis mortality rate per 100K ,Male,HIV+,yes
 hiv_prev_per_100k_female,HIV prevalence per 100K ,Female, ,
 hiv_prev_per_100k_male,HIV prevalence per 100K ,Male, ,

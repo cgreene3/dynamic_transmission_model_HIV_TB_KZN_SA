@@ -158,18 +158,20 @@ hiv_inc_plot_male<-ggplot(data=hiv_inc_df_graph_male) +
   geom_line(aes(x=year, y=val, group = factor(program_id)), color="grey")+
   geom_point(aes(x=year, y=val, colour=factor(`Policy ID`), 
                  shape = factor(`Policy ID`)), size = 1.5)+
-  scale_color_manual(values = c("#006d2c", "#74c476"))+
+  scale_color_manual(values = c("blue", "red"))+
   geom_vline(xintercept = 2017, linetype="dashed", 
              color = "darkgrey", size=1)+
   annotate("text", x=2009.5, y=.045, label= "calibration period", size = 5)+
   annotate("text", x=2023.5, y=.045, label= "evaluation period", size = 5)+
-  labs(title="HIV incidence rate, Males")+
-  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+  #labs(title="HIV incidence rate, Males")+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1980, to = 2028, by = 4))+
   scale_y_continuous(name = bquote(atop(eta[{"1,2,1"}]^{VAL}~(Y))), limits = c(0, .05), breaks=(seq(0, .05, .01)))+
   theme(text = element_text(size=18), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank(),
         plot.title = element_text(hjust = 0.5), legend.position = "top",
-        legend.key = element_rect(fill = "grey94"))+
+        legend.key = element_rect(fill = "grey94"),
+        legend.background = element_rect(colour = "lightgrey"),
+        legend.box.background = element_rect(colour = "black"))+
   scale_shape_manual(values=c(8, 2))
 
 hiv_inc_df_graph_female<-hiv_inc_df3%>%
@@ -182,18 +184,20 @@ hiv_inc_plot_female<-ggplot(data=hiv_inc_df_graph_female) +
   geom_line(aes(x=year, y=val, group = factor(program_id)), color="grey")+
   geom_point(aes(x=year, y=val, colour=factor(`Policy ID`), 
                  shape = factor(`Policy ID`)), size = 1.3)+
-  scale_color_manual(values = c("#54278f", "#9e9ac8"))+
+  scale_color_manual(values = c("blue", "red"))+
   geom_vline(xintercept = 2017, linetype="dashed", 
              color = "darkgrey", size=1)+
   annotate("text", x=2009.5, y=.045, label= "calibration period", size = 5)+
   annotate("text", x=2023.5, y=.045, label= "evaluation period", size = 5)+
-  labs(title="HIV incidence rate, Females")+
-  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1990, to = 2030, by = 10))+
+  #labs(title="HIV incidence rate, Females")+
+  scale_x_continuous(name = 'Year Y', breaks=seq(from = 1980, to = 2028, by = 4))+
   scale_y_continuous(name = bquote(atop(eta[{"1,2,2"}]^{VAL}~(Y))), limits = c(0, .05), breaks=(seq(0, .05, .01)))+
   theme(text = element_text(size=18), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.title=element_blank(),
         plot.title = element_text(hjust = 0.5), legend.position = "top",
-        legend.key = element_rect(fill = "grey94"))+
+        legend.key = element_rect(fill = "grey94"),
+        legend.background = element_rect(colour = "lightgrey"),
+        legend.box.background = element_rect(colour = "black"))+
   scale_shape_manual(values=c(8, 2))
 
 

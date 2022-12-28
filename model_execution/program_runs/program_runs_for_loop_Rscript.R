@@ -1,4 +1,4 @@
-#last updated October 11, 2022
+#last updated Nov 22, 2022
 #runs warmup from 1940 to end of 2017 (beg of 2018)
 #writes csv for model outputs in calibration years
 #metrics 
@@ -17,43 +17,43 @@ n_accepted_param_sets<-1928 #number of accepted parameter sets
 n_sims_in_loop<-4 #number of sims run each loop
 sim_id_ref_range<-seq(from = 1, to = n_accepted_param_sets, by = n_sims_in_loop)
 
-# # ####HYAK OR GITHUB SPECIFIC CODES TO COMMENT/UNCOMMENT####
-#hyak specific code
-
-args = commandArgs(trailingOnly=TRUE)
-if (length(args)==0) {
-  stop("At least one argument must be supplied (input file).n", call.=FALSE)
-} else if (length(args)>1) {
-  stop("only need one parameter", call.=FALSE)
-}
-
-args_temp<- as.integer(args[1])
-
-#location where input parameters are
-indir<-'/gscratch/icrc/cgreene3/input_parameters'
-indir_accepted_param_sets<-'/gscratch/icrc/cgreene3/calibration_analysis'
-
-#location where want outputs
-outdir<-'/gscratch/icrc/cgreene3/program_outputs'
-outdir_economic_analysis<-'/gscratch/icrc/cgreene3/program_outputs_economic_analysis'
-
-# # # # #if running from local/github
-# library(here)
-# #if running from local set env to KZN_south_africa
+# # # ####HYAK OR GITHUB SPECIFIC CODES TO COMMENT/UNCOMMENT####
+# #hyak specific code
+# 
+# args = commandArgs(trailingOnly=TRUE)
+# if (length(args)==0) {
+#   stop("At least one argument must be supplied (input file).n", call.=FALSE)
+# } else if (length(args)>1) {
+#   stop("only need one parameter", call.=FALSE)
+# }
+# 
+# args_temp<- as.integer(args[1])
 # 
 # #location where input parameters are
-indir<-paste0(here(), '/param_files/input_parameters')
-indir_accepted_param_sets<-paste0(here(), '/calibration_analysis')
+# indir<-'/gscratch/icrc/cgreene3/input_parameters'
+# indir_accepted_param_sets<-'/gscratch/icrc/cgreene3/calibration_analysis'
 # 
 # #location where want outputs
+# outdir<-'/gscratch/icrc/cgreene3/program_outputs'
+# outdir_economic_analysis<-'/gscratch/icrc/cgreene3/program_outputs_economic_analysis'
+
+# # # #if running from local/github
+library(here)
+#if running from local set env to KZN_south_africa
+
+#location where input parameters are
+indir<-paste0(here(), '/param_files/input_parameters')
+indir_accepted_param_sets<-paste0(here(), '/results/calibration_analysis')
+
+#location where want outputs
 outdir<-paste0(here(), '/test/program_outputs')
 outdir_economic_analysis<-paste0(here(), '/test/program_outputs_economic_analysis')
 
-args_temp<-482
+#args_temp<-482
 
-args_temp_start<-sim_id_ref_range[args_temp]
-args_temp_end<-args_temp_start+n_sims_in_loop-1
-args_temp_range<-args_temp_start:args_temp_end
+#args_temp_start<-sim_id_ref_range[args_temp]
+#args_temp_end<-args_temp_start+n_sims_in_loop-1
+#args_temp_range<-args_temp_start:args_temp_end
 
 ########Time Horizon and Evaluation intervals (1 month)#####
 time_interval <- 1/12
@@ -61,14 +61,13 @@ time_interval <- 1/12
 #specify warmup period
 start_yr_warmup <- 1940
 end_yr_warmup <- 2018 #start of 2018 
-TT_warmup<-end_yr_warmup-start_yr_warmup
-TT_SET_warmup <- seq(from = 0, to = TT_warmup, by = time_interval) #tau
+#TT_warmup<-end_yr_warmup-start_yr_warmup
+TT_SET_warmup <- seq(from = start_yr_warmup, to = end_yr_warmup, by = time_interval) #tau
 
 #specify eval period
 start_yr_eval <- 2018
-end_yr_eval <- 2029  #start of 2029
-TT_eval<-end_yr_eval-start_yr_eval
-TT_SET_eval <- seq(from = 0, to = TT_eval, by = time_interval) #tau
+end_yr_eval <- 2028  #start of 2028
+TT_SET_eval <- seq(from = start_yr_eval, to = end_yr_eval, by = time_interval) #tau
 
 #these data frames change depending on combin of calib parameters
 
@@ -76,7 +75,7 @@ TT_SET_eval <- seq(from = 0, to = TT_eval, by = time_interval) #tau
 setwd(indir_accepted_param_sets)
 sim_calibration_ref_df<-read.csv('accepted_calibration_sets_ref_df.csv')
 accepted_sim_ids<-sim_calibration_ref_df$sim_id
-all_sim_ids_in_current_eval<-accepted_sim_ids[c(args_temp_start:args_temp_end)] #evaluate 5 per loop
+all_sim_ids_in_current_eval<-accepted_sim_ids#[c(args_temp_start:args_temp_end)] #evaluate 5 per loop
 
 setwd(indir)
 pop_init_df <- read.csv('pop_init_df_1940.csv')
@@ -640,7 +639,8 @@ tb_hiv_prog_calibration_model <- function(time, N_t_r_h_g, parms){
   
   #write year parameter for parameters that change over time
   if(time > 0){
-    current_yr <-as.integer(start_yr_temp+time)
+    #current_yr <-as.integer(start_yr_temp+time)
+    current_yr <- as.integer(time)
   } 
   
   #HIV transitions start in 1980
@@ -997,7 +997,7 @@ for(sim_id_current_eval in all_sim_ids_in_current_eval){
     filter(time == max(time))%>%
     select(-c('time'))
   
-  out_df_temp_warmup<- cbind(year = as.integer(start_yr_warmup+out_df$time), 
+  out_df_temp_warmup<- cbind(year = as.integer(out_df$time), 
                              sim_id = rep(sim_id_current_eval,
                                           times = nrow(out_df)),
                              program_id = rep(1,
@@ -1015,7 +1015,7 @@ for(sim_id_current_eval in all_sim_ids_in_current_eval){
                                    func = tb_hiv_prog_calibration_model, method = 'lsoda',
                                    parms = NULL))
     
-    out_df_temp_eval<-cbind(year = as.integer(start_yr_eval+out_df2$time), 
+    out_df_temp_eval<-cbind(year = as.integer(start_yr_eval),
                                sim_id = rep(sim_id_current_eval,
                                             times = nrow(out_df2)),
                                program_id = rep(current_program_eval,
@@ -1023,30 +1023,36 @@ for(sim_id_current_eval in all_sim_ids_in_current_eval){
                             out_df2)
     
   
-  out_df_warmup_calib_eval<-rbind(out_df_temp_warmup,
+  out_df_warmup_prog_eval<-rbind(out_df_temp_warmup%>%
+                                   filter(as.integer(time) < start_yr_eval),
                                   out_df_temp_eval)
   
   #calculate population estimates
-  out_df_warmup_calib_eval$total_t_male_pop<-rowSums(out_df_warmup_calib_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, HIV_SET,1])])
-  out_df_warmup_calib_eval$total_t_female_pop<-rowSums(out_df_warmup_calib_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, HIV_SET,2])])
+  out_df_warmup_prog_eval$total_t_male_pop<-rowSums(out_df_warmup_prog_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, HIV_SET,1])])
+  out_df_warmup_prog_eval$total_t_female_pop<-rowSums(out_df_warmup_prog_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, HIV_SET,2])])
   
   #calculate hiv prev
-  out_df_warmup_calib_eval$hiv_prev_t_male_per_100K_people<-rowSums(out_df_warmup_calib_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, c(2,3,4),1])]) 
-  out_df_warmup_calib_eval$hiv_prev_t_female_per_100K_people<-rowSums(out_df_warmup_calib_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, c(2,3,4),2])])
+  out_df_warmup_prog_eval$hiv_prev_t_male_per_100K_people<-rowSums(out_df_warmup_prog_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, c(2,3,4),1])]) 
+  out_df_warmup_prog_eval$hiv_prev_t_female_per_100K_people<-rowSums(out_df_warmup_prog_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, c(2,3,4),2])])
+  
+  #calculate TB prev
+  out_df_warmup_prog_eval$tb_prev_t_per_100K_people<-rowSums(out_df_warmup_prog_eval[,4+c(N_t_r_h_g_ref[6, DR_SET, HIV_SET, G_SET])])
   
   #calculate art coverage
-  out_df_warmup_calib_eval$n_on_art_t_per_100K_people<-rowSums(out_df_warmup_calib_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, 4, G_SET])])
+  out_df_warmup_prog_eval$n_on_art_t_per_100K_people<-rowSums(out_df_warmup_prog_eval[,4+c(N_t_r_h_g_ref[TB_SET, DR_SET, 4, G_SET])])
   
   #######summarise calibration metrics######
-  subset_out_df<-out_df_warmup_calib_eval%>%
+  subset_out_df<-out_df_warmup_prog_eval%>%
     select(c('year', 'time', 
              model_output_names,
              'total_t_male_pop',
              'total_t_female_pop',
              'hiv_prev_t_male_per_100K_people',
-             'hiv_prev_t_female_per_100K_people'))
+             'hiv_prev_t_female_per_100K_people',
+             'tb_prev_t_per_100K_people',
+             'n_on_art_t_per_100K_people'))
   
-  summarised_metrics_TB<-subset_out_df%>%
+  summarised_metrics_TB_by_gender<-subset_out_df%>%
     mutate(Tb_inc_neg_female_t_per_100k_ppl = Tb_inc_neg_female_cumulative-lag(Tb_inc_neg_female_cumulative),
            Tb_inc_neg_male_t_per_100k_ppl = Tb_inc_neg_male_cumulative-lag(Tb_inc_neg_male_cumulative),
            Tb_inc_pos_female_t_per_100k_ppl = Tb_inc_pos_female_cumulative-lag(Tb_inc_pos_female_cumulative),
@@ -1073,19 +1079,52 @@ for(sim_id_current_eval in all_sim_ids_in_current_eval){
               Tb_mort_pos_female_Y_per_100k_female = sum(Tb_mort_pos_female_t_per_100k_female), 
               Tb_mort_pos_male_Y_per_100k_male = sum(Tb_mort_pos_male_t_per_100k_male))%>%
     filter(year >= 1990)%>%
-    filter(year <= 2028)
+    filter(year <= 2027)
   
-  summarised_metrics_hiv_prev<-subset_out_df%>%
+  summarised_metrics_hiv_prev_by_gender<-subset_out_df%>%
     mutate(hiv_prev_per_100k_female = ((hiv_prev_t_female_per_100K_people/total_t_female_pop)*100000),
            hiv_prev_per_100k_male = ((hiv_prev_t_male_per_100K_people/total_t_male_pop)*100000))%>%
     group_by(year)%>%
     summarise(hiv_prev_per_100k_female = mean(hiv_prev_per_100k_female),
               hiv_prev_per_100k_male = mean(hiv_prev_per_100k_male))%>%
     filter(year >= 1990)%>%
-    filter(year <= 2028)
+    filter(year <= 2027)
   
-  summarised_eval_metrics_df<-summarised_metrics_TB%>%
-    left_join(summarised_metrics_hiv_prev, by = c('year'))%>%
+  #summarised_metrics_tb_prev<-subset_out_df%>%
+  #  group_by(year)%>%
+  #  summarise(tb_prev_Y_per_100K_people = mean(tb_prev_t_per_100K_people))%>%
+  #  filter(year >= 1990)%>%
+  #  filter(year <= 2027)
+  
+  summarised_metrics_tb_inc<-subset_out_df%>%
+    mutate(Tb_inc_neg_female_t_per_100k_ppl = Tb_inc_neg_female_cumulative-lag(Tb_inc_neg_female_cumulative),
+           Tb_inc_neg_male_t_per_100k_ppl = Tb_inc_neg_male_cumulative-lag(Tb_inc_neg_male_cumulative),
+           Tb_inc_pos_female_t_per_100k_ppl = Tb_inc_pos_female_cumulative-lag(Tb_inc_pos_female_cumulative),
+           Tb_inc_pos_male_t_per_100k_ppl = Tb_inc_pos_male_cumulative-lag(Tb_inc_pos_male_cumulative))%>%
+    mutate(Tb_inc_t_per_100k_ppl = Tb_inc_neg_female_t_per_100k_ppl+
+                Tb_inc_neg_male_t_per_100k_ppl+
+                Tb_inc_pos_female_t_per_100k_ppl+
+                Tb_inc_pos_male_t_per_100k_ppl)%>%
+    group_by(year)%>%
+    summarise(Tb_inc_Y_per_100k_ppl = sum(Tb_inc_t_per_100k_ppl))
+  
+  summarised_metrics_tb_mort<-subset_out_df%>%
+    mutate(Tb_mort_neg_female_t_per_100k_ppl = Tb_mort_neg_female_cumulative-lag(Tb_mort_neg_female_cumulative),
+           Tb_mort_neg_male_t_per_100k_ppl = Tb_mort_neg_male_cumulative-lag(Tb_mort_neg_male_cumulative),
+           Tb_mort_pos_female_t_per_100k_ppl = Tb_mort_pos_female_cumulative-lag(Tb_mort_pos_female_cumulative),
+           Tb_mort_pos_male_t_per_100k_ppl = Tb_mort_pos_male_cumulative-lag(Tb_mort_pos_male_cumulative))%>%
+    mutate(Tb_mort_t_per_100k_ppl = Tb_mort_neg_female_t_per_100k_ppl+
+                Tb_mort_neg_male_t_per_100k_ppl+
+                Tb_mort_pos_female_t_per_100k_ppl+
+                Tb_mort_pos_male_t_per_100k_ppl)%>%
+    group_by(year)%>%
+    summarise(Tb_mort_Y_per_100k_ppl = sum(Tb_mort_t_per_100k_ppl))
+
+  summarised_eval_metrics_df<-summarised_metrics_TB_by_gender%>%
+    left_join(summarised_metrics_hiv_prev_by_gender, by = c('year'))%>%
+    #left_join(summarised_metrics_tb_prev, by = c('year'))%>%
+    left_join(summarised_metrics_tb_inc, by = c('year'))%>%
+    left_join(summarised_metrics_tb_mort, by = c('year'))%>%
     mutate(sim_id = sim_id_current_eval,
            program_id = current_program_eval)
   
@@ -1096,16 +1135,16 @@ for(sim_id_current_eval in all_sim_ids_in_current_eval){
   if(current_program_eval == 1){
     summarised_eval_metrics_df_all<-summarised_eval_metrics_df
     
-    out_df_eval_all<-out_df_warmup_calib_eval%>%
+    out_df_eval_all<-out_df_warmup_prog_eval%>%
       filter(year >= 1990)
   } else {
     summarised_eval_metrics_df_temp<-summarised_eval_metrics_df%>%
-      filter(year >= 2018)
+      filter(year >= 2017)
     summarised_eval_metrics_df_all<-rbind(summarised_eval_metrics_df_all,
                                           summarised_eval_metrics_df_temp)
     
     out_df_eval_all<-rbind(out_df_eval_all, 
-                           out_df_warmup_calib_eval%>%filter(year >= 2017))
+                           out_df_warmup_prog_eval%>%filter(year >= 2017))
   }
   }
   setwd(outdir)
