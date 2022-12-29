@@ -15,7 +15,7 @@ sapply(c('readxl', 'here', 'dplyr', 'reshape2',
 #to epi_model_HIV_TB for here to work
 
 #projections from HIV-HPV Cara's model
-indir<-paste0(here(), '/param_files/calculated_param_gen/input_data/DO_ART')
+indir<-paste0(here(), '/param_files/calculated_param_gen/raw_input_data/DO_ART')
 
 #update parameter file
 outdir <- paste0(here(),'/param_files/input_parameters')

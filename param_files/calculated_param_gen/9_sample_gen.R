@@ -19,7 +19,7 @@ set.seed(as.integer(1))
 
 #update parameter file
 outdir <- paste0(here(),'/param_files/input_parameters')
-indir_params <- paste0(here(),'/param_files/calculated_param_gen/input_data')
+indir_params <- paste0(here(),'/param_files/calculated_param_gen/raw_input_data')
 
 setwd(indir_params)
 model_params_df<-read_excel('KZN_SA_model_parameters.xlsx')%>%

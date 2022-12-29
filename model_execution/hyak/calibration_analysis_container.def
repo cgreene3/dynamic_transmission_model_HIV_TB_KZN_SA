@@ -1,0 +1,8 @@
+Bootstrap: docker
+From: rocker/tidyverse:3.5.2
+
+%post
+   Rscript -e "install.packages(c('deSolve', 'varhandle', 'reshape2'), repos='https://cran.rstudio.com/')"
+
+%runscript
+    Rscript /gscratch/icrc/cgreene3/calibration_analysis_Rscript.R "$@"

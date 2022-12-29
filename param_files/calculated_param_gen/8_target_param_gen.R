@@ -10,7 +10,7 @@ gc()
 sapply(c('here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
 
 #Need to set project (upper R corner of screen) to KZN_south_africa
-indir <- paste0(here(),'/param_files/calculated_param_gen/input_data/GBD')
+indir <- paste0(here(),'/param_files/calculated_param_gen/raw_input_data/GBD')
 outdir <- paste0(here(),'/param_files/target_calibration_estimates')
 
 ##########read in pop files#################

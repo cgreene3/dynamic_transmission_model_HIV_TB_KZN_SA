@@ -11,7 +11,7 @@ gc()
 sapply(c('here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, character.only=T)
 
 #Need to set project (upper R corner of screen) to KZN_south_africa for here to work
-indir <- paste0(here(),'/param_files/calculated_param_gen/input_data/GBD')
+indir <- paste0(here(),'/param_files/calculated_param_gen/raw_input_data/GBD')
 outdir <- paste0(here(),'/param_files/input_parameters')
 graph_outdir<-paste0(here(),'/param_files/dynamic_param_graphs')
 

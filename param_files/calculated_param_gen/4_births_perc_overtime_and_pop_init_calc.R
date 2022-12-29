@@ -14,7 +14,7 @@ sapply(c('readxl', 'here', 'dplyr', 'reshape2', 'ggplot2', 'stringr'), require, 
 #Need to set project (upper R corner of screen) 
 #to epi_model_HIV_TB for here to work
 #percent in each gender based on GBD pop estimates
-indir <- paste0(here(),'/param_files/calculated_param_gen/input_data/GBD')
+indir <- paste0(here(),'/param_files/calculated_param_gen/raw_input_data/GBD')
 
 #update parameter file
 outdir <- paste0(here(),'/param_files/input_parameters')
