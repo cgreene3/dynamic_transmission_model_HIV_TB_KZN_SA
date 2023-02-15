@@ -98,7 +98,7 @@ GBD_2017_male_val<-hiv_inc_df2%>%
          year == 2017)
 
 setwd(indir_DOART)
-incidence_do_art_df_SOC<-readxl::read_excel('incidence_est.xlsx', sheet = 'option_1')%>%
+incidence_do_art_df_SOC<-readxl::read_excel('intervention_hiv_incidence_est.xlsx', sheet = 'option_1')%>%
   filter(year > 2017)%>%
   select(c('year', 'sex', 'Percent_Decrease_SOC'))%>%
   arrange(sex, year)%>%
@@ -152,7 +152,7 @@ hiv_inc_df_graph_male<-hiv_inc_df3%>%
   filter(sex == 'Male')%>%
   select(-c('sex'))%>%
   filter(program_id != 3)%>%
-  mutate(`Policy ID` = if_else(program_id == 1, "Program 1", "Program 2 and 3"))
+  mutate(`Policy ID` = if_else(program_id == 1, "Program 1", "Programs 2 and 3"))
 
 hiv_inc_plot_male<-ggplot(data=hiv_inc_df_graph_male) +
   geom_line(aes(x=year, y=val, group = factor(program_id)), color="grey")+

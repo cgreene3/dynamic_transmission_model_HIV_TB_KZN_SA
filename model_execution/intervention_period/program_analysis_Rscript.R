@@ -57,11 +57,236 @@ for (i in 2:length(all_files_in_outdir)){
   print(i)
 }
 
-missing_sims_prog_df<-as.data.frame(unique(outputs_combined_df$sim_id))
+#missing_sims_prog_df<-as.data.frame(unique(outputs_combined_df$sim_id))
 
-colors_for_graphs <- brewer.pal(n = 10, name = "Paired")
+#program stats
+
+#by gender in 2017
+stats_df_TB_inc_mort_by_g_2017<-outputs_combined_df%>%
+  filter(year == 2017,
+         program_id == 1)%>%
+  select(c("sim_id",
+           'Tb_inc_neg_female_Y_per_100k_female', 
+           'Tb_inc_pos_female_Y_per_100k_female',
+           "Tb_inc_neg_male_Y_per_100k_male",
+           "Tb_inc_pos_male_Y_per_100k_male",
+           'Tb_mort_neg_female_Y_per_100k_female', 
+           'Tb_mort_pos_female_Y_per_100k_female',
+           "Tb_mort_neg_male_Y_per_100k_male",
+           "Tb_mort_pos_male_Y_per_100k_male"))
+
+stats_df_TB_inc_mort_by_g_2017<-melt(stats_df_TB_inc_mort_by_g_2017, id = "sim_id")
+stats_df_TB_inc_mort_by_g_2017<-stats_df_TB_inc_mort_by_g_2017%>%
+  mutate(variable = str_replace(variable, "pos", ""),
+         variable = str_replace(variable, "neg", ""))%>%
+  group_by(variable, sim_id)%>% #sum over hiv pos and hiv neg
+  summarise(total = sum(value))%>%
+  group_by(variable)%>%
+  summarise(mean = round(mean(total)),
+            min = round(min(total)),
+            max = round(max(total)))
+
+#by gender in 2027
+
+#program 1
+stats_df_TB_inc_mort_by_g_2027_P1<-outputs_combined_df%>%
+  filter(year == 2027,
+         program_id == 1)%>%
+  select(c("sim_id",
+           'Tb_inc_neg_female_Y_per_100k_female', 
+           'Tb_inc_pos_female_Y_per_100k_female',
+           "Tb_inc_neg_male_Y_per_100k_male",
+           "Tb_inc_pos_male_Y_per_100k_male",
+           'Tb_mort_neg_female_Y_per_100k_female', 
+           'Tb_mort_pos_female_Y_per_100k_female',
+           "Tb_mort_neg_male_Y_per_100k_male",
+           "Tb_mort_pos_male_Y_per_100k_male"))
+
+stats_df_TB_inc_mort_by_g_2027_P1<-melt(stats_df_TB_inc_mort_by_g_2027_P1, id = "sim_id")
+stats_df_TB_inc_mort_by_g_2027_P1<-stats_df_TB_inc_mort_by_g_2027_P1%>%
+  mutate(variable = str_replace(variable, "pos", ""),
+         variable = str_replace(variable, "neg", ""))%>%
+  group_by(variable, sim_id)%>% #sum over hiv pos and hiv neg
+  summarise(total = sum(value))%>%
+  group_by(variable)%>%
+  summarise(mean = round(mean(total)),
+            min = round(min(total)),
+            max = round(max(total)))
+
+###Program 3
+stats_df_TB_inc_mort_by_g_2027_P3<-outputs_combined_df%>%
+  filter(year == 2027,
+         program_id == 3)%>%
+  select(c("sim_id",
+           'Tb_inc_neg_female_Y_per_100k_female', 
+           'Tb_inc_pos_female_Y_per_100k_female',
+           "Tb_inc_neg_male_Y_per_100k_male",
+           "Tb_inc_pos_male_Y_per_100k_male",
+           'Tb_mort_neg_female_Y_per_100k_female', 
+           'Tb_mort_pos_female_Y_per_100k_female',
+           "Tb_mort_neg_male_Y_per_100k_male",
+           "Tb_mort_pos_male_Y_per_100k_male"))
+
+stats_df_TB_inc_mort_by_g_2027_P3<-melt(stats_df_TB_inc_mort_by_g_2027_P3, id = "sim_id")
+stats_df_TB_inc_mort_by_g_2027_P3<-stats_df_TB_inc_mort_by_g_2027_P3%>%
+  mutate(variable = str_replace(variable, "pos", ""),
+         variable = str_replace(variable, "neg", ""))%>%
+  group_by(variable, sim_id)%>% #sum over hiv pos and hiv neg
+  summarise(total = sum(value))%>%
+  group_by(variable)%>%
+  summarise(mean = round(mean(total)),
+            min = round(min(total)),
+            max = round(max(total)))
+
+#by gender and hiv status in 2017 (and hiv prev)
+stats_df_by_g_hiv_status_2017<-outputs_combined_df%>%
+  filter(year == 2017,
+         program_id == 1)%>%
+  select(c("sim_id",
+           'Tb_inc_neg_female_Y_per_100k_female', 
+           'Tb_inc_pos_female_Y_per_100k_female',
+           "Tb_inc_neg_male_Y_per_100k_male",
+           "Tb_inc_pos_male_Y_per_100k_male",
+           'Tb_mort_neg_female_Y_per_100k_female', 
+           'Tb_mort_pos_female_Y_per_100k_female',
+           "Tb_mort_neg_male_Y_per_100k_male",
+           "Tb_mort_pos_male_Y_per_100k_male",
+           "hiv_prev_per_100k_female",
+           "hiv_prev_per_100k_male"))
+
+stats_df_by_g_hiv_status_2017<-melt(stats_df_by_g_hiv_status_2017, 
+                                    id = "sim_id")
+stats_df_by_g_hiv_status_2017<-stats_df_by_g_hiv_status_2017%>%
+  group_by(variable)%>%
+  summarise(mean = round(mean(value)),
+            min = round(min(value)),
+            max = round(max(value)))
+
+##2027 stats
+stats_df_by_program_2027<-outputs_combined_df%>%
+  filter(year == 2027)%>%
+  select(c('sim_id',
+           "program_id",
+           "Tb_inc_Y_per_100k_ppl",
+           "Tb_mort_Y_per_100k_ppl"))
+
+stats_df_by_program_2027<-melt(stats_df_by_program_2027, 
+                                    id = c("sim_id",
+                                    "program_id"))
+
+stats_df_by_program_2027_2<-stats_df_by_program_2027%>%
+  group_by(variable, program_id)%>%
+  summarise(mean = round(mean(value)),
+            min = round(min(value)),
+            max = round(max(value)))
+
+##percent decrease
+stats_df_by_program_2027_3<-stats_df_by_program_2027%>%
+  mutate(program_id = paste0("p", program_id))
+
+stats_df_by_program_2027_3<-dcast(stats_df_by_program_2027_3, 
+                                 sim_id+variable~program_id)
+stats_df_by_program_2027_3<-stats_df_by_program_2027_3%>% 
+  mutate(P2_v_P1 = (1- (p2/p1)),
+         P3_v_P1 = (1- (p3/p1)),
+         P3_v_P2 = (1- (p3/p2)))%>%
+  select(-c('sim_id', 'p1', 'p2', 'p3'))
+
+stats_df_by_program_2027_3<-melt(stats_df_by_program_2027_3,
+                                 id = "variable")
+
+colnames(stats_df_by_program_2027_3)<-c("variable",
+                                        "comparison",
+                                        "value")
+
+stats_df_by_program_2027_3<-stats_df_by_program_2027_3%>%
+  group_by(variable, comparison)%>%
+  summarise(mean = round(mean(value)*100, 1),
+            min = round(min(value)*100, 1),
+            max = round(max(value)*100, 1))
+
+
+##
+stats_df_by_g_hiv_status_2027<-outputs_combined_df%>%
+  filter(year == 2027)%>%
+  select(c("program_id",
+    "sim_id",
+           'Tb_inc_neg_female_Y_per_100k_female', 
+           'Tb_inc_pos_female_Y_per_100k_female',
+           "Tb_inc_neg_male_Y_per_100k_male",
+           "Tb_inc_pos_male_Y_per_100k_male",
+           'Tb_mort_neg_female_Y_per_100k_female', 
+           'Tb_mort_pos_female_Y_per_100k_female',
+           "Tb_mort_neg_male_Y_per_100k_male",
+           "Tb_mort_pos_male_Y_per_100k_male"))
+
+stats_df_by_g_hiv_status_2027<-melt(stats_df_by_g_hiv_status_2027,
+                                    id = c("program_id", 
+                                           "sim_id"))
+
+stats_df_by_g_hiv_status_2027_summarised_total<-stats_df_by_g_hiv_status_2027%>%
+  group_by(program_id, variable)%>%
+  summarise(mean = round(mean(value)),
+            min = round(min(value)),
+            max = round(max(value)))%>%
+  mutate(ref = paste0(mean, " (range ", min, "-", max, ")"))
+
+stats_df_by_g_hiv_status_2027_perc_reduction_summarised<-stats_df_by_g_hiv_status_2027
+stats_df_by_g_hiv_status_2027_perc_reduction_summarised$program_id<-paste0('p', stats_df_by_g_hiv_status_2027_perc_reduction_summarised$program_id)
+stats_df_by_g_hiv_status_2027_perc_reduction_summarised<-dcast(stats_df_by_g_hiv_status_2027_perc_reduction_summarised,
+                            sim_id+variable ~ program_id)
+stats_df_by_g_hiv_status_2027_perc_reduction_summarised<-stats_df_by_g_hiv_status_2027_perc_reduction_summarised%>%
+  mutate(p3_p1_perc_reduction = 1-p3/p1)%>%
+  group_by(variable)%>%
+  summarise(mean = mean(p3_p1_perc_reduction),
+            min = min(p3_p1_perc_reduction),
+            max = max(p3_p1_perc_reduction))%>%
+  mutate(text = paste0(round(mean*100, 1), "% (range ", round(min*100, 1), "% - ", round(max*100, 1), "%)"))
+
+stats_df_by_g_2027_1<-stats_df_by_g_hiv_status_2027%>%
+  mutate(variable = str_replace(variable, "pos", ""),
+         variable = str_replace(variable, "neg", ""))%>%
+  group_by(sim_id, program_id, variable)%>%
+  summarise(value = round(sum(value)))%>%
+  ungroup()
+
+stats_df_by_g_2027_1<-stats_df_by_g_2027_1%>%
+  mutate(program_id = paste0("p", program_id))
+
+stats_df_by_g_2027_1<-dcast(stats_df_by_g_2027_1,
+                                     sim_id+variable ~ program_id)
+
+stats_df_by_g_2027_1<-stats_df_by_g_2027_1%>% 
+  mutate(P2_v_P1 = (1- (p2/p1)),
+         P3_v_P1 = (1- (p3/p1)),
+         P3_v_P2 = (1- (p3/p2)))%>%
+  select(-c('sim_id', 'p1', 'p2', 'p3'))
+
+stats_df_by_g_2027_1<-melt(stats_df_by_g_2027_1,
+                                 id = "variable")
+
+colnames(stats_df_by_g_2027_1)<-c("variable",
+                                        "comparison",
+                                        "value")
+
+stats_df_by_g_2027_1<-stats_df_by_g_2027_1%>%
+  group_by(variable, comparison)%>%
+  summarise(mean = round(mean(value)*100, 1),
+            min = round(min(value)*100, 1),
+            max = round(max(value)*100, 1))
+
+
+###negative inc and mort
+stats_df_by_hiv_status_2027_2<-stats_df_by_g_hiv_status_2027%>%
+  filter(grepl('neg', variable))%>%
+  group_by(program_id, variable)%>%
+  summarise(mean = round(mean(value)),
+            min = round(min(value)),
+            max = round(max(value)))%>%
+  filter(program_id != 2)
 
 #####COLORS FOR PROGRAM GRAPHS#######
+colors_for_graphs <- brewer.pal(n = 10, name = "Paired")
 colors_for_program_graph_fill<-colors_for_graphs[c(1, 3, 5)]
 colors_for_program_graph_line<-colors_for_graphs[c(2, 4, 6)]
 
@@ -1009,12 +1234,6 @@ for(current_measure_eval in unique(outputs_combined_df_calibration$title)){
   dev.off()
 }
 
-#discount factor
-R = 0.03
-eval_start_yr <- 2018
 
-disc_factor_df<-data.frame(year = 2018:2027)
-disc_factor_df<-disc_factor_df%>%
-  mutate(FY = 1/(1+R)^(year - eval_start_yr))
 
 
