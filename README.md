@@ -1,4 +1,4 @@
-## Preventing tuberculosis with community-based antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) care in an HIV-endemic setting: a dynamic tranmission modeling analysis
+## Preventing tuberculosis with community-based antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) care in Kwazulu-Natal, South Africa: a dynamic tranmission modeling analysis
 
 ### Contents in the repository:
 1. [Parameter Files](#parameter_files)
@@ -6,7 +6,7 @@
 3. [Results Files](#results)
 
 #### About the Model <a name="about"></a>
-This repository contains the files needed to execute a dynamic transmission model for tuberculosis (TB) and human immunodeficiency virus (HIV) disease progression that is compartmentalized by TB stage, HIV stage, TB and HIV treatment status, TB drug resistance status, and gender. The model is set up to evaluate the impacts of increased uptake of antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) observed in the community-based intervention of the Delivery Optimization for Antiretroviral Therapy (DO ART) trial, compared to standard facility-based care. The model projects health outcomes, including TB incidence, TB mortality, TB and HIV prevalence. The details for the model are provided in the appendix. *The appendix file includes a detailed description of the dynamic transmission model including the equations for the dynamic transmission model, input parameters and calculations of metrics using dynamic transmission model outputs. *
+This repository contains the files needed to execute a dynamic transmission model for tuberculosis (TB) and human immunodeficiency virus (HIV) disease progression that is compartmentalized by TB stage, HIV stage, TB and HIV treatment status, TB drug resistance status, and gender. The model is set up to evaluate the impacts of increased uptake of antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) observed in the community-based intervention of the Delivery Optimization for Antiretroviral Therapy (DO ART) trial, compared to standard, facility-based ART and IPT care. The model projects health outcomes, including TB incidence, TB mortality, TB and HIV prevalence. The details for the model are provided in the appendix. *The appendix file includes a detailed description of the dynamic transmission model including the equations for the dynamic transmission model, input parameters and calculations of metrics using dynamic transmission model outputs. *
 
 <figure>
   <figcaption> **TB Transitions** </figcaption>
