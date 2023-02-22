@@ -614,15 +614,34 @@ violin_plot_df_by_policy<-violin_plot_df_by_policy%>%
                                      'DALYs'))))
 
 #nipt
-n_ipt_df_by_community_v_facility<-n_ipt_df%>%
-  mutate(program_group = if_else(program_id == 3, "community_based_ipt", "facility_based_ipt"))%>%
-  mutate(value_avg = if_else(program_id == 3, n_ipt, n_ipt/2))%>%
-  group_by(sim_id, program_group)%>%
-  summarise(n_ipt_total = sum(value_avg))%>%
-  group_by(program_group)%>%
-  summarise(mean = round(mean(n_ipt_total)),
-            min = round(min(n_ipt_total)),
-            max = round(max(n_ipt_total)))
+n_ipt_df_summarised<-n_ipt_df%>%
+  mutate(program_group = paste0("Program ", program_id, "\n(p=", program_id, ")"))%>%
+  mutate(time = time + 2018)%>%
+  group_by(program_group, time)%>%
+  summarise(n_ipt = round(mean(n_ipt)))
+
+#####COLORS FOR PROGRAM GRAPHS#######
+colors_for_graphs <- brewer.pal(n = 10, name = "Paired")
+colors_for_program_graph_line<-colors_for_graphs[c(2, 4, 6)]
+
+ggplot(n_ipt_df_summarised, aes(x=time, y=n_ipt, group=program_group)) +
+  geom_line(aes(color=program_group))+
+  labs(color="")+
+  theme(text = element_text(size=12, family="Times New Roman"), 
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        legend.position="top", legend.title = element_blank(), legend.text=element_text(size=12),
+        plot.title = element_text(hjust = .5, size=12),
+        legend.background = element_rect(colour = "lightgrey"),
+        legend.box.background = element_rect(colour = "black"))+
+  scale_x_continuous(breaks=seq(2018,2028,2), name = expression("time"~tau))+
+  scale_y_continuous(breaks=seq(0,3000,1000), name = "Number of Individuals on IPT,\nper 100K Individuals")+
+  scale_color_manual(values=c(colors_for_program_graph_line))
+  
+  
+
+
+
 
 
 
