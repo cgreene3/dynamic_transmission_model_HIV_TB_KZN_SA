@@ -1,4 +1,4 @@
-## Preventing tuberculosis with community-based antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) care in an HIV-endemic setting: a modeling analysis
+## Preventing tuberculosis with community-based antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) care in an HIV-endemic setting: a dynamic tranmission modeling analysis
 
 ### Contents in the repository:
 1. [Parameter Files](#parameter_files)
