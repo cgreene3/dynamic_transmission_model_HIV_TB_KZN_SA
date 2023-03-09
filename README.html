@@ -358,16 +358,21 @@ pre code {
 </div>
 
 
-<div id="preventing-tuberculosis-with-community-based-antiretroviral-therapy-art-and-isoniazid-preventive-therapy-ipt-care-in-an-hiv-endemic-setting-a-modeling-analysis" class="section level2">
+<div id="preventing-tuberculosis-with-community-based-antiretroviral-therapy-art-and-isoniazid-preventive-therapy-ipt-care-in-kwazulu-natal-south-africa-a-dynamic-tranmission-modeling-analysis" class="section level2">
 <h2>Preventing tuberculosis with community-based antiretroviral therapy
-(ART) and isoniazid preventive therapy (IPT) care in an HIV-endemic
-setting: a modeling analysis</h2>
+(ART) and isoniazid preventive therapy (IPT) care in Kwazulu-Natal,
+South Africa: a dynamic tranmission modeling analysis</h2>
+<p>The details for the model are provided in the <a href="https://github.com/cgreene3/dynamic_transmission_model_HIV_TB_KZN_SA/blob/master/appendix.pdf">appendix</a>.
+The description of what is included the repository is provided
+below.</p>
 <div id="contents-in-the-repository" class="section level3">
 <h3>Contents in the repository:</h3>
 <ol style="list-style-type: decimal">
-<li><a href="#parameter_files">Parameter Files</a></li>
-<li><a href="#model_execution">Model Execution Files</a></li>
-<li><a href="#results">Results Files</a></li>
+<li><a href="#about">About the Model</a></li>
+<li><a href="#parameter_files">Description of Parameter Files</a></li>
+<li><a href="#model_execution">Descriptions of Model Execution
+Files</a></li>
+<li><a href="#results">Description of Results Files</a></li>
 </ol>
 <div id="about-the-model" class="section level4">
 <h4>About the Model <a name="about"></a></h4>
@@ -379,13 +384,9 @@ gender. The model is set up to evaluate the impacts of increased uptake
 of antiretroviral therapy (ART) and isoniazid preventive therapy (IPT)
 observed in the community-based intervention of the Delivery
 Optimization for Antiretroviral Therapy (DO ART) trial, compared to
-standard facility-based care. The model projects health outcomes,
-including TB incidence, TB mortality, TB and HIV prevalence. The details
-for the model are provided in the appendix. <em>The appendix file
-includes a detailed description of the dynamic transmission model
-including the equations for the dynamic transmission model, input
-parameters and calculations of metrics using dynamic transmission model
-outputs. </em></p>
+standard, facility-based ART and IPT care. The model projects health
+outcomes, including TB incidence, TB mortality, TB and HIV
+prevalence.</p>
 <figure>
 <figcaption>
 <strong>TB Transitions</strong>
@@ -580,9 +581,7 @@ appendix for each program, and state and transition files for use in the
 cost model and economic evaluation. Since we run the code on Hyak
 outputs are saved to a file called program_outputs and
 program_outputs_economic_analysis. Then we copy the program outputs into
-<em>/results/program_outputs</em>. program_outputs_economic_analysis are
-saved to a seperate repository used for the cost model, DALYs and to
-calculate incremental health gains and costs.</li>
+<em>/results/program_outputs</em>.</li>
 <li><em>program_analysis_Rscript.R (script)</em> used to generate graphs
 used to analyse program heath outcomes. While we can run the script on
 Hyak, its small enough to run locally with the results stored in
@@ -597,6 +596,12 @@ scripts used to run the image files on hyak and,</li>
 <li>instructions (folder) describes how to make an image file with
 command line on hyak, and the organization of the hyak folder where we
 run all the files from.</li>
+</ul></li>
+<li><strong>cost_model</strong>
+<ul>
+<li>program_outputs_economic_analysis are saved to a seperate repository
+used for the cost model, DALYs and to calculate incremental health gains
+and costs.</li>
 </ul></li>
 </ul>
 </div>

@@ -1,12 +1,15 @@
 ## Preventing tuberculosis with community-based antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) care in Kwazulu-Natal, South Africa: a dynamic tranmission modeling analysis
 
+The details for the model are provided in the [appendix](https://github.com/cgreene3/dynamic_transmission_model_HIV_TB_KZN_SA/blob/master/appendix.pdf). The description of what is included the repository is provided below.
+
 ### Contents in the repository:
-1. [Parameter Files](#parameter_files)
-2. [Model Execution Files](#model_execution)
-3. [Results Files](#results)
+1. [About the Model](#about)
+2. [Description of Parameter Files](#parameter_files)
+3. [Descriptions of Model Execution Files](#model_execution)
+4. [Description of Results Files](#results)
 
 #### About the Model <a name="about"></a>
-This repository contains the files needed to execute a dynamic transmission model for tuberculosis (TB) and human immunodeficiency virus (HIV) disease progression that is compartmentalized by TB stage, HIV stage, TB and HIV treatment status, TB drug resistance status, and gender. The model is set up to evaluate the impacts of increased uptake of antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) observed in the community-based intervention of the Delivery Optimization for Antiretroviral Therapy (DO ART) trial, compared to standard, facility-based ART and IPT care. The model projects health outcomes, including TB incidence, TB mortality, TB and HIV prevalence. The details for the model are provided in the appendix. *The appendix file includes a detailed description of the dynamic transmission model including the equations for the dynamic transmission model, input parameters and calculations of metrics using dynamic transmission model outputs. *
+This repository contains the files needed to execute a dynamic transmission model for tuberculosis (TB) and human immunodeficiency virus (HIV) disease progression that is compartmentalized by TB stage, HIV stage, TB and HIV treatment status, TB drug resistance status, and gender. The model is set up to evaluate the impacts of increased uptake of antiretroviral therapy (ART) and isoniazid preventive therapy (IPT) observed in the community-based intervention of the Delivery Optimization for Antiretroviral Therapy (DO ART) trial, compared to standard, facility-based ART and IPT care. The model projects health outcomes, including TB incidence, TB mortality, TB and HIV prevalence. 
 
 <figure>
   <figcaption> **TB Transitions** </figcaption>
@@ -70,13 +73,16 @@ The model execution file contains the code to run the calibration period, interv
   * *calibration_analysis_Rscript.R (script)* used to evaluate model values for each parameter set for metrics used in calibration against target calibration ranges. The script generates the list of accepted parameter sets, model values for metrics used in calibration for each of the accepted parameter sets. Since we run the code on Hyak outputs are saved to a file called calibration_analysis then we copy outputs into */results/calibration_analysis*.
   
 * **intervention_period**
-  * *program_runs_for_loop_Rscript.R (script)* used to run accepted parameter sets from the start of 1940 to the end of 2017 under Program 1 then for program from the start of 2018 to the end of 2027. The script outputs the metrics in Section 4.1 to Section 4.3 in the appendix for each program, and state and transition files for use in the cost model and economic evaluation.  Since we run the code on Hyak outputs are saved to a file called program_outputs and program_outputs_economic_analysis. Then we copy the program outputs into */results/program_outputs*. program_outputs_economic_analysis are saved to a seperate repository used for the cost model, DALYs and to calculate incremental health gains and costs. 
+  * *program_runs_for_loop_Rscript.R (script)* used to run accepted parameter sets from the start of 1940 to the end of 2017 under Program 1 then for program from the start of 2018 to the end of 2027. The script outputs the metrics in Section 4.1 to Section 4.3 in the appendix for each program, and state and transition files for use in the cost model and economic evaluation.  Since we run the code on Hyak outputs are saved to a file called program_outputs and program_outputs_economic_analysis. Then we copy the program outputs into */results/program_outputs*. 
   * *program_analysis_Rscript.R (script)* used to generate graphs used to analyse program heath outcomes. While we can run the script on Hyak, its small enough to run locally with the results stored in */results/program_outputs*. The code generates stats used in the results section to analyse health outcomes for each program to */results/stats* and graphs to */results/graphs*
   
 * **hyak**
   * Contains the containers needed to make image files, and batch scripts used to run the image files on hyak and,
   * instructions (folder) describes how to make an image file with command line on hyak, and the organization of the hyak folder where we run all the files from.
   
+* **cost_model**
+  * program_outputs_economic_analysis are saved to a seperate repository used for the cost model, DALYs and to calculate incremental health gains and costs. 
+
 #### results (folder) <a name="results"></a>
 The results folder contains the results listed below. There is a test folder that is used to gather results of outputs for calibration and intervention period runs.
 

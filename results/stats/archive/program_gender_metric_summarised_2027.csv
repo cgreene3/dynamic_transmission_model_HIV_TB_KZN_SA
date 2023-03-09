@@ -1,0 +1,13 @@
+"title","variable","max","min","mean"
+"Tuberculosis incidence rate per 100K Females","program_1_2_diff",0.377121347306635,0.207494375245776,0.294606440219571
+"Tuberculosis incidence rate per 100K Females","program_2_3_diff",0.189867805850244,0.0600123432933123,0.120547562420729
+"Tuberculosis incidence rate per 100K Females","program_1_3_diff",0.439611481161248,0.330416939716443,0.3800202482697
+"Tuberculosis incidence rate per 100K Males","program_1_2_diff",0.435738437875713,0.237664922432915,0.34178635047657
+"Tuberculosis incidence rate per 100K Males","program_2_3_diff",0.16804755826128,0.0532788811615582,0.106016122068312
+"Tuberculosis incidence rate per 100K Males","program_1_3_diff",0.483322861433718,0.34933948199642,0.411995859848638
+"Tuberculosis mortality rate per 100K Females","program_1_2_diff",0.404349059755803,0.213757617265482,0.314367504624391
+"Tuberculosis mortality rate per 100K Females","program_2_3_diff",0.140809096973132,0.0299747727376368,0.0717039266232683
+"Tuberculosis mortality rate per 100K Females","program_1_3_diff",0.440132884239724,0.299611235252339,0.363798595408141
+"Tuberculosis mortality rate per 100K Males","program_1_2_diff",0.520179398598434,0.279627264418931,0.407247508946307
+"Tuberculosis mortality rate per 100K Males","program_2_3_diff",0.136386231520773,0.0324346228619488,0.0736270604309893
+"Tuberculosis mortality rate per 100K Males","program_1_3_diff",0.544859549440052,0.367736571489126,0.451211135048217

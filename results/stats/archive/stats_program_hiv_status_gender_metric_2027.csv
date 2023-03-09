@@ -1,0 +1,25 @@
+"title","variable","max","min","mean"
+"Tuberculosis incidence rate per 100K Females and HIV-","program_1_2_diff",0.168901878979406,-0.00192901335838688,0.0936849434816106
+"Tuberculosis incidence rate per 100K Females and HIV-","program_2_3_diff",0.0914025369057333,0.0194000729405387,0.049142251586944
+"Tuberculosis incidence rate per 100K Females and HIV-","program_1_3_diff",0.202303403981476,0.0599234743960866,0.138409435943246
+"Tuberculosis incidence rate per 100K Females and HIV+","program_1_2_diff",0.435973157442655,0.274942422403955,0.361716476474085
+"Tuberculosis incidence rate per 100K Females and HIV+","program_2_3_diff",0.234690306525665,0.0809146449415511,0.154410280031835
+"Tuberculosis incidence rate per 100K Females and HIV+","program_1_3_diff",0.507212752592545,0.415693180773181,0.460784456766028
+"Tuberculosis incidence rate per 100K Males and HIV-","program_1_2_diff",0.199802500914128,0.0403851787588849,0.127879712478999
+"Tuberculosis incidence rate per 100K Males and HIV-","program_2_3_diff",0.0914657856385139,0.0195923355340331,0.0493052441145646
+"Tuberculosis incidence rate per 100K Males and HIV-","program_1_3_diff",0.230759969105953,0.09757889076332,0.171058173545579
+"Tuberculosis incidence rate per 100K Males and HIV+","program_1_2_diff",0.565335318445899,0.354445604757769,0.46952860212223
+"Tuberculosis incidence rate per 100K Males and HIV+","program_2_3_diff",0.244155809010618,0.0808594132963841,0.161694143279782
+"Tuberculosis incidence rate per 100K Males and HIV+","program_1_3_diff",0.622682376952642,0.497099193265524,0.556013530991002
+"Tuberculosis mortality rate per 100K Females and HIV-","program_1_2_diff",0.133510507594986,-0.0177090384087694,0.0638432410010966
+"Tuberculosis mortality rate per 100K Females and HIV-","program_2_3_diff",0.0724707458944854,0.0138875407373477,0.0375698246368524
+"Tuberculosis mortality rate per 100K Females and HIV-","program_1_3_diff",0.160189650711693,0.0256309650233841,0.0991179381113342
+"Tuberculosis mortality rate per 100K Females and HIV+","program_1_2_diff",0.455054853576798,0.261277847477513,0.365631512497405
+"Tuberculosis mortality rate per 100K Females and HIV+","program_2_3_diff",0.16073653638399,0.0334125758795176,0.0820119295394219
+"Tuberculosis mortality rate per 100K Females and HIV+","program_1_3_diff",0.490459114807107,0.356659642544487,0.418004662664103
+"Tuberculosis mortality rate per 100K Males and HIV-","program_1_2_diff",0.166691620424216,0.0227592709479039,0.100620380745931
+"Tuberculosis mortality rate per 100K Males and HIV-","program_2_3_diff",0.075230080177765,0.0148730195600147,0.0395966334535659
+"Tuberculosis mortality rate per 100K Males and HIV-","program_1_3_diff",0.19383471413541,0.0656713434424168,0.136343868707934
+"Tuberculosis mortality rate per 100K Males and HIV+","program_1_2_diff",0.631277571848069,0.36370473488462,0.520135266528688
+"Tuberculosis mortality rate per 100K Males and HIV+","program_2_3_diff",0.177186413982888,0.0414230086628147,0.0970656412974595
+"Tuberculosis mortality rate per 100K Males and HIV+","program_1_3_diff",0.655631678356158,0.470284796011518,0.567215606596619
