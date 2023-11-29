@@ -11,7 +11,7 @@ gc()
 sapply(c('dplyr', 'deSolve', 
          'readxl', 'stringr', 
          'reshape2', 'ggplot2', 
-         'varhandle', 'here', 'extrafont', 'RColorBrewer'), require, character.only=T)
+         'varhandle', 'here', 'extrafont', 'RColorBrewer', 'gridExtra'), require, character.only=T)
 
 ##GITHUB/LOCAL###
 #location where we sent outputs
@@ -59,32 +59,36 @@ for (i in 2:length(all_files_in_outdir)){
 
 #missing_sims_prog_df<-as.data.frame(unique(outputs_combined_df$sim_id))
 
-#program stats
+###identify calibration sets that have worse cumulative TB incidence/mortality rates 
+##in program 3 vs 2
+remaining_calib_sets_df<-outputs_combined_df%>%
+  filter(program_id %in% c(2,3))%>%
+  group_by(sim_id, program_id)%>%
+  summarise(total_tb_inc = sum(Tb_inc_Y_per_100k_ppl))%>%
+  dcast(sim_id ~ program_id)%>%
+  mutate(total_diff = `3` - `2`)%>% #Program 2 to Program 3 should see less TB inc
+  filter(total_diff < 0) #only keep sims that have improved health outcomes
 
-#by gender in 2017
-stats_df_TB_inc_mort_by_g_2017<-outputs_combined_df%>%
-  filter(year == 2017,
-         program_id == 1)%>%
-  select(c("sim_id",
-           'Tb_inc_neg_female_Y_per_100k_female', 
-           'Tb_inc_pos_female_Y_per_100k_female',
-           "Tb_inc_neg_male_Y_per_100k_male",
-           "Tb_inc_pos_male_Y_per_100k_male",
-           'Tb_mort_neg_female_Y_per_100k_female', 
-           'Tb_mort_pos_female_Y_per_100k_female',
-           "Tb_mort_neg_male_Y_per_100k_male",
-           "Tb_mort_pos_male_Y_per_100k_male"))
+##reduced TB mort
+reduced_TB_mort<-outputs_combined_df%>%
+  filter(program_id %in% c(2,3))%>%
+  group_by(sim_id, program_id)%>%
+  summarise(total_tb_mort = sum(Tb_mort_Y_per_100k_ppl))%>%
+  dcast(sim_id ~ program_id)%>%
+  mutate(total_diff = `3` - `2`)%>% #Program 2 to Program 3 should see less TB mort
+  filter(total_diff > 0) #don't keep sims that do not have improved health outcomes
 
-stats_df_TB_inc_mort_by_g_2017<-melt(stats_df_TB_inc_mort_by_g_2017, id = "sim_id")
-stats_df_TB_inc_mort_by_g_2017<-stats_df_TB_inc_mort_by_g_2017%>%
-  mutate(variable = str_replace(variable, "pos", ""),
-         variable = str_replace(variable, "neg", ""))%>%
-  group_by(variable, sim_id)%>% #sum over hiv pos and hiv neg
-  summarise(total = sum(value))%>%
-  group_by(variable)%>%
-  summarise(mean = round(mean(total)),
-            min = round(min(total)),
-            max = round(max(total)))
+remaining_calib_sets_df<-remaining_calib_sets_df%>%
+  filter(!(sim_id %in% reduced_TB_mort$sim_id))
+
+setwd(outdir_stats)
+write.csv(remaining_calib_sets_df,
+          'remaining_calib_sets_df.csv',
+          row.names = FALSE)
+
+#filter outputs combined with remaining calibration sets
+outputs_combined_df<-outputs_combined_df%>%
+  filter(sim_id %in% unique(remaining_calib_sets_df$sim_id))
 
 #by gender in 2027
 
@@ -156,11 +160,34 @@ stats_df_by_g_hiv_status_2017<-outputs_combined_df%>%
 
 stats_df_by_g_hiv_status_2017<-melt(stats_df_by_g_hiv_status_2017, 
                                     id = "sim_id")
+
+stats_df_by_g_2017 <-stats_df_by_g_hiv_status_2017%>%
+  mutate(variable = str_replace(variable, "pos", ""),
+         variable = str_replace(variable, "neg", ""))%>%
+  group_by(variable, sim_id)%>%
+  summarise(value = sum(value))
+
+
 stats_df_by_g_hiv_status_2017<-stats_df_by_g_hiv_status_2017%>%
   group_by(variable)%>%
   summarise(mean = round(mean(value)),
             min = round(min(value)),
             max = round(max(value)))
+
+stats_df_by_g_2017<-stats_df_by_g_2017%>%
+  group_by(variable)%>%
+  summarise(mean = round(mean(value)),
+            min = round(min(value)),
+            max = round(max(value)))
+
+setwd(outdir_stats)
+write.csv(stats_df_by_g_2017,
+          'stats_df_by_g_2017.csv',
+          row.names = FALSE)
+
+write.csv(stats_df_by_g_hiv_status_2017,
+          'stats_df_by_g_hiv_status_2017.csv',
+          row.names = FALSE)
 
 ##2027 stats
 stats_df_by_program_2027<-outputs_combined_df%>%
@@ -329,14 +356,17 @@ cast_stats_program_hiv_status_gender_metric_2027<-cast_stats_program_hiv_status_
          program_2_3_diff = (program_2 - program_3)/program_2,
          program_1_3_diff = (program_1 - program_3)/program_1)
 
-cast_stats_program_hiv_status_gender_metric_2027<-cast_stats_program_hiv_status_gender_metric_2027%>%
-  select(-c("program_1", "program_2", "program_3"))
+#cast_stats_program_hiv_status_gender_metric_2027<-cast_stats_program_hiv_status_gender_metric_2027%>%
+  #select(-c("program_1", "program_2", "program_3"))
 
 melt_stats_program_hiv_status_gender_metric_2027<-melt(cast_stats_program_hiv_status_gender_metric_2027,
                                                  id = c("title", "sim_id"))
 
 stats_program_hiv_status_gender_metric_2027_2<-melt_stats_program_hiv_status_gender_metric_2027%>%
   group_by(title, variable)%>%
+  mutate(rank_measure = rank(value))%>%
+  filter(rank_measure <= nrow(remaining_calib_sets_df)*.99,
+         rank_measure >= nrow(remaining_calib_sets_df)*.01)%>% #99th percentile
   summarise(max=max(value),
             min=min(value),
             mean=mean(value))
@@ -386,14 +416,14 @@ for(current_var_eval in unique(outputs_combined_df_program_hiv_status_gender_met
   
   if (grepl('inc', current_var_eval)){
     measure_temp<-"TB incidence rate"
-    if(grepl('negative', current_var_eval)){
+    if(grepl('HIV-', current_var_eval)){
       max_min_graph_y_axis<-c(0, 800, 200)
     } else {
       max_min_graph_y_axis<-c(0, 2400, 400)
     }
   } else if (grepl('mort', current_var_eval)){
     measure_temp<-"TB mortality rate"
-    if(grepl('negative', current_var_eval)){
+    if(grepl('HIV-', current_var_eval)){
       max_min_graph_y_axis<-c(0, 150, 20)
     } else{
       max_min_graph_y_axis<-c(0, 800, 150)
@@ -416,7 +446,7 @@ for(current_var_eval in unique(outputs_combined_df_program_hiv_status_gender_met
     annotate("text", x=2012, y=max_min_graph_y_axis[2]*.95, label= "calibration period", size = 7)+
     annotate("text", x=2022, y=max_min_graph_y_axis[2]*.95, label= "intervention period", size = 7)+
     #ggtitle(current_var_eval)+
-    scale_x_continuous(name = 'year Y', breaks=c(seq(from = 1990, to = 2028, by = 3)))+
+    scale_x_continuous(name = 'year y', breaks=c(seq(from = 1990, to = 2028, by = 3)))+
     scale_color_manual(values=c("black", colors_for_program_graph_line))+
     scale_fill_manual(values=c('grey75', colors_for_program_graph_fill))+
     ylim(max_min_graph_y_axis[1:2])+
@@ -461,14 +491,17 @@ cast_program_gender_metric_summarised_2027<-cast_program_gender_metric_summarise
          program_2_3_diff = (program_2 - program_3)/program_2,
          program_1_3_diff = (program_1 - program_3)/program_1)
 
-cast_program_gender_metric_summarised_2027<-cast_program_gender_metric_summarised_2027%>%
-  select(-c("program_1", "program_2", "program_3"))
+cast_program_gender_metric_summarised_2027<-cast_program_gender_metric_summarised_2027#%>%
+  #select(-c("program_1", "program_2", "program_3"))
 
 melt_program_gender_metric_summarised_2027<-melt(cast_program_gender_metric_summarised_2027,
                                                  id = c("title", "sim_id"))
 
 program_gender_metric_summarised_2027_2<-melt_program_gender_metric_summarised_2027%>%
   group_by(title, variable)%>%
+  mutate(rank_measure = rank(value))%>%
+  filter(rank_measure <= nrow(remaining_calib_sets_df)*.99,
+         rank_measure >= nrow(remaining_calib_sets_df)*.01)%>% #99th percentile
   summarise(max=max(value),
             min=min(value),
             mean=mean(value))
@@ -479,6 +512,7 @@ setwd(outdir_stats)
 write.csv(program_gender_metric_summarised_2027_2,
           'program_gender_metric_summarised_2027.csv',
           row.names = FALSE)
+
 
 # gender_metric_prog_diff_stats_2027<-outputs_combined_df_program_gender_metric%>%
 #   filter(year == 2027)%>%
@@ -500,6 +534,8 @@ write.csv(program_gender_metric_summarised_2027_2,
 #           'gender_metric_prog_diff_stats_2027.csv',
 #           row.names = FALSE)
 
+myplots <- vector('list', length(unique(outputs_combined_df_program_gender_metric$title)))
+i_itr<-1
 
 for(current_var_eval in unique(outputs_combined_df_program_gender_metric$title)){
   
@@ -555,17 +591,20 @@ for(current_var_eval in unique(outputs_combined_df_program_gender_metric$title))
   program_graph_temp<-ggplot(program_eval_summarised)+
     geom_ribbon(aes(ymin = lower_rate, ymax = upper_rate, x = year, fill = group))+
     geom_point(aes(x = year, y = val_rate, colour = group, shape = group), 
-               size = 2)+
-    geom_point(aes(x = 2017, y = last_yr_calib_est), colour="black")+
-    theme(text = element_text(size=18, family="Times New Roman"), 
+               size = 1)+
+    #geom_point(aes(x = 2017, y = last_yr_calib_est), colour="black")+
+    theme(text = element_text(family="Times New Roman", size = 10), 
           panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
-          legend.position="top", legend.title = element_blank(), legend.text=element_text(size=18),
-          plot.title = element_text(hjust = .5, size=20))+
+          legend.position=c(0, 0), #change position to print/not print
+          legend.title = element_blank(), legend.text=element_text(size=12),
+          plot.title = element_text(hjust = .5, size=10))+
+    guides(color=guide_legend(nrow=1, byrow=TRUE))+
+                                    #size=20))+
     geom_vline(xintercept = 2017, linetype="dashed", 
-               color = "darkgrey", size=1.5)+
-    annotate("text", x=2012, y=max_min_graph_y_axis[2]*.95, label= "calibration period", size = 6.5)+
-    annotate("text", x=2022, y=max_min_graph_y_axis[2]*.95, label= "intervention period", size = 6.5)+
+               color = "darkgrey", size=0.5)+
+    annotate("text", x=2013, y=max_min_graph_y_axis[2]*.95, label= "calibration\nperiod", size =3)+
+    annotate("text", x=2022, y=max_min_graph_y_axis[2]*.95, label= "intervention\nperiod", size = 3)+
     ggtitle(title)+
     scale_x_continuous(name = 'Year', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
     scale_color_manual(values=c("black", colors_for_program_graph_line))+
@@ -576,11 +615,21 @@ for(current_var_eval in unique(outputs_combined_df_program_gender_metric$title))
   
   file_name<-paste0(str_replace_all(current_var_eval, " ", "_"),".png")
   
-  setwd(outdir_graphs_prog2)
-  png(file_name, width = 800, height = 600)
-  print(program_graph_temp)
-  dev.off()
+  #setwd(outdir_graphs_prog2)
+  #png(file_name, width = 800, height = 600)
+  #print(program_graph_temp)
+  #dev.off()
+  
+  myplots[[i_itr]]<-program_graph_temp
+  i_itr<-i_itr+1
 }
+
+setwd(outdir_graphs_prog2)
+png('test.png', width = 8.5, height = 6, units = "in", res = 1000)
+print(grid.arrange(myplots[[1]], myplots[[2]], 
+             myplots[[3]], myplots[[4]], 
+             ncol=2))
+dev.off()
 
 
 ######program3 mort prev and incidence differences over eval period######
@@ -644,6 +693,9 @@ for(measure in c('mort', 'prev', 'inc')){
     select(c('year', 'program_id', measure2))%>%
     rename(value = measure2)%>%
     group_by(year, program_id)%>%
+    mutate(rank_measure = rank(value))%>%
+    filter(rank_measure <= nrow(remaining_calib_sets_df)*.99,
+           rank_measure >= nrow(remaining_calib_sets_df)*.01)%>% #99th percentile
     summarise(lower_rate = min(value),
               upper_rate = max(value),
               val_rate = mean(value))%>%
@@ -707,7 +759,7 @@ for(measure in c('mort', 'prev', 'inc')){
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position="top", legend.title = element_blank(), legend.text=element_text(size=18),
           plot.title = element_text(hjust = .5, size=20))+
-    scale_x_continuous(name = 'year Y',
+    scale_x_continuous(name = 'year y',
                        breaks=c(seq(from = 2018, to = 2027, by = 3)),
                        expand = expansion(mult=c(0,.1)))+
     scale_color_manual(values=c(colors_for_program_graph_line))+
@@ -751,18 +803,23 @@ for(measure in c('mort', 'prev', 'inc')){
   dev.off()
 }
 
-####program 3 for manuscript####
-for(measure in c('mort', 'prev', 'inc')){
+
+
+####program 4 for manuscript####
+myplots2 <- vector('list', length(unique(outputs_combined_df_program_gender_metric$title)))
+i_itr<-1
+
+for(measure in c('mort', 'inc')){
   
   measure2<-paste0('tb_', measure, '_y_per_100k_ppl')
   measure_y_axis<-if_else(grepl('mort', measure), 'TB mortality rate,\nper 100,000 individuals, per year',
                           if_else(grepl('prev', measure), 
                                   'TB prevalence rate,\nper 100,000 individuals, per year',
                                   'TB incidence rate,\nper 100,000 individuals, per year'))
-  measure_title<-if_else(grepl('mort', measure), 'TB mortality rate for each program over the intervention period',
+  measure_title<-if_else(grepl('mort', measure), 'TB mortality rate for each program\nover the intervention period',
                          if_else(grepl('prev', measure), 
-                                 'TB prevalence rate for each program over the intervention period',
-                                 'TB incidence rate for each program over the intervention period'))
+                                 'TB prevalence rate for each program\nover the intervention period',
+                                 'TB incidence rate for each program\nover the intervention period'))
   
   
   outputs_current_measure_df<-outputs_combined_df
@@ -770,8 +827,12 @@ for(measure in c('mort', 'prev', 'inc')){
   names(outputs_current_measure_df)<-tolower(names(outputs_current_measure_df))
   
   outputs_current_measure_df<-outputs_current_measure_df%>%
-    select(c('year', 'program_id', measure2))%>%
+    select(c('year', 'program_id', measure2, 'sim_id'))%>%
     rename(value = measure2)%>%
+    group_by(year, program_id)%>%
+    mutate(rank_measure = rank(value))%>%
+    filter(rank_measure <= nrow(remaining_calib_sets_df)*.99,
+           rank_measure >= nrow(remaining_calib_sets_df)*.01)%>% #99th percentile
     group_by(year, program_id)%>%
     summarise(lower_rate = min(value),
               upper_rate = max(value),
@@ -828,58 +889,69 @@ for(measure in c('mort', 'prev', 'inc')){
   prog2_v_3<-prog2_v_3$mean[[1]]
   prog2_v_3<-paste(round(100*prog2_v_3, 1), "%", sep="")
   
+  max_upper_rate<-max(outputs_current_measure_df$upper_rate)*1.1
+  
   program_graph_temp<-ggplot(outputs_current_measure_df)+
     geom_ribbon(aes(ymin = lower_rate, ymax = upper_rate, x = year, fill = Program))+
-    geom_point(aes(x = year, y = val_rate, colour = Program, shape = Program), size = 3)+
-    theme(text = element_text(size=18, family="Times New Roman"), 
+    geom_point(aes(x = year, y = val_rate, colour = Program, shape = Program), size = 2)+
+    theme(text = element_text(size=12, family="Times New Roman"), 
           panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
-          legend.position="top", legend.title = element_blank(), legend.text=element_text(size=18),
-          plot.title = element_text(hjust = .5, size=20))+
+          legend.position=c(0,100), 
+          legend.title = element_blank(), legend.text=element_text(size=12),
+          plot.title = element_text(hjust = .5, size=14))+
     scale_x_continuous(name = 'Year',
                        breaks=c(seq(from = 2018, to = 2027, by = 3)),
                        expand = expansion(mult=c(0,.1)))+
     scale_color_manual(values=c(colors_for_program_graph_line))+
     scale_fill_manual(values=c(colors_for_program_graph_fill))+
     ylab(measure_y_axis)+
+    ylim(0, max_upper_rate)+
     geom_segment(aes(x = 2027.5, y = prog1_val[[1]], xend = 2027.2, 
                      yend = prog1_val[[1]]),
-                 arrow = arrow(length = unit(0.3, "cm"), type = 'closed'))+
+                 arrow = arrow(length = unit(0.1, "cm"), type = 'closed'))+
     geom_segment(aes(x = 2027.5, y = prog1_val[[1]], xend = 2027.5, 
-                     yend = prog2_val[[1]]*1.02))+
-    geom_segment(aes(x = 2027.5, y = prog2_val[[1]]*1.02, xend = 2027.2, 
-                     yend = prog2_val[[1]]*1.02),
-                 arrow = arrow(length = unit(0.3, "cm"), type = 'closed'))+
-    geom_segment(aes(x = 2027.5, y = prog2_val[[1]]*.98, xend = 2027.2, 
-                     yend = prog2_val[[1]]*.98),
-                 arrow = arrow(length = unit(0.3, "cm"), type = 'closed'))+
-    geom_segment(aes(x = 2027.5, y = prog2_val[[1]]*.98, xend = 2027.5, 
+                     yend = prog2_val[[1]]*1.04))+
+    geom_segment(aes(x = 2027.5, y = prog2_val[[1]]*1.04, xend = 2027.2, 
+                     yend = prog2_val[[1]]*1.04),
+                 arrow = arrow(length = unit(0.1, "cm"), type = 'closed'))+
+    geom_segment(aes(x = 2027.5, y = prog2_val[[1]]*.99, xend = 2027.2, 
+                     yend = prog2_val[[1]]*1),
+                 arrow = arrow(length = unit(0.1, "cm"), type = 'closed'))+
+    geom_segment(aes(x = 2027.5, y = prog2_val[[1]]*.99, xend = 2027.5, 
                      yend = prog3_val[[1]]))+
     geom_segment(aes(x = 2027.5, y = prog3_val[[1]], xend = 2027.2, 
                      yend = prog3_val[[1]]),
-                 arrow = arrow(length = unit(0.3, "cm"), type = 'closed'))+
-    annotate("text", x=2028.8, y=((prog1_val[[1]]+prog2_val[[1]])/2)*1.1, 
+                 arrow = arrow(length = unit(0.1, "cm"), type = 'closed'))+
+    annotate("text", x=2028.8, y=((prog1_val[[1]]+prog2_val[[1]])/2)*1.15, 
              label= paste0('Program 2\n', prog1_v_2, ' reduction\nvs Program 1\nin 2027'), 
              #label= paste0('Community-ART\n', prog1_v_2, ' reduction\nin 2027'), 
-             size = 6.5)+
-    annotate("text", x=2028.8, y=(prog2_val[[1]]*.9+prog3_val[[1]])/2, 
+             size = 3.2)+
+    annotate("text", x=2028.8, y=(prog2_val[[1]]*.6+prog3_val[[1]])/2, 
              label= paste0('Program 3\n', prog2_v_3, ' reduction\nvs Program 2\nin 2027'), 
              #label= paste0('Community-IPT\n', prog2_v_3, ' reduction\nin 2027'), 
-             size = 6.5)+
+             size = 3.2)+
     scale_shape_manual(values=c(16, 8, 5))+
     ggtitle(measure_title)
   
   
   
-  
+  #myplots2[[i_itr]]<-program_graph_temp
+  #i_itr<-i_itr+1
   
   file_name<-paste0(measure,".png")
   
   setwd(outdir_graphs_prog4)
-  png(file_name, width = 800, height = 600)
+  png(file_name, width = 5.7, height = 4, units = "in", res = 1000)
   print(program_graph_temp)
   dev.off()
 }
+
+setwd(outdir_graphs_prog4)
+png('test2.png', width = 8.5, height = 4, units = "in", res = 1000)
+print(grid.arrange(myplots2[[2]], myplots2[[1]], 
+                   ncol=2))
+dev.off()
 
 ###COLORS FOR CALIBRATION GRAPHS####
 
@@ -978,7 +1050,7 @@ for(current_var_eval in unique(outputs_combined_df_calibration$title)){
           legend.position="top", legend.title = element_blank(), legend.text=element_text(size=18),
           plot.title = element_text(hjust = .5, size=20))+
     ggtitle(current_var_eval)+
-    scale_x_continuous(name = 'year Y', breaks=c(seq(from = 1990, to = 2017, by = 3)))+
+    scale_x_continuous(name = 'year y', breaks=c(seq(from = 1990, to = 2017, by = 3)))+
     guides(color=guide_legend(nrow=1,byrow=TRUE))+
     ylim(max_min_graph_y_axis[1:2])+
     ylab(measure_temp)+
@@ -1138,7 +1210,7 @@ for(current_measure_eval in unique(outputs_combined_df_calibration$title)){
             legend.background = element_rect(colour = "lightgrey"),
             legend.box.background = element_rect(colour = "black"))+
       #ggtitle(current_measure_eval)+
-      scale_x_continuous(name = 'year Y', breaks=c(seq(from = 1990, to = 2018, by = 3)))+
+      scale_x_continuous(name = 'year y', breaks=c(seq(from = 1990, to = 2018, by = 3)))+
       
       
       #scale_y_continuous(name = yaxis_label, breaks = c(seq(from = max_min_graph_y_axis[1],
@@ -1199,7 +1271,7 @@ for(current_measure_eval in unique(outputs_combined_df_calibration$title)){
             legend.background = element_rect(colour = "lightgrey"),
             legend.box.background = element_rect(colour = "black"))+
       #ggtitle(current_measure_eval)+
-      scale_x_continuous(name = 'year Y', breaks=c(seq(from = 1990, to = 2017, by = 3)))+
+      scale_x_continuous(name = 'year y', breaks=c(seq(from = 1990, to = 2017, by = 3)))+
       guides(color=guide_legend(nrow=1,byrow=TRUE))+
       scale_color_manual(values=colors_for_calib_graph_line_hiv)+
       scale_fill_manual(values=colors_for_calib_graph_fill_hiv)+
@@ -1235,5 +1307,77 @@ for(current_measure_eval in unique(outputs_combined_df_calibration$title)){
 }
 
 
+####graphs with calibration period and programs (moratlity rate per 100,000 individuals)
+  
+outputs_df_select<-outputs_combined_df%>%
+  mutate(group = paste0('Program ', program_id))%>%
+  select(c('sim_id', 'year', 'group', 'Tb_mort_Y_per_100k_ppl'))
+  
+program_eval_summarised<-outputs_df_select%>%
+  group_by(year, group)%>%
+  summarise(upper_rate = max(Tb_mort_Y_per_100k_ppl),
+            lower_rate = min(Tb_mort_Y_per_100k_ppl),
+            val_rate = mean(Tb_mort_Y_per_100k_ppl))
+  
+##to connect 2017 ending at calibration to 2018 starting at evaluation
+program_eval_summarised_connect<-program_eval_summarised%>%
+  filter(year == 2018)
+  
+program_eval_summarised_connect2<-program_eval_summarised%>%
+  filter(year == 2017)
+  
+last_yr_calib_est<-program_eval_summarised_connect2$val_rate
+  
+program_eval_summarised_connect2<-rbind(program_eval_summarised_connect2,
+                                        program_eval_summarised_connect2,
+                                        program_eval_summarised_connect2)
+program_eval_summarised_connect2$group<-c('Program 1',
+                                          'Program 2',
+                                          'Program 3')
+  
+program_eval_summarised$group<-if_else(program_eval_summarised$year <= 2017,
+                                       "Calibration Period", program_eval_summarised$group)
+  
+program_eval_summarised<-rbind(program_eval_summarised,
+                               program_eval_summarised_connect2,
+                               program_eval_summarised_connect)
 
+max_min_graph_y_axis<-c(0, 700, 100)
+
+  
+yaxis_label<-'TB mortality rate,\nper 100K individuals, per year'
+  
+  
+program_graph_temp<-ggplot(program_eval_summarised)+
+  geom_ribbon(aes(ymin = lower_rate, ymax = upper_rate, x = year, fill = group))+
+  geom_point(aes(x = year, y = val_rate, colour = group, shape = group), 
+             size = 1)+
+  #geom_point(aes(x = 2017, y = last_yr_calib_est), colour="black")+
+  theme(text = element_text(family="Times New Roman", size = 10), 
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        legend.position=c(-10, 0), #change position to print/not print
+        legend.title = element_blank(), legend.text=element_text(size=12),
+        plot.title = element_text(hjust = .5, size=10))+
+  guides(color=guide_legend(nrow=1, byrow=TRUE))+
+  #size=20))+
+  geom_vline(xintercept = 2017, linetype="dashed", 
+             color = "darkgrey", size=0.5)+
+  annotate("text", x=2013, y=max_min_graph_y_axis[2]*.95, label= "calibration\nperiod", size =3)+
+  annotate("text", x=2022, y=max_min_graph_y_axis[2]*.95, label= "intervention\nperiod", size = 3)+
+  #ggtitle(title)+
+  scale_x_continuous(name = 'Year', breaks=c(seq(from = 1990, to = 2028, by = 4)))+
+  scale_color_manual(values=c("black", colors_for_program_graph_line))+
+  scale_fill_manual(values=c('grey75', colors_for_program_graph_fill))+
+  ylim(max_min_graph_y_axis[1:2])+
+  ylab(yaxis_label)+
+  scale_shape_manual(values=c(16, 16, 8, 5))
+  
+file_name<-("tb_mort.png")
+  
+setwd("/Users/chelseagreene/github/dynamic_transmission_model_HIV_TB_KZN_SA/results/graphs/program5")
+png(file_name)
+print(program_graph_temp)
+dev.off()
+  
 

@@ -5,6 +5,8 @@ gc()
 #generates histograms of accepted parameter values
 #used to assess calibrated parameter value ranges fit
 
+##added to calculate percent reduction in TB progression 
+
 library(readxl)
 library(here)
 library(dplyr)
@@ -14,17 +16,43 @@ library(reshape2)
 
 #update parameter file
 outdir_sample <- paste0(here(),'/param_files/input_parameters')
-indir_params <- paste0(here(),'/param_files/calculated_param_gen/input_data')
+indir_params <- paste0(here(),'/param_files/calculated_param_gen/raw_input_data')
 outdir_graphs <-paste0(here(),'/param_files/distribution_of_accepted_points_graphs')
 indir_calib_analysis<-paste0(here(), '/results/calibration_analysis/')
+indir_filtered_calib_sets<-paste0(here(), '/results/stats')
+indir_recent_remote_proj<-paste0(here(), '/results/cost_model')
 
 setwd(indir_calib_analysis)
 best_results_df_plot_dist<-read.csv("almost_best_calibration_sets_ref_df.csv")%>%
   filter(total_in_confidence == 20) #change if want to see dist of parameter sets
 #with 18, 19, or 20 in calib targets
 
-setwd(indir_params)
+setwd(indir_recent_remote_proj)
+recent_remote_df<-read.csv('recent_remote_df.csv')
 
+#read in remaining stats
+setwd(indir_filtered_calib_sets)
+remaining_calib_sets_df<-read.csv('remaining_calib_sets_df.csv')
+
+best_results_df_plot_dist<-best_results_df_plot_dist%>%
+  filter(sim_id %in% remaining_calib_sets_df$sim_id)
+
+##calculate percent decrease approx
+perc_decrease_TB_inc_rate<-best_results_df_plot_dist%>%
+  select(c('sim_id', 'pi_36.', 'pi_46.', 'pi_56.', 'pi_86.', 'theta_4.'))%>%
+  mutate('theta_4_pi_36' = pi_36.*theta_4.,
+         'theta_4_pi_46' = pi_46.*theta_4.)%>%
+  left_join(recent_remote_df, by = c('sim_id'))%>%
+  mutate(weighted_not_on_IPT = (theta_4_pi_36*percent_recent) + (theta_4_pi_46*percent_remote))%>%
+  mutate(perc_reduction_on_IPT = 1-(pi_56./weighted_not_on_IPT),
+         perc_reduction_after_IPT = 1-(pi_86./weighted_not_on_IPT))%>%
+  summarise(perc_reduction_on_IPT_avg = mean(perc_reduction_on_IPT),
+            perc_reduction_after_IPT_avg = mean(perc_reduction_after_IPT),
+            percent_recent_avg = mean(percent_recent))
+
+
+
+setwd(indir_params)
 
 model_params_df<-read_excel('KZN_SA_model_parameters.xlsx')%>%
   select(c('model_matched_param', 'min', 'max', 'value', 'calibrated'))
@@ -43,6 +71,7 @@ calib_param_names<-as.vector(t(calib_param_names))
 for (mp in model_params_df$model_matched_param){
   if(model_params_df[model_params_df$model_matched_param == mp, 
                      c('calibrated')] == "yes"){
+    print(mp)
     
     max_temp<-as.numeric(model_params_df[model_params_df$model_matched_param == mp, 
                                          c('max')])
@@ -89,11 +118,16 @@ for (mp in model_params_df$model_matched_param){
                     aes(x = bins_avg,
                         y = prop_of_total_best),
                     stat = "identity")+
-           #xlim(min_temp, max_temp)+
+           ylim(0, 0.25)+
            #ylim(0,1)+
-           ggtitle(mp)+
+           #ggtitle(mp)+
            xlab('Value')+
-           ylab('Density'))
+           ylab('Density')+
+      theme(text = element_text(size=18, family="Times New Roman"), 
+            panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.position="top", legend.title = element_blank(), legend.text=element_text(size=18),
+            plot.title = element_text(hjust = .5, size=20)))
     dev.off()
     
     

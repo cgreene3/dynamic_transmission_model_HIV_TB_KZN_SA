@@ -1,19 +1,21 @@
-﻿cost_desc,sensitivity_desc,sensitivity_id
-outpatient_not_on_art,upper,1
-outpatient_on_art_facility,upper,2
-outpatient_on_art_community,upper,3
-inpatient_h2,upper,4
-inpatient_h3,upper,5
-inpatient_h4,upper,6
-ipt_cost,upper,7
-tb_care_cost_r1,upper,8
-tb_care_cost_r2,upper,9
-outpatient_not_on_art,lower,10
-outpatient_on_art_facility,lower,11
-outpatient_on_art_community,lower,12
-inpatient_h2,lower,13
-inpatient_h3,lower,14
-inpatient_h4,lower,15
-ipt_cost,lower,16
-tb_care_cost_r1,lower,17
-tb_care_cost_r2,lower,18
+﻿cost_desc,sensitivity_desc,sensitivity_id,cost_desc_graph,cost_desc_graph_general
+outpatient_not_on_art,high,1,"Annual outpatient HIV care cost, not on ART\n ($101-$169)","Annual outpatient HIV care cost, not on ART"
+outpatient_on_art_facility,high,2,"Annual outpatient HIV care cost, on ART\n under facility-based ART (Program 1)\n ($187-$311)","Annual outpatient HIV care cost, on ART\n under facility-based ART (Program 1)"
+outpatient_on_art_community,high,3,"Annual outpatient HIV care cost, on ART\n under community-based ART (Programs 2 and 3)\n ($233-$388)","Annual outpatient HIV care cost, on ART\n under community-based ART (Programs 2 and 3)"
+inpatient_h2,high,4,"Annual inpatient HIV care costs, not on ART, CD4 > 200 \n ($47-$78)","Annual inpatient HIV care costs, not on ART, CD4 > 200 "
+inpatient_h3,high,5,"Annual inpatient HIV care costs, not on ART, CD4  ≤ 200 \n ($122-$203)","Annual inpatient HIV care costs, not on ART, CD4  ≤ 200 "
+inpatient_h4,high,6,"Annual inpatient HIV care cost, on ART \n ($113-$189)","Annual inpatient HIV care cost, on ART "
+ipt_cost,high,7,6-month course of TPT with isonazid \n ($15-$25),6-month course of TPT with isonazid
+tb_care_cost_r1,high,8,Cost for a course of TB treatment for people with DS-TB \n ($194-$324),Cost for a course of TB treatment for people with DS-TB 
+tb_care_cost_r2,high,9,"Cost for a course of TB treatment for people with MDR-TB \n ($1,417-$2,361)",Cost for a course of TB treatment for people with MDR-TB 
+hiv_test_cost,high,10,Cost per HIV diagnosis and ART initiation \n ($18 - $30),Cost per HIV diagnosis and ART initiation 
+outpatient_not_on_art,low,11,"Annual outpatient HIV care cost, not on ART\n ($101-$169)","Annual outpatient HIV care cost, not on ART"
+outpatient_on_art_facility,low,12,"Annual outpatient HIV care cost, on ART\n under facility-based ART (Program 1)\n ($187-$311)","Annual outpatient HIV care cost, on ART\n under facility-based ART (Program 1)"
+outpatient_on_art_community,low,13,"Annual outpatient HIV care cost, on ART\n under community-based ART (Programs 2 and 3)\n ($233-$388)","Annual outpatient HIV care cost, on ART\n under community-based ART (Programs 2 and 3)"
+inpatient_h2,low,14,"Annual inpatient HIV care costs, not on ART, CD4 > 200 \n ($47-$78)","Annual inpatient HIV care costs, not on ART, CD4 > 200 "
+inpatient_h3,low,15,"Annual inpatient HIV care costs, not on ART, CD4  ≤ 200 \n ($122-$203)","Annual inpatient HIV care costs, not on ART, CD4  ≤ 200 "
+inpatient_h4,low,16,"Annual inpatient HIV care cost, on ART \n ($113-$189)","Annual inpatient HIV care cost, on ART "
+ipt_cost,low,17,6-month course of TPT with isonazid \n ($15-$25),6-month course of TPT with isonazid
+tb_care_cost_r1,low,18,Cost for a course of TB treatment for people with DS-TB \n ($194-$324),Cost for a course of TB treatment for people with DS-TB 
+tb_care_cost_r2,low,19,"Cost for a course of TB treatment for people with MDR-TB \n ($1,417-$2,361)",Cost for a course of TB treatment for people with MDR-TB 
+hiv_test_cost,low,20,Cost per HIV diagnosis and ART initiation \n ($18 - $30),Cost per HIV diagnosis and ART initiation 

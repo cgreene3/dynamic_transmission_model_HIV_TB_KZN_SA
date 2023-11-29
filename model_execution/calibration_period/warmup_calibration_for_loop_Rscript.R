@@ -915,7 +915,7 @@ for(sim_id_current_eval in sim_id_start:sim_id_end){
   beta_g<<-beta_g_param_extraction(sim_id_current_eval)
   phi_h<<-phi_h_param_extraction(sim_id_current_eval)
   varepsilon_g<<-varepsilon_g_param_extraction(sim_id_current_eval)
-  iota_r<<-varepsilon_g_param_extraction(sim_id_current_eval)
+  iota_r<<-iota_r_param_extraction(sim_id_current_eval)
   xi<<-xi_param_extraction(sim_id_current_eval)
   zeta<<-zeta_param_extraction(sim_id_current_eval)
   pi_i_t<<-pi_i_t_param_extraction(sim_id_current_eval)
