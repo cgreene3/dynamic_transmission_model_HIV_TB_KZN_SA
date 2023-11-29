@@ -1,0 +1,11 @@
+"variable","mean","min","max"
+"Tb_inc_neg_female_Y_per_100k_female",356,295,484
+"Tb_inc_pos_female_Y_per_100k_female",1050,828,1140
+"Tb_inc_neg_male_Y_per_100k_male",438,351,566
+"Tb_inc_pos_male_Y_per_100k_male",727,597,805
+"Tb_mort_neg_female_Y_per_100k_female",24,17,30
+"Tb_mort_pos_female_Y_per_100k_female",111,83,162
+"Tb_mort_neg_male_Y_per_100k_male",67,54,86
+"Tb_mort_pos_male_Y_per_100k_male",173,117,228
+"hiv_prev_per_100k_female",33743,29715,39664
+"hiv_prev_per_100k_male",18900,17515,21943
