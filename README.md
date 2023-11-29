@@ -1,10 +1,8 @@
 ## Preventing tuberculosis with community-based antiretroviral therapy (ART) and tuberculosis preventive therapy (TPT) care in Kwazulu-Natal, South Africa: a dynamic transmission modeling analysis
 
-<<<<<<< HEAD
 The details for the model are provided in the [appendix](https://github.com/cgreene3/dynamic_transmission_model_HIV_TB_KZN_SA/blob/master/documentation/Modeling_community_ART_and_IPT_appendix_20230505.pdf). The description of what is included the repository is provided below.
 =======
 The details for the model are provided in the [appendix](https://github.com/cgreene3/dynamic_transmission_model_HIV_TB_KZN_SA/blob/master/documentation). The description of what is included the repository is provided below.
->>>>>>> b8860cbbf87292755f532fd820275c3bb81e35d1
 
 ### Contents in the repository:
 1. [About the Model](#about)
